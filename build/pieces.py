@@ -43,8 +43,7 @@ PIECES = [
   title="Fugue in C major", bwv="BWV 846", book="WTC I, No. 1", collection="wtc1",
   card="Twenty-two entries in twenty-seven bars, piled into stretto. No regular countersubject, "
        "and barely an episode.",
-  blurb="Almost nothing but subject. Four voices, no regular countersubject, barely an episode "
-        "anywhere; the entries pile up in stretto until there is no room left for anything else.",
+  blurb="Its longest episode runs under two bars, the shortest of any fugue on this site.",
   history=[
     "Statements of the subject overlap almost continuously, and the music never settles into the "
     "subject-then-episode alternation most fugues run on. It is the densest fugue in Book I, and "
@@ -66,8 +65,7 @@ PIECES = [
   title="Fugue in C minor", bwv="BWV 847", book="WTC I, No. 2", collection="wtc1",
   card="The textbook fugue. Compact subject, a countersubject that comes back with nearly every "
        "entry, episodes spun from the subject's tail.",
-  blurb="Three voices, a compact subject, a countersubject that returns nearly every time, and "
-        "episodes spun from the subject's own tail. If you learn to hear one fugue, make it this one.",
+  blurb="Eight entries in thirty-one bars, and the last arrives over the closing pedal.",
   history=[
     "Two-bar subject, tonal answer, a countersubject that comes back intact with most entries, "
     "episodes built by sequencing fragments of the subject itself. Everything lines up, which is "
@@ -90,9 +88,7 @@ PIECES = [
   title="Fugue in C-sharp major", bwv="BWV 848", book="WTC I, No. 3", collection="wtc1",
   card="Seven sharps, twelve entries, and not one stretto, inversion or pedal point anywhere in "
        "it.",
-  blurb="A countersubject that comes back with eight of the twelve entries, and a hole in the "
-        "middle where the subject is out of all three voices for thirteen and a half bars. Turn "
-        "the entry brackets on and watch bars 29 to 42 stay empty.",
+  blurb="The countersubject comes back with eight of the twelve entries.",
   history=[
     "Twelve entries, three voices, and none of the tricks a fugue is supposed to show off with. "
     "The subject is under two bars of light quavers falling in broken sixths, and Bach's method "
@@ -120,9 +116,7 @@ PIECES = [
   subject=dict(v=4, q0=0, q1=12),  # bars 1:1..4:1
   card="Five voices and 115 bars — the longest fugue in Book I, and one of only two in the book "
        "with five of them.",
-  blurb="The biggest thing in Book I: five voices, 115 bars, and a subject so slow that all five "
-        "have room to speak. The entry brackets follow the first subject only, which is why a "
-        "forty-one-bar stretch early on looks empty. It isn't.",
+  blurb="A triple fugue: two more subjects arrive later, and all three combine at the end.",
   history=[
     "The subject is a cross motif in long notes — a falling semitone, a leap, a falling semitone "
     "— and its slowness is what makes five voices possible at all. The bass states it first and "
@@ -151,9 +145,7 @@ PIECES = [
   subject=dict(v=3, q0=1, q1=4.75),  # bars 1:2..2:1.75
   card="Twenty-seven entries in twenty-seven bars, more than any other fugue in Book I, and "
        "thirteen overlapping pairs.",
-  blurb="The subject is under a bar long and made of dotted figures, so entries can follow each "
-        "other almost immediately. Bach takes the invitation: twenty-seven statements in "
-        "twenty-seven bars, and no gap anywhere longer than two and a half bars.",
+  blurb="The subject packs thirteen notes into less than one bar, briefer than any other here.",
   history=[
     "Dotted rhythm, the idiom of a French overture — the music that played while somebody "
     "important walked into a room. Because the subject fits inside a single bar, the entries can "
@@ -181,8 +173,7 @@ PIECES = [
   title="Fugue in D minor", bwv="BWV 851", book="WTC I, No. 6", collection="wtc1",
   card="Fast, and then halfway through Bach turns the subject upside down and carries on "
        "regardless.",
-  blurb="Short, fast, three voices, and halfway through Bach turns the subject upside down. "
-        "Switch on the entry brackets and watch the shape flip.",
+  blurb="The earliest fugue in the 48 to turn its subject upside down.",
   history=[
     "The subject is barely two bars of running quavers, short enough that Bach can stack the "
     "entries close together and then invert the thing outright. Every rising step becomes a "
@@ -202,25 +193,26 @@ PIECES = [
  dict(
   id="bwv852", file="wtc1f07.krn", bpm=78,
   title="Fugue in E-flat major", bwv="BWV 852", book="WTC I, No. 7", collection="wtc1",
-  subject=dict(v=0, q0=0, q1=8),  # bars 1:1..3:1
-  card="Three statements of the subject in thirty-seven bars, the fewest of any fugue on this "
-       "site.",
-  blurb="The prelude in front of this fugue already contains a complete four-voice fugue of its "
-        "own — the only one of the 48 that does. What follows is three voices, short and light: "
-        "thirty-one of its thirty-seven bars are episode.",
+  subject=dict(v=0, q0=0.25, q1=4.5),  # bars 1:1.25..2:1.5
+  headOnly=True,   # the span is the subject's head; later statements re-value its tail
+  card="Nine episodes in thirty-seven bars, more per bar than any other fugue in Book I, and not "
+       "one stretto.",
+  blurb="The prelude in front of this fugue contains a complete four-voice fugue of its own.",
   history=[
-    "The tracker finds three statements of the subject and nothing after bar 22. Take that as "
-    "much as a fact about the tracker as about the fugue: the matcher wants something close to a "
-    "literal restatement, and it stops finding one. But the shape it reports is real enough. "
-    "Thirty-one of thirty-seven bars fall inside an episode, a higher proportion than any other "
-    "fugue in Book I, and the last episode alone runs fifteen and a half bars. The key path does "
-    "the work the entries would normally do: E-flat, F minor, C minor, back to E-flat, out to C "
-    "major and C minor, home.",
-    "The prelude is the strange one of the pair. Seventy bars in three sections — a short "
-    "toccata, then a chorale in four-part harmony, then a four-voice double fugue longer than the "
-    "other two put together. No other prelude in either book has a finished fugue inside it. "
-    "Which is presumably why what follows is three voices and unbothered: the contrapuntal "
-    "argument had already been made.",
+    "Eleven statements in thirty-seven bars, and the bracket covers only the head of the subject: "
+    "twelve notes, a little over a bar. That is on purpose. Bach's answer re-values the tail, "
+    "shifting its transposition halfway through, so a template the full length of the subject "
+    "matches three entries and walks past eight that are plainly there. On the head there are "
+    "three exact returns, one tonal answer and seven partial ones, with the countersubject "
+    "alongside four of them. Nine episodes separate the statements, and twenty-five of the "
+    "thirty-seven bars fall inside one. There is no stretto anywhere. The keys do the work the "
+    "entries would normally do: E-flat, F minor, C minor, back to E-flat, out to C major and C "
+    "minor, home.",
+    "The prelude is the strange one of the pair. Seventy bars in three sections: a short toccata, "
+    "then a chorale in four-part harmony, then a four-voice double fugue longer than the other "
+    "two put together. No other prelude in either book has a finished fugue inside it. Which is "
+    "presumably why what follows is three voices and unbothered — the contrapuntal argument had "
+    "already been made.",
     WTC1_CONTEXT,
   ],
   links=[WTC1_SCORE, ("Prelude and Fugue in E-flat major, BWV 852",
@@ -239,9 +231,7 @@ PIECES = [
   forms=("I", "Aug"),
   card="Prelude in E-flat minor, fugue in D-sharp minor: same key, six flats swapped for six "
        "sharps.",
-  blurb="The only fugue on this site with both augmentation and inversion in it, and the only one "
-        "in Book I with augmentation at all. Switch the entry brackets on and watch three "
-        "statements come back at double length.",
+  blurb="The only fugue here with both inversion and augmentation of the subject.",
   history=[
     "Two and a half bars of slow steps around a rising fifth, and Bach then works the subject "
     "harder than anything else in Book I. Sixteen entries: twelve upright, three stretched into "
@@ -270,9 +260,7 @@ PIECES = [
   title="Fugue in E major", bwv="BWV 854", book="WTC I, No. 9", collection="wtc1",
   card="A one-bar subject with a countersubject glued to it — six of the eleven entries carry "
        "both.",
-  blurb="Small in every dimension: a subject one bar long, eleven entries, twenty-nine bars, "
-        "exposition finished before bar five. Turn the entry brackets on and the subject drags "
-        "its countersubject along with it, entry after entry.",
+  blurb="The exposition is over by bar five, the earliest of any fugue here.",
   history=[
     "A subject that fits inside one bar is about as short as Bach writes them, and it lets the "
     "next voice come in a bar later without waiting. Eleven entries, four of them in stretto, and "
@@ -298,8 +286,7 @@ PIECES = [
   title="Fugue in E minor", bwv="BWV 855", book="WTC I, No. 10", collection="wtc1",
   card="The only two-voice fugue in either book. One line above, one below, and nowhere to hide. "
        "Start here.",
-  blurb="The only two-voice fugue in either book. One line above and one below, so you hear "
-        "every entry without trying. Start here.",
+  blurb="Two voices; every other fugue in either book has at least three.",
   history=[
     "Every other fugue in Book I has three, four or five voices. This one has two. That leaves "
     "Bach almost nothing to hide behind, which is exactly why students are often handed it "
@@ -320,10 +307,10 @@ PIECES = [
  dict(
   id="bwv856", file="wtc1f11.krn", bpm=104,
   title="Fugue in F major", bwv="BWV 856", book="WTC I, No. 11", collection="wtc1",
+  headOnly=True,   # the span is the subject's head; later statements re-value its tail
   card="A dancing 3/8, and a long subject that walks almost entirely by step, so each voice reads "
        "as a tune.",
-  blurb="A 3/8 fugue that moves like a dance. The subject is long and nearly all stepwise, so "
-        "each voice reads as a tune rather than a knot of figuration.",
+  blurb="Seventy-two bars of 3/8, and still the fewest notes of any fugue in Book I.",
   history=[
     "3/8, full of scale figures, closer to a gigue than to a study. The subject is long, so there "
     "are fewer entries than usual and the episodes between them stretch out to match.",
@@ -344,9 +331,7 @@ PIECES = [
   subject=dict(v=2, q0=1, q1=12.5),  # bars 1:2..4:1.5
   card="Four voices, a chromatic subject, and one note held for nine bars from bar 19 while "
        "everything moves over it.",
-  blurb="A chromatic subject: eleven notes, most of them a semitone from the last, with two leaps "
-        "in the middle so it never turns into a plain scale. Ten entries and eight episodes, and "
-        "after the exposition the two simply alternate to the end.",
+  blurb="Ten entries, eight episodes, and from bar 10 the two alternate strictly to the end.",
   history=[
     "Eleven notes over nearly three bars, most of them a semitone apart. The exposition closes in "
     "bar 16, and six more statements follow at bars 19, 27, 34, 40, 47 and 53, each with an "
@@ -373,8 +358,8 @@ PIECES = [
   title="Fugue in F-sharp major", bwv="BWV 858", book="WTC I, No. 13", collection="wtc1",
   card="Seven entries in thirty-five bars, and after the exposition the subject disappears for "
        "eight of them.",
-  blurb="Three voices, and no countersubject at all — nothing travels with the subject, so the "
-        "other two lines are free every time it comes round.",
+  blurb="Six sharps, three voices, and no countersubject: nothing ever recurs alongside the "
+        "subject.",
   history=[
     "Sixteen notes, not quite two bars. Seven statements across thirty-five bars with five "
     "episodes between them, and the longest of those runs from bar 7 to bar 15: the exposition "
@@ -398,9 +383,7 @@ PIECES = [
   title="Fugue in F-sharp minor", bwv="BWV 859", book="WTC I, No. 14", collection="wtc1",
   forms=("I",),
   card="Six-four time, and four voices take eighteen of the forty bars just to finish entering.",
-  blurb="Bach interrupts his own exposition twice with episodes, so the fourth voice does not "
-        "enter until bar 15. Two of the nine statements arrive inverted, both of them after the "
-        "exposition is finally over.",
+  blurb="The only fugue here in 6/4.",
   history=[
     "The subject walks: eighteen notes over nearly three bars of 6/4, which works out at about a "
     "note a beat. Two episodes cut into the exposition before the fourth voice has said anything, "
@@ -424,20 +407,28 @@ PIECES = [
  dict(
   id="bwv860", file="wtc1f15.krn", bpm=108,
   title="Fugue in G major", bwv="BWV 860", book="WTC I, No. 15", collection="wtc1",
-  card="Eighty-six bars, four entries: three episodes account for sixty-nine of the bars.",
-  blurb="The subject appears at bars 1, 5, 11 and 38, and the finder marks nothing after that. "
-        "The last forty-five bars come out as one long episode.",
+  subject=dict(v=0, q0=0, q1=3),  # bars 1:1..2:1
+  forms=("I",),
+  headOnly=True,   # the span is the subject's head; later statements re-value its tail
+  card="Eighteen entries in eighty-six bars, seven of them upside down: the most inversion of any "
+       "fugue in Book I.",
+  blurb="Thirteen episodes, more than any other fugue in Book I.",
   history=[
-    "Four bars and thirty-one notes of running quavers, long enough that Bach gets three voices "
-    "in and then more or less stops. Three episodes account for sixty-nine of the eighty-six "
-    "bars. From bar 42 to the end there is no statement marked at all, just sequences running "
-    "through E minor, B minor, D major and A major before the music comes home, with a pedal "
-    "under the last three bars.",
-    "Turn the entry brackets on and the map goes blank after bar 42. Four entries in eighty-six "
-    "bars is a strange count, and this is the page where the finder is least likely to be right: "
-    "the labels are computed from the notes, and a late entry that has been altered is exactly "
-    "the sort it misses. Check it against the score before taking the second half as "
-    "subject-free.",
+    "Ten notes, one bar of 6/8, and all three voices have had the subject by bar 12. The fugue "
+    "then runs another seventy-four bars: eighteen statements, thirteen episodes between them, "
+    "and the longest of those only nine bars, from 29 to 38. Bach starts turning the subject over "
+    "at bar 20, still in G major, and keeps at it to the end: seven of the eighteen come "
+    "inverted. The music goes out to E minor at 37 and B minor at 50, and from bar 51 the entries "
+    "begin to overlap, five stretto pairs in all. G major returns at bar 71, three statements "
+    "land together at bar 79 with one of them still upside down, and a pedal holds under the last "
+    "three bars.",
+    "The bracket here covers the head of the subject, ten notes, not the whole of it. Bach "
+    "re-values the tail every time the subject comes back, so a template cut to full length "
+    "matches almost nothing past the exposition — an earlier pass over this piece used four bars "
+    "and thirty-one notes, found four entries, and reported the second half as one forty-five-bar "
+    "episode, with four of the seven inverted entries inside it, unmarked. If you want more "
+    "inversion than this, Contrapunctus V splits its twenty-two entries evenly between upright "
+    "and upside down.",
     WTC1_CONTEXT,
   ],
   links=[WTC1_SCORE, WTC_WIKI, KERN_WTC],
@@ -453,8 +444,7 @@ PIECES = [
   title="Fugue in G minor", bwv="BWV 861", book="WTC I, No. 16", collection="wtc1",
   card="Four voices, a short and sharply drawn subject, and a countersubject stuck to it. Hear "
        "how much thicker four parts sound than three.",
-  blurb="Four voices, a short subject with a very definite rhythm, and a countersubject that "
-        "sticks to it. Play it after the two-voice E minor and you can hear what the extra lines do.",
+  blurb="Fifteen entries in thirty-four bars, and only three keys: G minor, B flat, C minor.",
   history=[
     "Four real voices moving at once, and the texture still never turns to mud. The subject is "
     "short and rhythmically sharp enough to stay audible under everything else.",
@@ -476,9 +466,7 @@ PIECES = [
   subject=dict(v=2, q0=1, q1=5),  # bars 1:2..2:2
   card="A seven-note subject one bar long, stated thirteen times, four of them in four "
        "consecutive bars.",
-  blurb="Seven notes and a single bar, so the subject can come round thirteen times in "
-        "thirty-five bars without the texture ever thickening. Four voices, and nothing recurring "
-        "against it anywhere.",
+  blurb="Seven notes of subject; only two fugues in the forty-eight use fewer.",
   history=[
     "The entries arrive in pairs a bar apart through the exposition — bars 1 and 2, then 5 and 6 "
     "— thin out across the middle for an eight-bar episode, then bunch again at bars 27, 28, 29 "
@@ -503,8 +491,7 @@ PIECES = [
   title="Fugue in G-sharp minor", bwv="BWV 863", book="WTC I, No. 18", collection="wtc1",
   card="Eleven entries, a countersubject marked seven times, and two bars in G-sharp major — "
        "eight sharps, no signature.",
-  blurb="Eleven entries in forty-one bars with the countersubject marked seven times, so for most "
-        "of the piece two fixed lines travel together and the other voices fill in around them.",
+  blurb="All four voices in by bar 7, two bars apart, and not one stretto in the whole fugue.",
   history=[
     "Only one of the eleven statements gets labelled an answer, even though five of them start on "
     "D-sharp. The labels on this page are computed from the notes rather than typed in, and this "
@@ -531,9 +518,7 @@ PIECES = [
   subject=dict(v=0, q0=0, q1=9),  # bars 1:1..3:1
   card="The only 9/8 fugue in the forty-eight; seven entries in fifty-four bars, and the rest is "
        "episode.",
-  blurb="Three voices, 9/8, and no other fugue in either book is in that metre. Seven entries in "
-        "fifty-four bars, six episodes between them sequenced out of the subject's own rising "
-        "fourths, and the episodes take up more of the piece than the entries do.",
+  blurb="The longest of its six episodes runs almost eleven bars, a fifth of the fugue.",
   history=[
     "The subject opens with a single note, then a gap three quavers wide, then a chain of rising "
     "fourths, each one falling back before the next climbs higher. Fourteen notes, spanning a "
@@ -563,8 +548,7 @@ PIECES = [
   title="Fugue in B-flat major", bwv="BWV 866", book="WTC I, No. 21", collection="wtc1",
   card="The subject leaps about for nearly four bars before it lets go. At that length there is "
        "no room for many entries, so most of what you hear is episode.",
-  blurb="Cheerful, three voices, and a subject that leaps about for nearly four bars before it "
-        "finishes. At that length there is room for only a handful of entries.",
+  blurb="Only eight entries in forty-eight bars — the subject alone runs thirty-eight notes.",
   history=[
     "Because the subject runs close to four bars, the fugue holds far fewer statements than a "
     "piece its length normally would. Most of what you hear is episode.",
@@ -586,9 +570,7 @@ PIECES = [
   subject=dict(v=0, q0=0, q1=10),  # bars 1:1..3:2
   card="Five voices, a seven-note subject with a minor ninth cut into it, and three entries a bar "
        "apart at the close.",
-  blurb="Five voices, which happens twice in Book I. The subject is seven notes long with a "
-        "silence and a minor-ninth leap cut into the middle, and at the close it comes back three "
-        "times a bar apart: soprano, then alto, then bass.",
+  blurb="One of only two five-voice fugues in the forty-eight; No. 4 is the other.",
   history=[
     "Seven notes, spread over two and a half bars. The subject drops a fourth, stops dead for a "
     "crotchet, then leaps up a minor ninth and walks back down. That silence in the middle is the "
@@ -616,9 +598,7 @@ PIECES = [
   forms=("I",),
   card="Four voices in thirty-four bars, nine entries, and two of them turn the subject upside "
        "down.",
-  blurb="Four voices inside thirty-four bars, so the episodes never run past four and a half. Two "
-        "of the nine entries come in inverted; the subject is short enough and stepwise enough "
-        "that you can hear the flip without looking.",
+  blurb="Three voices have the subject by bar 16; the fourth waits until bar 21 of 34.",
   history=[
     "Thirty-four bars is not much room for four voices, and none of it is spent idling: five "
     "episodes, the longest four and a half bars, with nine entries packed around them. The "
@@ -646,9 +626,7 @@ PIECES = [
   subject=dict(v=1, q0=0.5, q1=12),  # bars 1:1.5..4:1
   card="Last in Book I, marked Largo, with a twenty-note subject that uses all twelve chromatic "
        "pitches.",
-  blurb="The last fugue in Book I, and the one Bach headed *Largo*. Its subject runs twenty notes "
-        "and touches all twelve pitches of the chromatic scale before it finishes — you can watch "
-        "it do that in the roll.",
+  blurb="Three pedal points hold 21 of the 76 bars between them.",
   history=[
     "Twenty notes in the subject, and between them they cover all twelve pitches of the chromatic "
     "scale before it lands. Bach wrote *Largo* over the fugue. Twelve entries across seventy-six "
@@ -672,19 +650,24 @@ PIECES = [
  dict(
   id="bwv870", file="wtc2f01.krn", bpm=84,
   title="Fugue in C major", bwv="BWV 870", book="WTC II, No. 1", collection="wtc2",
-  subject=dict(v=1, q0=0.5, q1=8),  # bars 1:1.5..5:1
-  card="Opens Book II with three countersubjects, and Gould's recording of it rode the Voyager "
-       "Golden Record.",
-  blurb="The piece that opens Book II: three voices in 2/4, with three countersubjects, so the "
-        "subject keeps arriving with the same company. Eight entries across eighty-three bars.",
+  subject=dict(v=1, q0=1, q1=5.25),  # bars 1:2..3:2.25
+  headOnly=True,   # the span is the subject's head; later statements re-value its tail
+  card="Opens Book II, and Glenn Gould's recording of it rode the Voyager Golden Record out past "
+       "the heliosphere.",
+  blurb="The fugue that opens Book II: eleven entries and eleven episodes in eighty-three bars.",
   history=[
-    "Book II opens in 2/4, with the subject in the alto: two short gestures, then continuous "
-    "semiquavers, twenty notes over not quite four bars. Three countersubjects come back with it, "
-    "more regular company than most fugues here give their subject. Six of the eight entries sit "
-    "on C or G; the other two go out to A and D in the middle of the piece.",
-    "Glenn Gould's recording of this prelude and fugue was put on the Voyager Golden Record, so "
-    "two copies of it are now past the edge of the heliosphere. An alternative version of the "
-    "same pair is catalogued separately, as BWV 870a.",
+    "Three voices in 2/4, and the subject arrives in the middle one on the second beat of bar 1: "
+    "seven notes over a little more than two bars. What the bracket marks is the head, not the "
+    "whole subject — Bach re-values the tail when the subject comes back, and a full-length "
+    "template walks straight past statements that are plainly there. Matching on the head finds "
+    "eleven: five exact, five altered, one tonal, with the countersubject alongside them four "
+    "times. Nine of the eleven sit on C or G; the two that leave, at bars 21 and 25, go to A and "
+    "D. Fifty-nine of the eighty-three bars fall inside one of the eleven episodes, and the "
+    "longest runs almost fifteen of them, in the gap between the entries at bar 51 and bar 68.",
+    "Glenn Gould's recording of this prelude and fugue went out on the Voyager Golden Record in "
+    "1977, so two copies are now past the edge of the heliosphere. Bach got three tracks on that "
+    "record, more than any other composer, and this is the only one of the 48 among them. An "
+    "alternative version of the same pair is catalogued separately, as BWV 870a.",
     WTC2_CONTEXT,
   ],
   links=[WTC2_SCORE, ("Prelude and Fugue in C major, BWV 870",
@@ -703,9 +686,7 @@ PIECES = [
   forms=("Aug",),
   card="A one-bar subject, eighteen entries in twenty-eight bars, and two of them stretched to "
        "double length.",
-  blurb="Twenty-eight bars, and Bach gets eighteen entries into them — the subject is one bar "
-        "long, which is what makes that possible. Two of the entries come in augmentation, at "
-        "double the note values.",
+  blurb="Only here in Book II does the subject also appear in augmentation.",
   history=[
     "The subject is one bar long. Nine notes. Short enough that Bach can overlap entries more or "
     "less at will, and he does: eighteen entries in twenty-eight bars, with eight places where "
@@ -734,9 +715,7 @@ PIECES = [
   forms=("I",),
   card="Three voices and only four whole statements; the answer cuts in before the subject has "
        "finished.",
-  blurb="Eleven notes off the C-sharp major triad, and the answer cuts in on top of it before it "
-        "is over. Four whole statements in thirty-five bars, two of them upside down, then "
-        "nineteen bars with no subject in them at all.",
+  blurb="The last entry is over by bar seventeen, and nineteen bars of episode follow it.",
   history=[
     "The subject is built out of the notes of the tonic triad and lasts under a bar and a half, "
     "which leaves room for the answer to enter on top of it — and it does, in bar two. After that "
@@ -764,8 +743,7 @@ PIECES = [
   forms=("I",),
   card="The only fugue here in 12/16, and it drops the subject for twenty-nine bars in the "
        "middle.",
-  blurb="Ten of the twelve entries land before bar 32, four of them two bars apart. Then the "
-        "subject disappears for twenty-nine bars and comes back twice at the end.",
+  blurb="Three of its twelve entries turn the subject upside down.",
   history=[
     "Nineteen notes inside a bar and a half of 12/16, which is a dancing subject however you play "
     "it. Bach spends the first half of the piece stacking it up — entries at bars 24, 26, 28 and "
@@ -790,9 +768,7 @@ PIECES = [
   title="Fugue in D major", bwv="BWV 874", book="WTC II, No. 5", collection="wtc2",
   card="Fifteen stretto pairs, more than any fugue here, and four entries stacked inside a bar at "
        "the end.",
-  blurb="Twenty-three statements in fifty bars and no countersubject at all — the entries are the "
-        "material. Across bars 44 and 45 all four voices start the subject, each a crotchet "
-        "behind the last.",
+  blurb="More entries than any other fugue in Book II: twenty-three of them in fifty bars.",
   history=[
     "Nine notes, a bar and a bit, and nothing that reliably comes back with it. What Bach has "
     "instead is overlap: the analysis counts fifteen stretto pairs here, more than in any other "
@@ -818,8 +794,7 @@ PIECES = [
   subject=dict(v=1, q0=0, q1=7.5),  # bars 1:1..2:4.5
   card="More notes per bar than any other fugue here, and never two and a half bars go by without "
        "an entry.",
-  blurb="Twenty-seven bars, twelve entries, three countersubjects and no room anywhere. Five of "
-        "those entries are fragments: Bach starts the subject and then takes it somewhere else.",
+  blurb="At twenty-seven bars, the shortest fugue in Book II.",
   history=[
     "The subject opens in triplet semiquavers, turns chromatic in quavers, and is finished in not "
     "quite two bars — twenty-two notes, with three countersubjects that keep coming back "
@@ -846,9 +821,7 @@ PIECES = [
   id="bwv876", file="wtc2f07.krn", bpm=104,
   title="Fugue in E-flat major", bwv="BWV 876", book="WTC II, No. 7", collection="wtc2",
   card="A six-bar subject, so the four voices need twenty-seven bars just to state it once each.",
-  blurb="The subject runs six bars and the voices enter from the bass upwards, which puts the end "
-        "of the exposition at bar 27 of 70. Later the entries come a bar apart, so two statements "
-        "overlap for five bars.",
+  blurb="The only fugue here whose entries all stay on the tonic and the dominant.",
   history=[
     "The longest subject of any Book II fugue on the site: twenty notes stretched over six bars, "
     "mostly in long values. Bass first, then tenor, alto, soprano, climbing, and the exposition "
@@ -874,9 +847,7 @@ PIECES = [
   subject=dict(v=1, q0=0.5, q1=8.5),  # bars 1:1.5..3:1.5
   forms=("I",),
   card="Six sharps, four voices, thirteen entries, and exactly one of them upside down.",
-  blurb="A two-bar subject, an exposition that takes eleven bars, and then ten bars with no "
-        "subject at all. At bar 43 two voices start it on the same beat, one on D-sharp and one "
-        "on A-sharp.",
+  blurb="The subject starts in an inner voice, and the top voice does not enter until bar nine.",
   history=[
     "The alto starts, the tenor answers, the bass follows and the soprano arrives last at bar "
     "nine, so the exposition runs to bar 11. Then nothing for ten bars, the longest episode in "
@@ -902,8 +873,7 @@ PIECES = [
   title="Fugue in E major", bwv="BWV 878", book="WTC II, No. 9", collection="wtc2",
   card="The long white notes and the alla breve are deliberate: this is Bach imitating a "
        "Renaissance motet.",
-  blurb="Bach writing in an idiom that was already old when he was born. Long white notes, alla "
-        "breve, four voices moving like a Renaissance motet.",
+  blurb="A six-note subject, the fewest in Book II, stated fifteen times.",
   history=[
     "*Stile antico*, the archaic idiom of Palestrina and his successors, which Bach studied and "
     "revived. Alla breve notation, a subject that moves in semibreves and minims, and harmony "
@@ -926,9 +896,7 @@ PIECES = [
   subject=dict(v=0, q0=1, q1=24.3333),  # bars 1:1..6:2.66667
   card="Forty-three notes of subject before the second voice gets in, and the last nine bars have "
        "no subject at all.",
-  blurb="The subject takes almost six bars and changes gear on the way: crotchets and semiquaver "
-        "turns to begin with, a stream of triplets to finish. Nothing ever overlaps, so all nine "
-        "statements are out in the open where you can hear them.",
+  blurb="Counted in notes, the longest fugue subject in the WTC.",
   history=[
     "The answer cannot come in until bar 7, because the first voice is still busy. The exposition "
     "is not over until bar 19 — most of the length of the entire C major fugue that opens Book I "
@@ -955,9 +923,7 @@ PIECES = [
   subject=dict(v=0, q0=0.75, q1=6.75),  # bars 1:4..5:4
   card="Six semiquavers to a bar, ninety-nine bars, seven entries — seven-tenths of it is "
        "episode.",
-  blurb="Written in 6/16 — two light beats to a bar, three semiquavers each, so the bars go past "
-        "very fast. The subject turns up seven times in ninety-nine bars; everything else is "
-        "sequence, including one episode that runs for twenty-seven bars without it.",
+  blurb="No other fugue in either book is in 6/16.",
   history=[
     "Twenty notes over four of those tiny bars, built round a three-note turn and a run back "
     "down. Bach then uses it sparingly: seven entries in the whole fugue, which leaves roughly "
@@ -983,9 +949,7 @@ PIECES = [
   subject=dict(v=0, q0=0, q1=7.25),  # bars 0:1..4:1.75
   card="One stretto, at bar 72 of 85. Everything before it keeps the three voices politely out of "
        "each other's way.",
-  blurb="An upbeat, a drop of a fifth, that note repeated three times, and then the subject "
-        "dissolves into semiquavers. The voices stay clear of each other until bar 72, where two "
-        "entries finally overlap — thirteen bars from the end.",
+  blurb="An episode interrupts the exposition before the third voice enters at bar 12.",
   history=[
     "An upbeat quaver, a fifth down, the same note three times, and then most of two bars of "
     "unbroken semiquavers: twenty-three notes over three and a half bars, and the second half of "
@@ -1012,9 +976,7 @@ PIECES = [
   subject=dict(v=1, q0=0, q1=15),  # bars 0:1..4:1.5
   card="The subject stops dead for a crotchet one bar in, and still comes back note-for-note "
        "exact nine times in eleven.",
-  blurb="Dotted crotchet, two semiquavers, one crotchet, then silence — the subject stops before "
-        "it has properly started, and the rest belongs to it. Eleven entries, nine of them exact, "
-        "with three recurring countersubjects riding along.",
+  blurb="The fugue is in gavotte form, and three countersubjects come back with the entries.",
   history=[
     "The subject stops almost as soon as it starts: a dotted upbeat, two semiquavers, a crotchet "
     "on the downbeat, then a crotchet of rest. That rest sits inside the subject rather than "
@@ -1041,10 +1003,7 @@ PIECES = [
   title="Fugue in F-sharp minor", bwv="BWV 883", book="WTC II, No. 14", collection="wtc2",
   card="Bach adds a second and third subject later; the map tracks only the first, so its "
        "episodes are not empty.",
-  blurb="A triple fugue. The first subject is short, and it keeps starting a dotted crotchet off "
-        "the beat so that it hangs over the next one and never sits square with the bar. Two more "
-        "subjects arrive later, and the closing stretch runs all three at once. The map on this "
-        "page follows subject one only.",
+  blurb="The only triple fugue in Book II.",
   history=[
     "Fifteen notes over two and a half bars, and three times inside them the subject starts a "
     "dotted crotchet off the beat and lets it hang over the next one — twice across a barline. So "
@@ -1071,9 +1030,7 @@ PIECES = [
   subject=dict(v=0, q0=0.25, q1=8.5),  # bars 1:1.5..6:3
   card="Thirty-three unbroken semiquavers, six entries in seventy-two bars, and a nineteen-bar "
        "gap before the last.",
-  blurb="The subject is one unbroken run of thirty-three semiquavers — broken chords falling and "
-        "climbing back, six notes to a 3/8 bar. Six statements, seventy-two bars, and between the "
-        "fifth and the sixth it disappears for nineteen and a half of them.",
+  blurb="Five and a half bars of subject, so the exposition alone reaches bar 20 of 72.",
   history=[
     "No rests worth the name. The subject is a single line of broken chords running five and a "
     "half bars without stopping, and the piece never stops moving underneath it either. Six "
@@ -1097,9 +1054,7 @@ PIECES = [
   title="Fugue in G minor", bwv="BWV 885", book="WTC II, No. 16", collection="wtc2",
   card="All four strettos held back until the second half, then twelve bars at the end with no "
        "subject at all.",
-  blurb="Four voices in a quick 3/4, sixteen entries, and Bach saves every overlap for later: the "
-        "first stretto does not arrive until bar 45. The last statement finishes around bar 73 "
-        "and the fugue plays out its final twelve bars without the subject anywhere.",
+  blurb="Four voices in 3/4 — the only fugue in either book scored that way.",
   history=[
     "The subject runs three and a half bars, which is why the exposition needs seventeen. Through "
     "the first half the entries come one after another, cleanly separated; from bar 45 onwards "
@@ -1125,9 +1080,7 @@ PIECES = [
   title="Fugue in A-flat major", bwv="BWV 886", book="WTC II, No. 17", collection="wtc2",
   card="Bach reshapes the subject nearly every time: eight of the fifteen entries come back "
        "altered.",
-  blurb="Twenty notes of semiquavers in under two bars, four voices in by bar 10, and after that "
-        "almost nothing is repeated literally. Watch the middle: from bar 26 the harmony walks "
-        "down the flat side of the key and takes a while to find its way back.",
+  blurb="It began as the F major fughetta BWV 901, transposed to A♭ and doubled in length.",
   history=[
     "No countersubject recurs, so what surrounds the subject is different every time — and so, "
     "mostly, is the subject. Of fifteen entries only two are exact transpositions; five take the "
@@ -1153,9 +1106,7 @@ PIECES = [
   title="Fugue in G-sharp minor", bwv="BWV 887", book="WTC II, No. 18", collection="wtc2",
   card="A double fugue, and the opening subject vanishes for 38 bars in the middle while the "
        "second one takes over.",
-  blurb="At 143 bars this is the longest fugue in either book, and the subject you hear at the "
-        "start is only half the story. Between bars 59 and 97 it disappears completely; that "
-        "stretch belongs to a second subject, which the entry finder here does not track.",
+  blurb="No fugue in the Well-Tempered Clavier runs longer than this one: 143 bars.",
   history=[
     "Three voices, 6/8, a four-bar subject, and only twelve entries in 143 bars. The first "
     "subject gets its exposition and a run of statements up to bar 59 and then stops. A second "
@@ -1181,9 +1132,7 @@ PIECES = [
   title="Fugue in A major", bwv="BWV 888", book="WTC II, No. 19", collection="wtc2",
   card="Out of A major by bar 3 and not back until bar 25; the home key gets seven bars out of "
        "29.",
-  blurb="Ten entries, no stretto, no inversion, no recurring countersubject — about as plainly as "
-        "Bach ever set a fugue out. What moves instead is the key, and the tonic gets only the "
-        "first two bars and the last five.",
+  blurb="Nineteen notes of subject inside a bar and a half: the densest subject in Book II.",
   history=[
     "Nineteen notes in a bar and a third, near-continuous semiquavers, and he never bends the "
     "shape: four entries are exact, six take the standard tonal answer, none are altered. The "
@@ -1207,8 +1156,7 @@ PIECES = [
   id="bwv889", file="wtc2f20.krn", bpm=74,
   title="Fugue in A minor", bwv="BWV 889", book="WTC II, No. 20", collection="wtc2",
   card="The only fugue here whose key never officially changes: 28 bars, all of them A minor.",
-  blurb="Eight notes make the whole subject — wide leaps, chromatic, almost nothing joining them "
-        "up — and the fugue around it has 733. Everything that moves is in the other voices.",
+  blurb="Four countersubject statements inside twenty-eight bars, and not one stretto.",
   history=[
     "The subject takes a bar and three quarters to say eight notes, which leaves the semiquavers "
     "to the lines underneath and above it. Four of those lines recur often enough to count as "
@@ -1233,9 +1181,7 @@ PIECES = [
   id="bwv890", file="wtc2f21.krn", bpm=104,
   title="Fugue in B-flat major", bwv="BWV 890", book="WTC II, No. 21", collection="wtc2",
   card="Ten entries in 93 bars, and more than half of it is episode rather than subject.",
-  blurb="A long, unhurried 3/4 built on a subject that takes nearly four bars to finish, so it "
-        "can only be stated ten times in 93 bars. The gaps between statements add up to more of "
-        "the piece than the statements do.",
+  blurb="The opening B-flat major lasts 41 bars, longer than any first key area in either book.",
   history=[
     "The length of the subject sets everything else: 24 notes over almost four bars, an "
     "exposition that runs to bar 17, and nine episodes that between them take about fifty of the "
@@ -1262,8 +1208,7 @@ PIECES = [
   forms=("I",),
   card="The only fugue here in 3/2, and its twenty-one entries split almost evenly between "
        "upright and upside down.",
-  blurb="Four voices in 3/2, and from bar 27 on Bach runs the subject against its own inversion. "
-        "Eleven of the twenty-one entries stand upright and ten are turned over.",
+  blurb="Ten key areas in 101 bars, and no other fugue in either book passes through more.",
   history=[
     "The exposition takes twenty-one bars, which is long, and after that the piece never really "
     "relaxes. Eleven entries keep the subject as it stands, ten invert it, and at eight points a "
@@ -1290,9 +1235,7 @@ PIECES = [
   subject=dict(v=3, q0=0, q1=16),  # bars 1:1..5:1
   card="Bass first and building upward, on a subject of eleven notes in four bars — most entries "
        "never state all of it.",
-  blurb="Bach starts at the bottom and stacks the voices upward. The subject is eleven notes "
-        "spread over four bars, and after the exposition he stops stating it whole: ten of the "
-        "fourteen entries are partial, the highest share of any fugue here.",
+  blurb="The longest four-voice fugue in the Well-Tempered Clavier, at 104 bars.",
   history=[
     "Bass, tenor, alto, soprano. The exposition builds from the floor and takes eighteen bars to "
     "finish, with a pedal underneath the last of it held for five and a half bars. Three "
@@ -1319,8 +1262,7 @@ PIECES = [
   title="Fugue in B minor", bwv="BWV 893", book="WTC II, No. 24", collection="wtc2",
   card="Last fugue in Book II, and it ends the collection in a hurry: three voices, 3/8, nine "
        "entries in a hundred bars.",
-  blurb="The piece that closes Book II, and it closes it fast. Three voices in 3/8, only nine "
-        "statements of the subject in a hundred bars, and the last thirteen have none at all.",
+  blurb="Only one of the nine entries is exact: two are tonal answers and six are altered.",
   history=[
     "The subject runs nearly six bars, which in 3/8 is not much clock time but is a lot of fugue: "
     "nine statements and eight episodes fill the whole hundred bars. Six of the nine are altered "
@@ -1346,8 +1288,7 @@ PIECES = [
   title="Contrapunctus I", bwv="BWV 1080/1", book="The Art of Fugue", collection="aof",
   card="One subject, four voices, no tricks. Everything else in the cycle is a variation on this "
        "one.",
-  blurb="One subject, four voices, no tricks. It opens The Art of Fugue as plainly as it can, and "
-        "everything else in the cycle is a variation on it.",
+  blurb="Nine entries of the twelve-note subject, every one upright, none inverted.",
   history=[
     "A *simple fugue* in the technical sense: one subject, treated straightforwardly. Bach puts it "
     "first so that the transformations to come have something to be measured against.",
@@ -1369,9 +1310,7 @@ PIECES = [
   title="Contrapunctus II", bwv="BWV 1080/2", book="The Art of Fugue", collection="aof", modernClefs=True,
   card="Contrapunctus I's subject again, this time in dotted rhythm, and the dotting spreads to "
        "every other voice.",
-  blurb="The same D minor subject as Contrapunctus I, now with a dotted tail. The pitches are the "
-        "ones you already know; what has changed is the rhythm, and it does not stay inside the "
-        "subject for long.",
+  blurb="Contrapunctus I touches three keys; this one reaches five, out as far as B-flat major.",
   history=[
     "Bass, tenor, alto, soprano, four bars apart each time, so the exposition is a staircase; the "
     "map finds four places where an entry begins fractionally before the previous one lets go, "
@@ -1395,18 +1334,23 @@ PIECES = [
  dict(
   id="bwv1080-3", file="artfugue-003.krn", bpm=84,
   title="Contrapunctus III", bwv="BWV 1080/3", book="The Art of Fugue", collection="aof", modernClefs=True,
-  subject=dict(v=2, q0=0, q1=14.5),  # bars 1:1..4:2.25
-  card="The subject upside down, chromatic lines around it, and five countersubjects that keep "
-       "coming back.",
-  blurb="The principal subject arrives upside down, and the lines around it are chromatic enough "
-        "that the harmony keeps sliding out from under you. Five countersubjects come back "
-        "through the piece.",
+  subject=dict(v=2, q0=2, q1=14.5),  # bars 1:2..4:2.25
+  headOnly=True,   # the span is the subject's head; later statements re-value its tail
+  card="The subject upside down, chromatic lines around it, and one countersubject stated nine "
+       "times against ten entries.",
+  blurb="Six keys in 72 bars, more than Contrapunctus I, II or IV touches.",
   history=[
-    "Tenor first, then alto, soprano, bass. Eight entries in 72 bars, fewer than any of the other "
-    "three simple fugues, and after the exposition the music runs from bar 19 to bar 43 — a third "
-    "of its length — without a complete statement anywhere. It ends over a pedal held for the "
-    "last three bars.",
-    "The entry brackets label every statement here as prime, and that is the map being literal: "
+    "Tenor first, then alto, soprano, bass, and the exposition is over by bar 19. Ten entries in "
+    "72 bars, only two of them exact: five are tonal answers and three are partial. The bracket "
+    "on the score covers the head of the subject only — three bars, seven notes — since Bach "
+    "re-values the tail whenever the theme comes back, and a full-length template walks straight "
+    "past entries that are plainly there. The three partial ones sit at bars 23, 29 and 35, six "
+    "bars apart, each matching five of the subject's seven notes. The countersubject is stated "
+    "nine times against ten entries; in Contrapunctus I and II nothing recurs alongside the "
+    "subject at all. Ten episodes, the longest just under nine bars, from bar 55 to the final "
+    "entry at bar 63, then a pedal from halfway through bar 68 that holds for three bars.",
+    "III and IV are the inverted pair among the four simple fugues, and this is the first of "
+    "them. The entry brackets still label every statement prime, which is the map being literal: "
     "it takes each movement's own opening as its reference shape, so it has no way of knowing "
     "that this shape is Contrapunctus I's subject turned over. Open the two side by side and "
     "compare the contours.",
@@ -1426,9 +1370,7 @@ PIECES = [
   subject=dict(v=0, q0=0, q1=14.5),  # bars 1:1..4:2.25
   card="138 bars on the inverted subject, with a sixty-four-bar stretch in the middle and no "
        "complete entry in it.",
-  blurb="The longest of the four simple fugues, and the one that spends least of its length on "
-        "the subject. Between bar 43 and bar 107 the map finds no complete statement at all — "
-        "sixty-four bars, the longest episode of any fugue here.",
+  blurb="The longest stretch without a subject anywhere on this site: bars 43 to 107.",
   history=[
     "Soprano, alto, tenor, bass, straight down through the voices, with the exposition done by "
     "bar 19. Twelve entries in all across 138 bars, thinner on the ground than anything else in "
@@ -1455,9 +1397,7 @@ PIECES = [
   forms=("I",),
   card="Eleven statements the right way up, eleven upside down: Bach answers his own subject with "
        "its inversion.",
-  blurb="A counter-fugue: the answer inverts the subject instead of copying it, and across 90 "
-        "bars the two forms come out dead even at eleven each. Turn the entry brackets on from "
-        "bar 33, where they start arriving in pairs.",
+  blurb="Alone among the Art of Fugue pieces here, it ends in D major, not D minor.",
   history=[
     "The exposition drops an entry every three bars — 1, 4, 7, 10 — and the next four keep the "
     "same spacing, at 17, 20, 23 and 26. Of 22 statements, eleven run upright and eleven "
@@ -1486,9 +1426,7 @@ PIECES = [
   subject=dict(v=1, q0=2, q1=17),  # bars 1:2..5:1.5
   card="Three voices, three subjects, 188 bars, and one 43-bar stretch where the entry finder has "
        "nothing to draw.",
-  blurb="A triple fugue, and the only movement from the collection on this site that is not in "
-        "four voices. The site tracks its first subject, so the long empty runs in the map are "
-        "where the other two are doing the work.",
+  blurb="Sixteen episodes — no other fugue on the site has more.",
   history=[
     "The first subject enters in the alto, then the bass, then the soprano, five bars apart, and "
     "the exposition is over by bar 15. Nineteen statements in all, never inverted, and exactly "
@@ -1515,10 +1453,7 @@ PIECES = [
   title="Contrapunctus IX", bwv="BWV 1080/9", book="The Art of Fugue", collection="aof", modernClefs=True,
   card="Eleven entries and not one overlaps another; the trick here is invertible counterpoint at "
        "the twelfth, not stretto.",
-  blurb="*Alla Duodecima* — the two subjects are written so that either can be shifted a twelfth "
-        "against the other and still work. The new one runs in quavers, the collection's D minor "
-        "subject moves against it in long notes, and across 130 bars no entry ever overlaps "
-        "another.",
+  blurb="Its subject runs 46 notes and close to seven bars, longer than any other here.",
   history=[
     "The subject here is new: nearly seven bars long, 46 notes, a couple of held ones and then a "
     "long stream of quavers. Entries arrive seven bars apart — alto, soprano, bass, tenor — so "
@@ -1546,9 +1481,7 @@ PIECES = [
   forms=("I",),
   card="The soprano waits 66 bars of 120 before it gets the subject; then, three times, two "
        "voices take it together.",
-  blurb="*Alla Decima* — the subject is built to run against itself a tenth away, and the last "
-        "third of the piece cashes that in: three times over, two voices start it on the same "
-        "beat.",
+  blurb="Thirteen entries, and only two of them turn the subject upside down.",
   history=[
     "Alto, tenor and bass pass the subject round for more than half the piece before the soprano "
     "is allowed near it, at bar 66 of 120. That is why the map holds the exposition open until "
@@ -1575,9 +1508,7 @@ PIECES = [
   forms=("I",),
   card="Contrapunctus VIII inverted and given a fourth voice: 3,034 notes, more than any other "
        "fugue on the site.",
-  blurb="The three subjects of Contrapunctus VIII, turned upside down and rewritten for four "
-        "voices. 184 bars and 3,034 notes, the most of anything on this site, with the exposition "
-        "finished inside the first 17.",
+  blurb="All four voices have had the subject by bar 18, with 166 bars still to run.",
   history=[
     "Alto, soprano, bass, tenor, an entry every four bars, and the subject has been through all "
     "four voices by bar 17. Then it vanishes for 44 bars while the second subject is set up, "
@@ -1606,9 +1537,7 @@ PIECES = [
   forms=("I",),
   card="Breaks off in bar 239, mid-phrase, and the D minor subject the whole collection is built "
        "on never turns up.",
-  blurb="The unfinished one. 239 bars, the longest fugue on this site, and it stops dead. Three "
-        "subjects get worked out, the third of them spelling B-A-C-H, and then the manuscript "
-        "ends.",
+  blurb="The third subject enters at bar 193 and spells B-A-C-H in German note names.",
   history=[
     "It builds from the bottom — bass, tenor, alto, soprano, five bars apart — and the exposition "
     "is done by bar 22. The first subject is heard 26 times in all, 22 upright and four inverted, "

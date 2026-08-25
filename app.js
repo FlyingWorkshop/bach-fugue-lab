@@ -1305,7 +1305,11 @@ function buildDrawer(doc) {
       'the edition\'s and not a guess. Verovio engraves. Entries are found by sliding the opening ' +
       'statement over every voice and comparing letter-name steps rather than semitones, so a tonal ' +
       'answer still matches. ' +
-      (doc.subjectByHand
+      (doc.subjectHeadOnly
+        ? 'One caveat here: the bracket marks the head of the subject, not the whole of it. Bach ' +
+          're-values the tail when he brings the subject back, and a template that includes the ' +
+          'tail finds far fewer of the entries that are plainly there.'
+        : doc.subjectByHand
         ? 'Where the subject itself ends was set by hand for this one — the detector picked a ' +
           'fragment of the head, which then matched far too much.'
         : 'Where the subject ends was worked out by the build too.'))),

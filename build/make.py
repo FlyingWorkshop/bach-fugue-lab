@@ -309,6 +309,7 @@ def build(P):
         'key': key_text, 'meter': meter, 'bpm': P['bpm'], 'blurb': P['blurb'],
         'card': P.get('card') or P['blurb'],
         'subjectByHand': subject_by_hand,
+        'subjectHeadOnly': bool(P.get('headOnly')),
         'history': P['history'], 'links': [{'label': a, 'url': b} for a, b in P['links']],
         'performances': P['performances'],
         'qpb': qpb, 'beats': beats, 'qbar': qbar, 'pickup': pickup,
