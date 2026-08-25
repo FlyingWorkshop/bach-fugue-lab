@@ -4,7 +4,7 @@
    panel open. Expect [] . */
 (async () => {
   const w = ms => new Promise(r => setTimeout(r, ms));
-  const BAD = /<\/?[a-z][a-z0-9]*\b[^>]*>|&(amp|lt|gt|quot|nbsp|#\d+);|(^|\s)`[^`]/i;
+  const BAD = /<\/?[a-z][a-z0-9]*\b[^>]*>|&(amp|lt|gt|quot|nbsp|#\d+);|(^|\s)`[^`]|\*[^*\s][^*]*\*/i;
   const scan = () => {
     const out = [], wk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     let n;

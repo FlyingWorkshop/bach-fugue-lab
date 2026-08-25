@@ -20,6 +20,9 @@ const el = (t, a, ...kids) => {
   return n;
 };
 const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+/* *asterisks* mark italics in the editorial text; that is the whole of the markup */
+const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const md = t => esc(t).replace(/\*([^*]+)\*/g, '<em>$1</em>');
 const PCS = ['C','C♯','D','E♭','E','F','F♯','G','A♭','A','B♭','B'];
 const pname = p => PCS[((p % 12) + 12) % 12] + (Math.floor(p / 12) - 1);
 const VCOL = {
@@ -1165,7 +1168,7 @@ async function selectPiece(id) {
   $('#pKey').textContent = doc.key;
   $('#pMeter').textContent = doc.meter;
   $('#pVoices').textContent = doc.nv + ' voices';
-  $('#pBlurb').textContent = doc.blurb;
+  $('#pBlurb').innerHTML = md(doc.blurb);
   $('#pieceBtnTitle').textContent = doc.title;
   $('#pieceBtnSub').textContent = `${doc.bwv} · ${doc.nv} voices`;
   document.querySelectorAll('#picker .pcard').forEach(b => b.classList.toggle('on', b.dataset.id === id));
@@ -1194,6 +1197,13 @@ function groupOf(p) {
 function buildPicker(idx) {
   const host = $('#picker');
   host.innerHTML = '';
+  // 58 fugues is too many to scan, so the list filters as you type
+  const box = el('div', { class: 'pfilter' });
+  const inp = el('input', { type: 'search', id: 'pfind', placeholder: 'Filter: key, BWV, book, voices\u2026',
+                            autocomplete: 'off', spellcheck: 'false' });
+  const count = el('span', { class: 'pcount' });
+  box.append(inp, count);
+  host.append(box);
   for (const [key, label] of GROUPS) {
     const rows = idx.filter(p => groupOf(p) === key);
     if (!rows.length) continue;
@@ -1208,15 +1218,36 @@ function buildPicker(idx) {
           el('span', { class: 'tag' }, `${p.bars} bars`),
           el('span', { class: 'tag' }, `${p.entries} entries`)));
       b.onclick = () => { $('#picker').hidden = true; selectPiece(p.id); };
+      b.dataset.find = [p.title, p.bwv, p.book, p.key, p.meter, `${p.nv} voices`].join(' ').toLowerCase();
       host.append(b);
     }
   }
+  const apply = () => {
+    const q = inp.value.trim().toLowerCase();
+    let shown = 0;
+    for (const b of host.querySelectorAll('.pcard')) {
+      const hit = !q || q.split(/\s+/).every(t => b.dataset.find.includes(t));
+      b.hidden = !hit; if (hit) shown++;
+    }
+    // hide a group heading whose whole group filtered away
+    for (const g of host.querySelectorAll('.grp')) {
+      let n = g.nextElementSibling, any = false;
+      while (n && !n.classList.contains('grp')) { if (!n.hidden) { any = true; break; } n = n.nextElementSibling; }
+      g.hidden = !any;
+    }
+    count.textContent = q ? `${shown} of ${idx.length}` : `${idx.length} fugues`;
+  };
+  inp.oninput = apply;
+  inp.onkeydown = e => {
+    if (e.key === 'Escape') { if (inp.value) { inp.value = ''; apply(); } else $('#picker').hidden = true; e.stopPropagation(); }
+    if (e.key === 'Enter') { const f = host.querySelector('.pcard:not([hidden])'); if (f) f.click(); }
+  };
+  apply();
 }
 function buildDrawer(doc) {
   const body = $('#drawerBody');
   $('#drawerTitle').textContent = `${doc.title} · ${doc.bwv}`;
   const sec = (h, ...kids) => el('section', { class: 'dsec' }, el('h4', {}, h), ...kids);
-  const md = t => t.replace(/\*([^*]+)\*/g, '<em>$1</em>');
 
   const keyPlan = doc.keys.map(k => k.k.replace('maj', ' major').replace('min', ' minor')).join('  →  ');
   const kinds = {};
@@ -1237,7 +1268,11 @@ function buildDrawer(doc) {
       el('p', { class: 'dnote', style: 'margin-top:10px' },
         `None of these numbers are typed in. Matching every voice against the opening entry ` +
         `turned up ${doc.entries.length} statements of the subject.` +
-        (doc.counters.length ? ` The same match run against the countersubject found ${doc.counters.length}.` : ''))),
+        (doc.counters.length ? ` The same match run against the countersubject found ${doc.counters.length}.` : '') +
+        (doc.subjectByHand
+          ? ' Where the subject itself starts and ends was set by hand for this one: the detector' +
+            ' picked a fragment of the head instead, which then matched far too much.'
+          : ' Where the subject starts and ends was worked out by the build too.'))),
     sec('Tonal plan', el('p', { html: keyPlan }),
       el('p', { class: 'dnote' },
          'Estimates, not markings in the score. A key-profile reading of every bar, smoothed so ' +
@@ -1293,7 +1328,10 @@ async function boot() {
   G.index = idx;
   buildPicker(idx);
   const pb = $('#pieceBtn'), pk = $('#picker');
-  pb.onclick = e => { e.stopPropagation(); pk.hidden = !pk.hidden; };
+  pb.onclick = e => {
+    e.stopPropagation(); pk.hidden = !pk.hidden;
+    if (!pk.hidden) { const f = $('#pfind'); if (f) { f.select(); f.focus(); } }
+  };
   document.addEventListener('click', e => {
     if (!pk.hidden && !pk.contains(e.target) && e.target !== pb) pk.hidden = true;
   });

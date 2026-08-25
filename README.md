@@ -6,20 +6,19 @@ build, not typed in by hand.
 
 **→ [Open the site](https://flyingworkshop.github.io/bach-fugue-lab/)**  ·  [jump straight into the lab](https://flyingworkshop.github.io/bach-fugue-lab/lab.html)
 
-Nine fugues: the Well-Tempered Clavier Books I and II, plus Contrapunctus I from *The Art of
-Fugue*, ranging from two voices to four.
+Fifty-seven fugues: forty-seven of the forty-eight in the Well-Tempered Clavier, and ten from
+*The Art of Fugue*. Two to five voices, 27 to 239 bars.
 
-| | Fugue | Voices | Bars | Statements |
-|---|---|---|---|---|
-| BWV 855 | E minor, WTC I/10 | 2 | 42 | 8 |
-| BWV 847 | C minor, WTC I/2 | 3 | 31 | 8 |
-| BWV 851 | D minor, WTC I/6 | 3 | 44 | 14 (3 inverted) |
-| BWV 856 | F major, WTC I/11 | 3 | 72 | 13 |
-| BWV 866 | B♭ major, WTC I/21 | 3 | 48 | 8 |
-| BWV 846 | C major, WTC I/1 | 4 | 27 | 22 |
-| BWV 861 | G minor, WTC I/16 | 4 | 34 | 15 |
-| BWV 878 | E major, WTC II/9 | 4 | 43 | 15 |
-| BWV 1080/1 | Contrapunctus I | 4 | 78 | 9 |
+| Collection | Fugues | Voices |
+|---|---|---|
+| Well-Tempered Clavier, Book I | 23 of 24 | 2–5 |
+| Well-Tempered Clavier, Book II | 24 of 24 | 3–4 |
+| *The Art of Fugue* | Contrapunctus I–V, VIII–XI, XIV | 3–4 |
+
+The one absentee is **BWV 865** (A minor, Book I No. 20). In the kern encoding its entire final bar
+is commented out — the encoder's note reads "the voicing in the final measure is somewhat
+arbitrary" — so the fugue would stop a bar before it ends. The canons of *The Art of Fugue* are
+not fugues and are not here either.
 
 ## What it shows
 
@@ -40,6 +39,12 @@ every voice and compares in **diatonic space** — letter-name steps rather than
 `exact` / `tonal` / `adjusted` / `partial`. The countersubject goes through the same pass, and so
 do inversion and augmentation where a piece uses them.
 
+The one thing that is sometimes typed in is where the subject *ends*. The detector takes the
+opening voice up to the answer's entry and shortens it until the later statements agree, which
+works for 32 of the 57 and fails on the rest — usually by settling on a fragment of the head, which
+then matches far too much. Those 25 spans are set by hand in `build/pieces.py`, and each piece's
+notes panel says which kind it is. Every statement is still found by the matcher either way.
+
 **A whole-piece map.** Every entry as a block on its voice's lane, episodes greyed, strettos
 flagged, and the estimated key underneath.
 
@@ -58,7 +63,7 @@ common pitch. The entries Bach bent are the interesting ones.
 
 ## Keys
 
-`space` play/pause · `←`/`→` bar · `shift`+`←`/`→` previous/next entry · `1`…`4` solo a voice ·
+`space` play/pause · `←`/`→` bar · `shift`+`←`/`→` previous/next entry · `1`…`5` solo a voice ·
 `0` all voices · `L` loop the current section · `S` spotlight · `N` notes panel · `esc` close
 
 ## Building it yourself
@@ -78,12 +83,18 @@ The pipeline is:
 | `build/analyze.py` | motif matching in diatonic space, with transposition/inversion/augmentation |
 | `build/autosubject.py` | works out how long the subject is: what every expository entry has in common |
 | `build/build.py` | Verovio engraving + geometry extraction (note positions, staff boxes, bar lines) |
+| `build/kernprep.py` | normalises the two Humdrum constructs Verovio will not import (see below) |
 | `build/pieces.py` | the repertoire and its editorial matter |
+| `build/facts.py` | dumps what the analysis found per piece, so the prose can be checked against it |
+| `build/look.py` | CLI: dump a voice as bar:beat, or test a candidate subject span |
 | `build/make.py` | puts it together into `data/<id>.json`, `<id>.svg`, `<id>.p.svg` |
 | `build/bundle.py` | packs the lab into one self-contained `dist/fugue-lab.html` |
 
-The site itself is two pages: `index.html` is the front page (`home.css` / `home.js`, drawing its
-figures from `data/teasers.json`), and `lab.html` is the tool (`app.css` / `app.js`).
+The site itself is two pages: `index.html` is the front page (`home.css` / `home.js`) and
+`lab.html` is the tool (`app.css` / `app.js`). The front page loads `data/hero.json` — every note of
+one fugue, for the figure at the top — and `data/maps.json`, which holds each fugue's thumbnail as
+one character per voice per instant. That keeps the front page under 90 kB for all 57; shipping the
+full note list for every piece would have cost 1.3 MB.
 
 Nothing is hand-transcribed. Onsets are cross-checked against Verovio's own timemap, and every
 note id in the JSON is verified to exist in the engraved SVG, so the score, the roll and the audio
@@ -94,8 +105,19 @@ bar one measure out.
 `build/audit-dom.js` can be pasted into the browser console on either page: it walks every fugue
 and reports any text that was meant to be markup but rendered literally.
 
-A note on pitch: Verovio 6.3's `getMIDIValuesForElement` and MIDI export ignore key signatures, so
-pitches here come from the `**kern` tokens instead, which spell every accidental explicitly.
+### Verovio 6.3 notes
+
+Four quirks cost enough time to be worth writing down.
+
+* `getMIDIValuesForElement` and MIDI export **ignore key signatures**, so pitches here come from the
+  `**kern` tokens instead, which spell every accidental explicitly.
+* A note carrying an explicit stem-direction marker (`/` or `\`) sometimes loses its `xml:id`, which
+  breaks the join between kern data and engraved geometry. The markers are cosmetic, so when
+  geometry comes back short the build re-renders without them and tries again.
+* A **phantom empty column** in the spine header (wtc1f24 has one) shifts every field number by one.
+* `*+`, which adds a spine mid-piece for a voice that enters late (wtc1f20 gains a fifth voice for
+  its last bars), makes the Humdrum importer return an **empty score** with no error. `kernprep.py`
+  declares the spine from the start instead and leaves it silent until it enters.
 
 ## Sources & credits
 

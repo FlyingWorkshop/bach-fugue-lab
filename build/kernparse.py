@@ -107,7 +107,9 @@ def parse(path):
                 eid = f'note-L{ln}F{f_i+1}'
                 if len(subtoks) > 1:
                     eid = f'note-L{ln}F{f_i+1}S{k+1}'
-                if 'r' in st and not re.search(r'[a-gA-G]', st):
+                # 'r' marks a rest; any pitch letters after it only place it on the
+                # staff (2rGG in Contrapunctus V), so they must not become a note
+                if 'r' in st:
                     events.append({'id': f'rest-L{ln}F{f_i+1}', 'kind': 'rest',
                                    'q': sp['q'], 'd': dur, 'spine': sp['origin'], 'line': ln})
                     continue

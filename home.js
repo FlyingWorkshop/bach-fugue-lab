@@ -9,8 +9,12 @@ const VCOL = {
   2: ['#5cc8ff', '#52d6a4'],
   3: ['#5cc8ff', '#ffc247', '#52d6a4'],
   4: ['#5cc8ff', '#ffc247', '#ff7eb6', '#52d6a4'],
+  5: ['#5cc8ff', '#ffc247', '#ff7eb6', '#c58bff', '#52d6a4'],
 };
 const vcol = (nv, i) => (VCOL[nv] || VCOL[4])[i] || '#8e9aac';
+/* *asterisks* mark italics in the editorial text; that is the whole of the markup */
+const esc = t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const md = t => esc(t).replace(/\*([^*]+)\*/g, '<em>$1</em>');
 
 /* ------------------------------------------------------------- mini rolls */
 function rollSvg(t, opts) {
@@ -77,33 +81,33 @@ function rollSvg(t, opts) {
 }
 
 /* A tiny structural map: what shape does this fugue have from a distance? */
-function mapSvg(t, { W, H }) {
-  const lane = H / t.nv, X = q => (q / t.total) * W;
+function mapSvg(m, { W, H }) {
+  const lane = H / m.nv, X = q => (q / m.total) * W;
+  const B = m.lanes[0].length, bw = W / B;
   const svg = sel('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H,
                            preserveAspectRatio: 'none' });
-  for (const [a, b] of (t.episodes || []))
+  for (const [a, b] of (m.episodes || []))
     svg.append(sel('rect', { x: X(a), y: 0, width: Math.max(1, X(b) - X(a)), height: H,
                              fill: 'rgba(255,255,255,.035)' }));
-  // strettos: where two entries overlap
-  for (let i = 0; i < t.entries.length; i++)
-    for (let j = i + 1; j < t.entries.length; j++) {
-      const a = t.entries[i], b = t.entries[j];
-      const s0 = Math.max(a[1], b[1]), s1 = Math.min(a[2], b[2]);
-      if (s1 > s0) svg.append(sel('rect', { x: X(s0), y: 0, width: Math.max(1, X(s1) - X(s0)),
-                                            height: H, fill: 'rgba(255,107,107,.14)' }));
-    }
-  for (let v = 0; v < t.nv; v++) {
+  for (const [a, b] of (m.stretto || []))
+    svg.append(sel('rect', { x: X(a), y: 0, width: Math.max(1, X(b) - X(a)), height: H,
+                             fill: 'rgba(255,107,107,.14)' }));
+  for (let v = 0; v < m.nv; v++) {
     const y = v * lane + lane / 2;
     svg.append(sel('line', { x1: 0, x2: W, y1: y, y2: y, stroke: '#1e2530', 'stroke-width': 1 }));
-    const g = sel('g', { opacity: .45 });
-    for (const n of t.notes) if (n[3] === v)
-      g.append(sel('rect', { x: X(n[0]), y: y - 0.9, width: Math.max(0.5, X(n[0] + n[1]) - X(n[0])),
-                             height: 1.8, fill: vcol(t.nv, v) }));
+    const g = sel('g', { opacity: .45 }), row = m.lanes[v];
+    for (let k = 0; k < B; ) {                    // merge runs of sounding buckets
+      if (row[k] !== '1') { k++; continue; }
+      let j = k; while (j < B && row[j] === '1') j++;
+      g.append(sel('rect', { x: k * bw, y: y - 0.9, width: (j - k) * bw, height: 1.8,
+                             fill: vcol(m.nv, v) }));
+      k = j;
+    }
     svg.append(g);
   }
-  for (const [v, a, b] of t.entries)
+  for (const [v, a, b] of m.entries)
     svg.append(sel('rect', { x: X(a), y: v * lane + 1.5, width: Math.max(2, X(b) - X(a)),
-                             height: lane - 3, rx: 2, fill: vcol(t.nv, v), 'fill-opacity': .85 }));
+                             height: lane - 3, rx: 2, fill: vcol(m.nv, v), 'fill-opacity': .85 }));
   return svg;
 }
 
@@ -113,31 +117,21 @@ const GROUPS = [
   ['WTC II,', 'The Well-Tempered Clavier, Book II (c. 1740)'],
   ['The Art',  'The Art of Fugue (c. 1745–50)'],
 ];
-const NOTE = {
-  bwv855: 'The only two-voice fugue in either book. One line above, one below, and nowhere to hide. Start here.',
-  bwv847: 'The textbook fugue. Compact subject, a countersubject that comes back with nearly every entry, episodes spun from the subject\'s tail.',
-  bwv851: 'Fast, and then halfway through Bach turns the subject upside down and carries on regardless.',
-  bwv856: 'A dancing 3/8, and a long subject that walks almost entirely by step, so each voice reads as a tune.',
-  bwv866: 'The subject leaps about for nearly four bars before it lets go. At that length there is no room for many entries, so most of what you hear is episode.',
-  bwv846: 'Twenty-two entries in twenty-seven bars, piled into stretto. No regular countersubject, and barely an episode.',
-  bwv861: 'Four voices, a short and sharply drawn subject, and a countersubject stuck to it. Hear how much thicker four parts sound than three.',
-  bwv878: 'The long white notes and the alla breve are deliberate: this is Bach imitating a Renaissance motet.',
-  'bwv1080-1': 'One subject, four voices, no tricks. Everything else in the cycle is a variation on this one.',
-};
 
-const [index, teasers] = await Promise.all([
+const [index, hero, maps] = await Promise.all([
   fetch('data/index.json').then(r => r.json()),
-  fetch('data/teasers.json').then(r => r.json()),
+  fetch('data/hero.json').then(r => r.json()),   // every note, for the figure at the top
+  fetch('data/maps.json').then(r => r.json()),   // thumbnail shapes, one per fugue
 ]);
 
 // hero: the exposition of the C minor fugue. Narrow screens get half of it, so the
 // entry labels stay large enough to read once the SVG is scaled down.
 const narrow = window.innerWidth < 720;
-$('#teaser').replaceChildren(rollSvg(teasers.bwv847, {
+$('#teaser').replaceChildren(rollSvg(hero, {
   W: narrow ? 560 : 1100, H: narrow ? 250 : 290, q0: 0, q1: narrow ? 18.5 : 33,
   boxes: true, labels: true, grid: true, nh: narrow ? 4.6 : 5.4, dim: .26, pad: 16 }));
 
-// the nine fugues
+// every fugue on the site
 const grid = $('#pieceGrid');
 for (const [key, label] of GROUPS) {
   const rows = index.filter(p => p.book.startsWith(key));
@@ -148,14 +142,14 @@ for (const [key, label] of GROUPS) {
     a.className = 'pc';
     a.href = `lab.html?piece=${p.id}`;
     a.innerHTML =
-      `<div class="ph"><b>${p.title}</b><span class="bwv">${p.bwv}</span></div>` +
-      `<div class="sub">${p.book} · ${p.key} · ${p.meter}</div>` +
-      `<div class="note">${NOTE[p.id] || ''}</div>` +
+      `<div class="ph"><b>${esc(p.title)}</b><span class="bwv">${esc(p.bwv)}</span></div>` +
+      `<div class="sub">${esc(p.book)} · ${esc(p.key)} · ${esc(p.meter)}</div>` +
+      `<div class="note">${md(p.card || p.blurb || '')}</div>` +
       `<div class="tags"><span class="tag v">${p.nv} voices</span>` +
       `<span class="tag">${p.bars} bars</span><span class="tag">${p.entries} entries</span></div>`;
     const mini = document.createElement('div');
     mini.className = 'mini';
-    mini.append(mapSvg(teasers[p.id], { W: 250, H: 34 }));
+    mini.append(mapSvg(maps[p.id], { W: 250, H: 34 }));
     a.append(mini);
     grid.append(a);
   }

@@ -7,6 +7,7 @@ from analyze import by_voice, make_template, find_statements, dedupe
 from autosubject import find_subject
 from build import extract as verovio_extract
 from pieces import PIECES, VOICE_NAMES
+from kernprep import normalise as normalise_kern
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PROJ = os.path.dirname(HERE)
@@ -71,6 +72,20 @@ def modernise_clefs(src, dst):
     return dst
 
 # ------------------------------------------------------------------ labelling
+def strip_stems(src, dst):
+    """Verovio 6.3 silently drops the xml:id of a handful of notes that carry an
+    explicit stem-direction marker (/ or \\). The markers are cosmetic — verovio
+    stems by itself — so when geometry comes back short we re-render without them."""
+    out = []
+    for ln in open(src, encoding='utf-8', errors='replace').read().split('\n'):
+        if ln[:1] in ('!', '*', '='):
+            out.append(ln)
+        else:
+            out.append('\t'.join(t.replace('/', '').replace('\\', '')
+                                  for t in ln.split('\t')))
+    open(dst, 'w', encoding='utf-8').write('\n'.join(out))
+    return dst
+
 def label_for(st, flats):
     if st['form'] == 'I':   return "Inversion", (PC_FLAT if flats else PC_SHARP)[st['p0'] % 12]
     if st['form'] == 'Aug': return "Augmented", (PC_FLAT if flats else PC_SHARP)[st['p0'] % 12]
@@ -88,6 +103,8 @@ def statement_dict(st, flats, motif):
 # ----------------------------------------------------------------------- main
 def build(P):
     krn = os.path.join(HERE, "kern-open", P["file"])
+    krn, fixed = normalise_kern(krn, os.path.join(HERE, "kern-open", "_n_" + P["file"]))
+    if fixed: print(f"  {P['id']}: normalised kern ({fixed})")
     if P.get("modernClefs"):
         krn = modernise_clefs(krn, os.path.join(HERE, "kern-open", "_mc_" + P["file"]))
 
@@ -103,15 +120,21 @@ def build(P):
     beats, qpb = mnum, 4.0 / mden
 
     # ---- geometry from verovio, in two spacings
-    tk,  svg,  vnotes,  vmeasures,  viewBox,  staffboxes,  *_ = verovio_extract(krn)
-    tk2, svgP, vnotesP, vmeasuresP, viewBoxP, _,            *_ = verovio_extract(krn, PRO)
-    pos, posP = {n['id']: n for n in vnotes}, {n['id']: n for n in vnotesP}
-    for n in notes:
-        g = next((pos[i] for i in n['ids'] if i in pos), None)
-        gp = next((posP[i] for i in n['ids'] if i in posP), None)
-        n['x'], n['y'] = (g['x'], g['y']) if g else (None, None)
-        n['xp'] = gp['x'] if gp else None
-    missing = [n for n in notes if n['x'] is None or n['xp'] is None]
+    for attempt in (0, 1):
+        tk,  svg,  vnotes,  vmeasures,  viewBox,  staffboxes,  *_ = verovio_extract(krn)
+        tk2, svgP, vnotesP, vmeasuresP, viewBoxP, _,            *_ = verovio_extract(krn, PRO)
+        pos, posP = {n['id']: n for n in vnotes}, {n['id']: n for n in vnotesP}
+        for n in notes:
+            g = next((pos[i] for i in n['ids'] if i in pos), None)
+            gp = next((posP[i] for i in n['ids'] if i in posP), None)
+            n['x'], n['y'] = (g['x'], g['y']) if g else (None, None)
+            n['xp'] = gp['x'] if gp else None
+        missing = [n for n in notes if n['x'] is None or n['xp'] is None]
+        if not missing or attempt: break
+        # stripping the cosmetic stem markers gets the dropped ids back; line
+        # numbers are untouched, so the kern-side note ids still line up
+        print(f"  {P['id']}: {len(missing)} notes without geometry, re-rendering without stem markers")
+        krn = strip_stems(krn, os.path.join(HERE, "kern-open", "_ns_" + P["file"]))
     assert not missing, f"{P['id']}: {len(missing)} notes without geometry, e.g. {missing[:2]}"
 
     # ---- bars.  An anacrusis has no "=" marker of its own, but Verovio still
@@ -146,7 +169,9 @@ def build(P):
 
     # ---- subject, answer, countersubject
     V = by_voice(notes)
-    S = P.get("subject") or find_subject(notes)
+    S = P.get("subject")
+    subject_by_hand = bool(S)          # the detector got this one wrong; the span is set in pieces.py
+    if not S: S = find_subject(notes)
     tpl = make_template(V, S['v'], S['q0'], S['q1'])
     forms = [('P', 1, 1.0)]
     for f in P.get("forms", ()):
@@ -282,6 +307,8 @@ def build(P):
     doc = {
         'id': P['id'], 'title': P['title'], 'bwv': P['bwv'], 'book': P['book'],
         'key': key_text, 'meter': meter, 'bpm': P['bpm'], 'blurb': P['blurb'],
+        'card': P.get('card') or P['blurb'],
+        'subjectByHand': subject_by_hand,
         'history': P['history'], 'links': [{'label': a, 'url': b} for a, b in P['links']],
         'performances': P['performances'],
         'qpb': qpb, 'beats': beats, 'qbar': qbar, 'pickup': pickup,
@@ -302,6 +329,15 @@ def build(P):
         x = re.sub(r'<desc>.*?</desc>', '', x, flags=re.S)
         x = re.sub(r'>\s+<', '><', x)                    # verovio indents heavily
         x = re.sub(r'\s{2,}', ' ', x).strip()
+        # Verovio stamps the root element and every glyph definition with a fresh
+        # random nonce on each run, so an unchanged piece would still rewrite its
+        # whole SVG on every build. Drop the root id and the nonce; the glyph ids
+        # stay unique within the file, and identical across files, which is fine
+        # because a given code point is the same glyph either way.
+        x = re.sub(r'^(<svg\b[^>]*?) id="[^"]*"', r'\1', x)
+        x = re.sub(r'(id="E[0-9A-F]{3})-[a-z0-9]+"', r'\1"', x)
+        x = re.sub(r'(href="#E[0-9A-F]{3})-[a-z0-9]+"', r'\1"', x)
+        x = re.sub(r'(class="pageMilestoneEnd) [a-z0-9]+"', r'\1"', x)
         # only note / staff / measure ids are addressed by the app; drop the rest
         head, sep, tail = x.partition('</defs>')
         tail = re.sub(r' id="(?!note-|staff-|measure-)[^"]*"', '', tail)
@@ -317,7 +353,7 @@ def build(P):
     return doc
 
 def teaser(d):
-    """A compact shape of the whole piece for the front page."""
+    """The whole piece note by note — only the front page's hero figure needs this."""
     return {
         'id': d['id'], 'nv': d['nv'], 'total': d['total'], 'qbar': d['qbar'],
         'notes': [[round(n['q'], 2), round(n['d'], 2), n['p'], n['v'], 1 if n['e'] >= 0 else 0]
@@ -328,12 +364,67 @@ def teaser(d):
         'episodes': d['episodes'],
     }
 
+MAP_BUCKETS = 160
+
+def mapdata(d, buckets=MAP_BUCKETS):
+    """A thumbnail-sized shape of the piece: one character per voice per instant,
+    '1' where that voice is sounding. The cards draw voices as lanes and ignore pitch,
+    so this is all they need, and it is a fiftieth of the bytes — which matters because
+    the front page loads every piece's map at once."""
+    total = d['total'] or 1.0
+    w = total / buckets
+    lanes = [['0'] * buckets for _ in range(d['nv'])]
+    byv = {}
+    for n in d['notes']:
+        byv.setdefault(n['v'], []).append(n)
+    for v, seq in byv.items():
+        seq.sort(key=lambda n: n['q'])
+        i = 0
+        for k in range(buckets):
+            t = (k + 0.5) * w
+            while i + 1 < len(seq) and seq[i + 1]['q'] <= t: i += 1
+            n = seq[i]
+            if n['q'] <= t < n['q'] + n['d'] + 1e-9: lanes[v][k] = '1'
+    lanes = [''.join(L) for L in lanes]
+    return {
+        'nv': d['nv'], 'total': round(total, 2), 'qbar': d['qbar'], 'lanes': lanes,
+        'entries': [[e['v'], round(e['q0'], 2), round(e['q1'], 2)] for e in d['entries']],
+        'episodes': [[round(a, 2), round(b, 2)] for a, b in d['episodes']],
+        'stretto': [[round(d['entries'][i]['q0'], 2), round(d['entries'][j]['q1'], 2)]
+                    for i, j in d['stretto']],
+    }
+
 if __name__ == "__main__":
-    docs = [build(P) for P in PIECES]
-    json.dump({d['id']: teaser(d) for d in docs},
-              open(f"{DATA}/teasers.json", "w"), separators=(',', ':'), ensure_ascii=False)
-    idx = [{k: d[k] for k in ('id', 'title', 'bwv', 'book', 'key', 'meter', 'nv', 'blurb', 'bpm')}
+    only = set(sys.argv[1:])
+    docs, failed = [], []
+    for P in PIECES:
+        if only and P['id'] not in only: continue
+        try:
+            docs.append(build(P))
+        except Exception as e:
+            failed.append((P['id'], f"{type(e).__name__}: {e}"))
+            print(f"  !! {P['id']} FAILED: {type(e).__name__}: {str(e)[:120]}")
+    if failed:
+        print(f"\n{len(failed)} of {len(failed)+len(docs)} pieces failed to build:")
+        for i, m in failed: print(f"  {i:12s} {m[:150]}")
+        print("(they are left out of index.json rather than shipped broken)\n")
+    HERO = "bwv847"
+    for d in docs:
+        if d['id'] == HERO:
+            json.dump(teaser(d), open(f"{DATA}/hero.json", "w"),
+                      separators=(',', ':'), ensure_ascii=False)
+    mp = {}
+    if only and os.path.exists(f"{DATA}/maps.json"):
+        mp = json.load(open(f"{DATA}/maps.json", encoding="utf-8"))
+    mp.update({d['id']: mapdata(d) for d in docs})
+    json.dump(mp, open(f"{DATA}/maps.json", "w"), separators=(',', ':'), ensure_ascii=False)
+    idx = [{k: d[k] for k in ('id', 'title', 'bwv', 'book', 'key', 'meter', 'nv', 'blurb', 'card', 'bpm')}
            for d in docs]
     for d, i in zip(docs, idx):
         i['bars'] = sum(1 for b in d['bars'] if b['n'] > 0); i['entries'] = len(d['entries'])
+    if only and os.path.exists(f"{DATA}/index.json"):
+        prev = {p['id']: p for p in json.load(open(f"{DATA}/index.json", encoding="utf-8"))}
+        prev.update({p['id']: p for p in idx})
+        order = [P['id'] for P in PIECES]
+        idx = [prev[i] for i in order if i in prev]
     json.dump(idx, open(f"{DATA}/index.json", "w"), indent=1, ensure_ascii=False)

@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fugue Lab — nine Bach fugues, one staff per voice</title>
-<meta name="description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis. Every statement of the subject is found by the build rather than typed in.">
+<title>Fugue Lab — 57 Bach fugues, one staff per voice</title>
+<meta name="description" content="Fifty-seven Bach fugues — the Well-Tempered Clavier and The Art of Fugue — as open score, piano roll and structural map on one shared axis. Every statement of the subject is found by the build rather than typed in.">
 <meta name="theme-color" content="#0d1014">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Fugue Lab — nine Bach fugues, one staff per voice">
-<meta property="og:description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis, with every statement of the subject found by the build rather than typed in.">
+<meta property="og:title" content="Fugue Lab — 57 Bach fugues, one staff per voice">
+<meta property="og:description" content="Fifty-seven Bach fugues as open score, piano roll and structural map on one shared axis, with every statement of the subject found by the build rather than typed in.">
 <meta property="og:url" content="https://flyingworkshop.github.io/bach-fugue-lab/">
-<link rel="stylesheet" href="home.css?v=5">
+<link rel="stylesheet" href="home.css?v=6">
 </head>
 <body>
 
@@ -28,7 +28,7 @@
 </header>
 
 <section class="hero">
-  <h2>Nine Bach fugues,<br>one staff per voice.</h2>
+  <h2>Fifty-seven Bach fugues,<br>one staff per voice.</h2>
   <p class="lede">Every entry of the subject is found by the build, not typed in.</p>
   <div class="cta">
     <a class="btn primary" href="lab.html?piece=bwv855">Start with the two-voice fugue</a>
@@ -53,8 +53,10 @@
          <a href="https://www.verovio.org/" target="_blank" rel="noopener">Verovio</a> engraves them
          at build time and every notehead's position is lifted out of the engraved SVG, so the score,
          the roll and the audio cannot drift apart.</p>
-      <p>The entries, strettos, episodes and key changes are all measured from the score. About a
-         thousand lines of Python, in the repository.</p>
+      <p>The entries, strettos, episodes and key changes are all measured from the score. The one
+         thing sometimes typed in is where the subject ends: the detector gets 32 of the 57 right
+         on its own and the other 25 are set by hand, which each fugue's notes panel tells you.
+         About a thousand lines of Python, in the repository.</p>
       <a class="btn" href="https://github.com/FlyingWorkshop/bach-fugue-lab" target="_blank" rel="noopener">Read the source ↗</a>
     </div>
     <ol class="pipeline">
@@ -81,6 +83,6 @@
   </div>
 </footer>
 
-<script src="home.js?v=5"></script>
+<script src="home.js?v=6"></script>
 </body>
 </html>

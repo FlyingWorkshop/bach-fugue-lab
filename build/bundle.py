@@ -1,5 +1,5 @@
 """Pack the site into one self-contained HTML file (and a body-only variant)."""
-import os, re, json, glob
+import os, re, sys, json, glob
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PROJ = os.path.dirname(HERE)
@@ -7,12 +7,16 @@ DIST = os.path.join(PROJ, "dist")
 
 def read(p): return open(os.path.join(PROJ, p), encoding="utf-8").read()
 
-def assemble():
+def assemble(only=None):
     html = read("lab.html")
     css  = read("app.css")
     js   = read("app.js")
 
     idx = json.load(open(os.path.join(PROJ, "data", "index.json"), encoding="utf-8"))
+    if only:
+        idx = [p for p in idx if p["id"] in only]
+        missing = only - {p["id"] for p in idx}
+        if missing: raise SystemExit(f"no such piece: {', '.join(sorted(missing))}")
     blobs = ['<script type="application/json" id="bx-index">%s</script>'
              % json.dumps(idx, ensure_ascii=False)]
     for p in idx:
@@ -34,9 +38,12 @@ window.__BUNDLE__ = {
     for tag in re.findall(r'</?script[^>]*>', "".join(blobs)):
         pass
     body = html
-    body = re.sub(r'<link rel="stylesheet" href="app\.css[^"]*">', '<style>\n%s\n</style>' % css, body)
-    body = re.sub(r'<script src="app\.js[^"]*"></script>',
-                  "\n".join(blobs) + "\n" + loader + "\n<script>\n" + js + "\n</script>", body)
+    # lambda replacements: the payload is code, not a substitution template, so a
+    # backslash escape in it (\u2026) must not be read as a group reference
+    body = re.sub(r'<link rel="stylesheet" href="app\.css[^"]*">',
+                  lambda m: '<style>\n%s\n</style>' % css, body)
+    payload = "\n".join(blobs) + "\n" + loader + "\n<script>\n" + js + "\n</script>"
+    body = re.sub(r'<script src="app\.js[^"]*"></script>', lambda m: payload, body)
     return body
 
 def lint():
@@ -52,7 +59,11 @@ def lint():
 def main():
     lint()
     os.makedirs(DIST, exist_ok=True)
-    full = assemble()
+    only = set(sys.argv[1:]) or None
+    if not only:
+        print("packing all 57 fugues — the result is around 70 MB.\n"
+              "Pass ids for a smaller one, e.g. build/bundle.py bwv846 bwv847 bwv855")
+    full = assemble(only)
     open(os.path.join(DIST, "fugue-lab.html"), "w", encoding="utf-8").write(full)
 
     # body-only variant: no doctype/html/head/body wrapper (the Artifact host adds one)
