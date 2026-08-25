@@ -119,21 +119,28 @@
   <div class="modalbox">
     <button class="close" id="helpClose">×</button>
     <h3>How to read this</h3>
-    <p><b>The score</b> is engraved in <i>open score</i> — one staff per voice — so a single fugal line never jumps between staves. Each voice keeps its colour everywhere: notation, piano roll, map.</p>
-    <p><b>The roll</b> underneath is the same music laid out by pitch and time, sharing the score's exact horizontal axis. The thin connecting line is that voice's melodic thread; boxes mark statements of the subject.</p>
-    <p><b>The map</b> is the whole fugue at a glance: every subject entry as a block, episodes greyed, strettos flagged, and the key the music has modulated to underneath.</p>
+    <p><b>The score</b> is engraved in <i>open score</i> — one staff per voice — so a single fugal line never jumps between staves the way it does in a two-stave keyboard reduction. Each voice keeps its colour everywhere: notation, roll, map, panel.</p>
+    <p><b>The roll</b> underneath is the same music by pitch and time, drawn at the score's own horizontal positions, so a bar in the roll sits directly under its notehead. The thin line through it is that voice's melodic thread.</p>
+    <p><b>Brackets</b> over the staves and boxes in the roll mark every statement of the subject, labelled with the note it starts on. A dashed bracket is the countersubject.</p>
+    <p><b>The map</b> is the whole fugue at a glance: entries as blocks on their voice's lane, episodes greyed, strettos flagged in red, and the key underneath. Click anywhere to jump; click an entry block to loop it.</p>
+    <h3>Two ways to space the page</h3>
+    <p><b>Time-proportional</b> makes horizontal distance strictly proportional to duration, so a semibreve really is four times a crotchet and rhythm becomes geometry. <b>Notation</b> uses conventional engraver's spacing, which fits more bars on screen but squashes long notes. Both keep the score and the roll locked together.</p>
+    <h3>Hearing the voices apart</h3>
+    <p>Solo or mute any voice from the panel, or press its number. <b>Spotlight subject</b> lifts whichever voice is stating the theme and ducks everything else — the fastest way to learn what to listen for. Everything is synthesised in the browser; nothing is downloaded.</p>
     <h3>Keys</h3>
     <ul class="keys">
       <li><kbd>space</kbd> play / pause</li>
       <li><kbd>←</kbd> <kbd>→</kbd> back / forward one bar</li>
-      <li><kbd>shift</kbd>+<kbd>←</kbd><kbd>→</kbd> previous / next subject entry</li>
+      <li><kbd>shift</kbd>+<kbd>←</kbd><kbd>→</kbd> previous / next entry</li>
       <li><kbd>home</kbd> back to the start</li>
-      <li><kbd>1</kbd>…<kbd>4</kbd> solo a voice, <kbd>0</kbd> all voices</li>
-      <li><kbd>L</kbd> loop the section you are in</li>
+      <li><kbd>1</kbd>…<kbd>4</kbd> solo a voice, <kbd>0</kbd> all</li>
+      <li><kbd>L</kbd> loop the current section</li>
       <li><kbd>S</kbd> spotlight the subject</li>
+      <li><kbd>N</kbd> notes &amp; sources</li>
     </ul>
-    <h3>Sources</h3>
-    <p>Notes come from the Humdrum <b>kern</b> edition of the <i>Well-Tempered Clavier</i> (encoded by David Huron, from the Bach-Gesellschaft), engraved here by Verovio. Subject and countersubject entries are found by matching every note of every voice against the opening statement in diatonic space, which is why tonal answers and modally-adjusted entries are still recognised — and labelled as such.</p>
+    <h3>Where this comes from</h3>
+    <p>Notes come from Humdrum <b>**kern</b> digital editions of the <i>Well-Tempered Clavier</i> and <i>The Art of Fugue</i>, which spell every accidental explicitly; the engraving is produced by Verovio. Nothing is hand-transcribed.</p>
+    <p>Subject entries are <b>found, not typed in</b>: the opening statement is slid over every note of every voice and compared in diatonic space — letter-name steps rather than semitones — so a tonal answer or a modally adjusted entry is still recognised, and labelled as <i>exact</i>, <i>tonal</i>, <i>adjusted</i> or <i>partial</i>. Per-fugue sources, recordings and background live behind <b>Notes &amp; sources</b>.</p>
   </div>
 </div>
 

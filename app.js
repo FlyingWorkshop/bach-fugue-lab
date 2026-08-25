@@ -17,9 +17,13 @@ const el = (t, a, ...kids) => {
 const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
 const PCS = ['C','C♯','D','E♭','E','F','F♯','G','A♭','A','B♭','B'];
 const pname = p => PCS[((p % 12) + 12) % 12] + (Math.floor(p / 12) - 1);
-const VCOL3 = ['#5cc8ff', '#ffc247', '#52d6a4'];
-const VCOL4 = ['#5cc8ff', '#ffc247', '#ff7eb6', '#52d6a4'];
-const vcol = (nv, i) => (nv <= 3 ? VCOL3 : VCOL4)[i] || '#888';
+const VCOL = {
+  2: ['#5cc8ff', '#52d6a4'],
+  3: ['#5cc8ff', '#ffc247', '#52d6a4'],
+  4: ['#5cc8ff', '#ffc247', '#ff7eb6', '#52d6a4'],
+  5: ['#5cc8ff', '#ffc247', '#ff7eb6', '#c58bff', '#52d6a4'],
+};
+const vcol = (nv, i) => (VCOL[nv] || VCOL[4])[i] || '#8e9aac';
 
 /* ============================================================ data loading */
 async function loadIndex() {
