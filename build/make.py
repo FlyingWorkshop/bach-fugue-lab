@@ -114,13 +114,20 @@ def build(P):
     missing = [n for n in notes if n['x'] is None or n['xp'] is None]
     assert not missing, f"{P['id']}: {len(missing)} notes without geometry, e.g. {missing[:2]}"
 
-    # ---- bars
+    # ---- bars.  An anacrusis has no "=" marker of its own, but Verovio still
+    #      engraves it as a measure, so record it or every bar is one out.
     bars = []
     marked = [m for m in marks if m['n'] is not None]
+    if marked and marked[0]['q'] > 1e-9:
+        bars.append({'n': 0, 'q0': 0.0, 'q1': marked[0]['q']})
     for i, m in enumerate(marked):
         q1 = marked[i+1]['q'] if i+1 < len(marked) else total
         bars.append({'n': m['n'], 'q0': m['q'], 'q1': q1})
-    qbar = bars[0]['q1'] - bars[0]['q0'] if bars else 4.0
+    full = [b for b in bars if b['n'] > 0]
+    qbar = (full[0]['q1'] - full[0]['q0']) if full else 4.0
+    assert len(bars) == len(vmeasures), \
+        f"{P['id']}: {len(bars)} bars but {len(vmeasures)} engraved measures"
+
     for i, b in enumerate(bars):
         b['x0']  = round(vmeasures[i]['x0'], 2)  if i < len(vmeasures)  else None
         b['x1']  = round(vmeasures[i]['x1'], 2)  if i < len(vmeasures)  else None
@@ -328,5 +335,5 @@ if __name__ == "__main__":
     idx = [{k: d[k] for k in ('id', 'title', 'bwv', 'book', 'key', 'meter', 'nv', 'blurb', 'bpm')}
            for d in docs]
     for d, i in zip(docs, idx):
-        i['bars'] = len(d['bars']); i['entries'] = len(d['entries'])
+        i['bars'] = sum(1 for b in d['bars'] if b['n'] > 0); i['entries'] = len(d['entries'])
     json.dump(idx, open(f"{DATA}/index.json", "w"), indent=1, ensure_ascii=False)

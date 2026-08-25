@@ -179,12 +179,14 @@ function pause() {
   A.live.forEach(o => { try { o.stop(); } catch (e) {} });
   A.live = [];
 }
+let lastSetScroll = -1;
+function setScroll(sc, x) { sc.scrollLeft = x; lastSetScroll = sc.scrollLeft; }
 function scrollToQ(q, always) {
   const sc = $('#scroller');
   if (!G.xu) return;
   const x = G.xu(q) * S.PXU;
   if (always || x < sc.scrollLeft + 40 || x > sc.scrollLeft + sc.clientWidth - 60)
-    sc.scrollLeft = x - sc.clientWidth * 0.33;
+    setScroll(sc, x - sc.clientWidth * 0.33);
 }
 function seek(q, keepPlaying, noScroll) {
   q = clamp(q, 0, S.doc.total);
@@ -239,6 +241,8 @@ function buildGeometry() {
   const lastBar = doc.bars[doc.bars.length - 1];
   const endX = (P ? lastBar.px1 : lastBar.x1) || curViewBox()[2];
   if (anchors[anchors.length - 1][0] < doc.total) anchors.push([doc.total, endX]);
+  for (let i = 1; i < anchors.length; i++)          // never let x(q) run backwards
+    if (anchors[i][1] < anchors[i - 1][1]) anchors[i][1] = anchors[i - 1][1];
   const AQ = anchors.map(a => a[0]), AX = anchors.map(a => a[1]);
   G.anchors = anchors; G.AQ = AQ; G.AX = AX;
   G.xu = q => {
@@ -851,7 +855,8 @@ function paint(force) {
     const sc = $('#scroller');
     const target = xpx - sc.clientWidth * 0.33;
     const cur = sc.scrollLeft;
-    if (Math.abs(target - cur) > 1) sc.scrollLeft = cur + (target - cur) * (Math.abs(target - cur) > 400 ? 1 : 0.18);
+    if (Math.abs(target - cur) > 1)
+      setScroll(sc, cur + (target - cur) * (Math.abs(target - cur) > 400 ? 1 : 0.18));
     stickyLabels();
   }
 }
@@ -1047,10 +1052,19 @@ function wireStage() {
     seek(G.qOfXu((ev.clientX - r.left) / S.PXU), true, true);
   });
   stack.addEventListener('pointerup', ev => { down = false; try { stack.releasePointerCapture(ev.pointerId); } catch (e) {} });
-  $('#scroller').addEventListener('scroll', () => { stickyLabels(); if (!S.playing) paint(false); }, { passive: true });
+  $('#scroller').addEventListener('scroll', () => {
+    const sc = $('#scroller');
+    // a hand-scroll during playback releases the auto-follow rather than fighting it
+    if (S.playing && S.follow && Math.abs(sc.scrollLeft - lastSetScroll) > 3) {
+      S.follow = false; $('#follow').checked = false;
+    }
+    stickyLabels();
+    if (!S.playing) paint(false);
+  }, { passive: true });
   $('#scroller').addEventListener('wheel', ev => {
     if (Math.abs(ev.deltaX) < Math.abs(ev.deltaY) && !ev.shiftKey) {
       $('#scroller').scrollLeft += ev.deltaY; ev.preventDefault();
+      lastSetScroll = -1;
     }
   }, { passive: false });
 }
@@ -1065,9 +1079,12 @@ function wireControls() {
   $('#zoom').oninput = e => {
     const q = currentQ();
     S.zoom = +e.target.value; relayout();
-    const sc = $('#scroller'); sc.scrollLeft = G.xu(q) * S.PXU - sc.clientWidth * 0.33;
+    const sc = $('#scroller'); setScroll(sc, G.xu(q) * S.PXU - sc.clientWidth * 0.33);
   };
-  $('#follow').onchange = e => S.follow = e.target.checked;
+  $('#follow').onchange = e => {
+    S.follow = e.target.checked;
+    if (S.follow) scrollToQ(currentQ(), true);
+  };
   $('#loopChk').onchange = e => {
     S.loopOn = e.target.checked;
     if (S.loopOn && !S.loop) S.loop = currentSection();
@@ -1097,7 +1114,7 @@ function wireControls() {
     S.spacing = b.dataset.sp;
     document.querySelectorAll('#spacingSeg button').forEach(x => x.classList.toggle('on', x === b));
     buildGeometry(); relayout();
-    const sc = $('#scroller'); sc.scrollLeft = G.xu(q) * S.PXU - sc.clientWidth * 0.33;
+    const sc = $('#scroller'); setScroll(sc, G.xu(q) * S.PXU - sc.clientWidth * 0.33);
   });
   $('#labAlign').onchange = buildLab;
   $('#helpBtn').onclick = () => $('#help').hidden = false;
@@ -1156,7 +1173,7 @@ async function selectPiece(id) {
   buildMap();
   buildLegend();
   buildLab();
-  $('#scroller').scrollLeft = 0;
+  setScroll($('#scroller'), 0);
   paint(true);
 }
 const GROUPS = [
