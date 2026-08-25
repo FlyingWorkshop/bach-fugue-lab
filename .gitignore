@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+# score encodings are fetched from upstream, not redistributed here
+build/kern-open/
+dist/
