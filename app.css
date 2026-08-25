@@ -123,6 +123,9 @@ input[type=range]{accent-color:var(--accent)}
 .card{border:1px solid var(--line);border-radius:var(--radius);background:var(--bg2);padding:11px 12px}
 .card h3{font-size:11px;text-transform:uppercase;letter-spacing:.11em;color:var(--dim);margin-bottom:9px}
 .toggles{display:flex;flex-direction:column;gap:7px}
+.cardnote{margin:9px 0 0;font-size:10.5px;line-height:1.55;color:var(--dim2)}
+.cardnote a{color:var(--dim);text-decoration:none;border-bottom:1px solid var(--line2)}
+.cardnote a:hover{color:var(--accent);border-color:var(--accent)}
 
 .voices{display:flex;flex-direction:column;gap:8px}
 .voice{display:grid;grid-template-columns:12px 1fr auto;gap:8px;align-items:center}
@@ -185,6 +188,8 @@ input[type=range]{accent-color:var(--accent)}
 #scoreOverlay .oventry{transition:opacity .15s}
 #scoreOverlay .oventry path{transition:stroke-width .15s,stroke-opacity .15s}
 #scoreOverlay .oventry.live path{stroke-width:2;stroke-opacity:1}
+#scoreOverlay .ovlabel{transition:opacity .15s}
+#scoreOverlay .oventry.live .ovlabel{font-weight:700}
 #scoreOverlay .oventry:hover path{stroke-opacity:1}
 .rollhost svg{display:block}
 

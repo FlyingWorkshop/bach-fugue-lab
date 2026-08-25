@@ -47,8 +47,8 @@ async function loadPiece(id) {
 const S = {
   doc: null, svg: null, svgP: null, id: null, spacing: 'p',
   q: 0, playing: false, bpm: 76, zoom: 1.1,
-  follow: true, loopOn: false, loop: null, spotlight: true,
-  mute: [], solo: -1, master: 0.8,
+  follow: true, loopOn: false, loop: null, spotlight: true, accents: true,
+  mute: [], solo: -1, master: 0.8, levels: [],
   show: { entries: true, cs: true, threads: true, dim: true, grid: true,
           diss: false, cross: false, score: true, keys: true },
   PXU: 1.45, scoreW: 0, scoreH: 0, rollH: 190,
@@ -101,12 +101,23 @@ function buildVoiceChain(nv) {
   A.voices.forEach(v => { try { v.gain.disconnect(); } catch (e) {} });
   A.voices = [];
   for (let i = 0; i < nv; i++) {
-    const g = A.ctx.createGain(); g.gain.value = 0.9;
+    const g = A.ctx.createGain();
+    g.gain.value = S.levels[i] == null ? 0.9 : S.levels[i];
     const p = A.ctx.createStereoPanner();
     p.pan.value = nv === 1 ? 0 : (-0.42 + (i / (nv - 1)) * 0.84) * 0.75;
     g.connect(p); p.connect(A.master);
-    A.voices.push({ gain: g, pan: p, level: 0.9 });
+    A.voices.push({ gain: g, pan: p });
   }
+  applyVoiceGains();
+}
+/* One place decides how loud each voice is: the slider, and whether it is muted
+   or soloed. Applied to the live gain node so it takes effect mid-note. */
+function applyVoiceGains() {
+  if (!A.ctx) return;
+  A.voices.forEach((vo, i) => {
+    const lvl = S.levels[i] == null ? 0.9 : S.levels[i];
+    vo.gain.gain.setTargetAtTime(voiceAudible(i) ? lvl : 0, A.ctx.currentTime, 0.015);
+  });
 }
 function voiceAudible(v) {
   if (S.solo >= 0) return S.solo === v;
@@ -197,10 +208,13 @@ function schedule() {
     if (voiceAudible(n.v)) {
       const when = A.t0 + (n.q - A.q0) / qps();
       const dur = Math.max(0.06, (n.d / qps()) * 0.96);
-      let amp = 0.19 * A.voices[n.v].level;
+      let amp = 0.19;
       if (S.spotlight) amp *= (n.e >= 0 ? 1.45 : (n.cs >= 0 ? 1.0 : 0.52));
-      const beat = (n.q - doc.pickup) % doc.qbar;
-      if (Math.abs(beat) < 1e-6) amp *= 1.1;
+      if (S.accents) {
+        const inBar = (((n.q - doc.pickup) % doc.qbar) + doc.qbar) % doc.qbar;
+        if (inBar < 1e-6) amp *= 1.13;
+        else if (Math.abs(inBar % doc.qpb) < 1e-6) amp *= 1.05;
+      }
       if (when > A.ctx.currentTime - 0.02) playNote(n.v, n.p, Math.max(when, A.ctx.currentTime), dur, amp);
     }
     A.nextIdx++;
@@ -246,6 +260,10 @@ function buildGeometry() {
   G.lo = Math.min(...doc.notes.map(n => n.p)) - 2;
   G.hi = Math.max(...doc.notes.map(n => n.p)) + 2;
   G.byId = new Map(); doc.notes.forEach(n => n.ids.forEach(i => G.byId.set(i, n)));
+  G.entryNotes = doc.entries.map(e =>
+    doc.notes.filter(n => n.v === e.v && n.q >= e.q0 - 1e-6 && n.q < e.q1 - 1e-6));
+  G.counterNotes = doc.counters.map(e =>
+    doc.notes.filter(n => n.v === e.v && n.q >= e.q0 - 1e-6 && n.q < e.q1 - 1e-6));
   G.barOfQ = q => {
     const B = doc.bars;
     for (let i = B.length - 1; i >= 0; i--) if (q >= B[i].q0 - 1e-9) return B[i];
@@ -360,37 +378,82 @@ function buildScoreOverlay() {
   const doc = S.doc, host = $('#score');
   host.querySelector('#scoreOverlay')?.remove();
   const W = S.scoreW, H = S.scoreH;
+  const svgEl = host.querySelector('svg');
+  const svgTop = svgEl ? svgEl.getBoundingClientRect().top : 0;
   const ov = sel('svg', { id: 'scoreOverlay', width: W, height: H, viewBox: `0 0 ${W} ${H}` });
   ov.style.cssText = `position:absolute;left:0;top:6px;width:${W}px;height:${H}px;pointer-events:none;overflow:visible`;
   const X = q => G.xu(q) * S.PXU;
   const staffTop = v => (doc.staffBox[v] ? doc.staffBox[v][0] : 0) * S.PXU;
-  G.entryBrackets = [];
-  const draw = (e, i, isCS) => {
-    const y = staffTop(e.v) - (isCS ? 5 : 12);
+  const staffBot = v => (doc.staffBox[v] ? doc.staffBox[v][1] : 0) * S.PXU;
+
+  /* Put the bracket just clear of the tallest thing the statement actually
+     draws — stems and beams included — instead of a fixed offset that would
+     cut through high notes. */
+  const spanTop = (v, notes) => {
+    let top = Infinity;
+    for (const n of notes) {
+      const g = G.scoreNotes.get(n.ids[0]); if (!g) continue;
+      let t = g.getBoundingClientRect().top;
+      const b = g.parentElement;
+      if (b && b.classList && b.classList.contains('beam')) t = Math.min(t, b.getBoundingClientRect().top);
+      if (t < top) top = t;
+    }
+    if (top === Infinity) return staffTop(v) - 12;
+    const y = top - svgTop - 8;
+    const ceiling = v > 0 ? staffBot(v - 1) + 11 : 11;
+    return Math.max(y, ceiling);
+  };
+
+  G.entryBrackets = []; G.entryLabels = [];
+  const draw = (e, i, isCS, notes) => {
+    if (!notes.length) return;
+    const y = spanTop(e.v, notes) - (isCS ? -6 : 0);
     const x0 = X(e.q0) - 5, x1 = X(e.q1) - 2;
     const col = isCS ? '#98a3b3' : vcol(doc.nv, e.v);
-    const g = sel('g', { class: isCS ? 'ovcs' : 'oventry', 'data-entry': i, style: 'pointer-events:auto;cursor:pointer' });
+    const g = sel('g', { class: isCS ? 'ovcs' : 'oventry', 'data-entry': i,
+                         style: 'pointer-events:auto;cursor:pointer' });
     g.append(sel('path', {
       d: `M${x0} ${y + 5} L${x0} ${y} L${x1} ${y} L${x1} ${y + 5}`,
       fill: 'none', stroke: col, 'stroke-width': 1.2,
       'stroke-opacity': isCS ? .5 : .8, 'stroke-dasharray': isCS ? '3 3' : 'none',
     }));
     if (!isCS) {
-      const label = `${e.role} · ${e.on}${e.kind === 'partial' ? ' (partial)' : ''}`;
-      const t = sel('text', { x: x0 + 5, y: y - 3, fill: col, 'font-size': 10.5, 'font-weight': 600,
+      const t = sel('text', { class: 'ovlabel', x: x0 + 5, y: y - 3.5, fill: col,
+                              'font-size': 10.5, 'font-weight': 600,
                               'font-family': 'ui-sans-serif,system-ui', style: 'paint-order:stroke',
                               stroke: '#0d1014', 'stroke-width': 3.5, 'stroke-linejoin': 'round' });
-      t.textContent = label; g.append(t);
+      t.textContent = `${e.role} · ${e.on}${e.kind === 'partial' ? ' (partial)' : ''}`;
+      g.append(t);
+      G.entryLabels.push({ el: t, x0: x0 + 5, x1, w: 0 });
     }
     ov.append(g);
     if (!isCS) G.entryBrackets[i] = g;
   };
-  if (S.show.entries) doc.entries.forEach((e, i) => draw(e, i, false));
-  if (S.show.cs) doc.counters.forEach((e, i) => draw(e, i, true));
+  if (S.show.entries) doc.entries.forEach((e, i) => draw(e, i, false, G.entryNotes[i] || []));
+  if (S.show.cs) doc.counters.forEach((e, i) => draw(e, i, true, G.counterNotes[i] || []));
   host.append(ov);
+  G.entryLabels.forEach(L => { try { L.w = L.el.getComputedTextLength(); } catch (err) { L.w = 60; } });
+  stickyLabels();
 }
+
+/* Keep a statement's label in view for as long as any part of that statement is:
+   it slides along the bracket rather than scrolling off with it. */
+function stickyLabels() {
+  const sc = $('#scroller');
+  if (!sc) return;
+  const left = sc.scrollLeft + 10;
+  for (const L of (G.entryLabels || [])) {
+    const lo = L.x0, hi = Math.max(lo, L.x1 - L.w - 3);
+    L.el.setAttribute('x', Math.min(Math.max(lo, left), hi));
+  }
+  for (const L of (G.rollLabels || [])) {
+    const lo = L.x0, hi = Math.max(lo, L.x1 - L.w - 3);
+    L.el.setAttribute('x', Math.min(Math.max(lo, left), hi));
+  }
+}
+
 function applyScoreClasses() {
-  const host = $('#score');
+  const host = $('#score'), doc = S.doc;
   host.classList.toggle('dimmed', S.show.dim);
   host.style.display = S.show.score ? '' : 'none';
   const beams = new Set();
@@ -399,10 +462,9 @@ function applyScoreClasses() {
     const on = !!n && (n.e >= 0 || (S.show.cs && n.cs >= 0));
     g.classList.toggle('inSubj', on);
     const b = g.parentElement;
-    if (b && b.classList && b.classList.contains('beam')) { if (on) beams.add(b); else if (!beams.has(b)) b.classList.remove('inSubj'); }
+    if (on && b && b.classList && b.classList.contains('beam')) beams.add(b);
   });
   host.querySelectorAll('g.beam').forEach(b => b.classList.toggle('inSubj', beams.has(b)));
-  const doc = S.doc;
   const inMotif = (v, q) =>
     doc.entries.some(e => e.v === v && q >= e.q0 - 1e-6 && q < e.q1) ||
     (S.show.cs && doc.counters.some(e => e.v === v && q >= e.q0 - 1e-6 && q < e.q1));
@@ -492,7 +554,7 @@ function buildRoll() {
     gMarks.append(sel('circle', { class: 'diss', cx: X(n.q) + 1.5, cy: Y(n.p) - nh / 2 - 2.6, r: 1.7 }));
   }
   // entry boxes
-  G.entryBoxes = [];
+  G.entryBoxes = []; G.rollLabels = [];
   if (S.show.entries) doc.entries.forEach((e, i) => {
     const ns = doc.notes.filter(n => n.v === e.v && n.q >= e.q0 - 1e-6 && n.q < e.q1 - 1e-6);
     if (!ns.length) return;
@@ -507,6 +569,7 @@ function buildRoll() {
     const t = sel('text', { class: 'elabel', x: x0 + 4, y: y0 - 2.5, fill: vcol(nv, e.v) });
     t.textContent = `${e.role === 'Answer' ? 'A' : 'S'}${e.on ? ' · ' + e.on : ''}${e.kind === 'partial' ? ' (part)' : ''}`;
     gBox.append(t);
+    G.rollLabels.push({ el: t, x0: x0 + 4, x1, w: 0 });
   });
   if (S.show.cs) doc.counters.forEach((e, i) => {
     const ns = doc.notes.filter(n => n.v === e.v && n.q >= e.q0 - 1e-6 && n.q < e.q1 - 1e-6);
@@ -518,6 +581,7 @@ function buildRoll() {
     }));
   });
   host.append(svg);
+  G.rollLabels.forEach(L => { try { L.w = L.el.getComputedTextLength(); } catch (err) { L.w = 40; } });
   svg.classList.toggle('dim', S.show.dim);
   updateVoiceVisibility();
 }
@@ -788,6 +852,7 @@ function paint(force) {
     const target = xpx - sc.clientWidth * 0.33;
     const cur = sc.scrollLeft;
     if (Math.abs(target - cur) > 1) sc.scrollLeft = cur + (target - cur) * (Math.abs(target - cur) > 400 ? 1 : 0.18);
+    stickyLabels();
   }
 }
 function paintNow(q, act) {
@@ -884,13 +949,16 @@ function buildVoicePanel() {
   const doc = S.doc, host = $('#voiceList');
   host.innerHTML = '';
   S.mute = new Array(doc.nv).fill(false); S.solo = -1;
+  S.levels = new Array(doc.nv).fill(0.9);
   doc.voiceNames.forEach((nm, v) => {
     const wrap = el('div', { class: 'voice', 'data-v': v });
     const mBtn = el('button', {}, 'M'), sBtn = el('button', {}, 'S');
     mBtn.onclick = () => { S.mute[v] = !S.mute[v]; refreshVoices(); };
     sBtn.onclick = () => { S.solo = S.solo === v ? -1 : v; refreshVoices(); };
-    const vol = el('input', { type: 'range', min: 0, max: 1.4, step: 0.01, value: 0.9 });
-    vol.oninput = () => { if (A.voices[v]) { A.voices[v].level = +vol.value; A.voices[v].gain.gain.value = +vol.value; } };
+    if (S.levels[v] == null) S.levels[v] = 0.9;
+    const vol = el('input', { type: 'range', min: 0, max: 1.4, step: 0.01, value: S.levels[v],
+                              title: 'Volume of this voice' });
+    vol.oninput = () => { S.levels[v] = +vol.value; applyVoiceGains(); };
     const nameEl = el('span', { class: 'nm' }, nm);
     nameEl.onclick = () => { S.solo = S.solo === v ? -1 : v; refreshVoices(); };
     wrap.append(el('span', { class: 'swatch', style: `background:${vcol(doc.nv, v)}` }), nameEl,
@@ -907,6 +975,7 @@ function refreshVoices() {
     const [m, s] = w.querySelectorAll('.btns button');
     m.classList.toggle('on', S.mute[v]); s.classList.toggle('on', S.solo === v);
   });
+  applyVoiceGains();
   updateVoiceVisibility();
 }
 
@@ -978,7 +1047,7 @@ function wireStage() {
     seek(G.qOfXu((ev.clientX - r.left) / S.PXU), true, true);
   });
   stack.addEventListener('pointerup', ev => { down = false; try { stack.releasePointerCapture(ev.pointerId); } catch (e) {} });
-  $('#scroller').addEventListener('scroll', () => { if (!S.playing) paint(false); }, { passive: true });
+  $('#scroller').addEventListener('scroll', () => { stickyLabels(); if (!S.playing) paint(false); }, { passive: true });
   $('#scroller').addEventListener('wheel', ev => {
     if (Math.abs(ev.deltaX) < Math.abs(ev.deltaY) && !ev.shiftKey) {
       $('#scroller').scrollLeft += ev.deltaY; ev.preventDefault();
@@ -1005,6 +1074,13 @@ function wireControls() {
     setLoop(S.loop, S.loopOn);
   };
   $('#spotlight').onchange = e => S.spotlight = e.target.checked;
+  $('#accents').onchange = e => S.accents = e.target.checked;
+  $('#soundWhy').onclick = e => {
+    e.preventDefault();
+    $('#drawer').hidden = false;
+    const t = $('#secSound');
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
   $('#vol').oninput = e => { S.master = +e.target.value; if (A.master) A.master.gain.value = S.master; };
   const tg = { tEntries: 'entries', tCS: 'cs', tThreads: 'threads', tDim: 'dim',
                tGrid: 'grid', tDiss: 'diss', tCross: 'cross', tScore: 'score', tKeys: 'keys' };
@@ -1157,6 +1233,21 @@ function buildDrawer(doc) {
          el('span', { class: 'arr' }, '↗')))),
       el('p', { class: 'dnote', style: 'margin-top:9px' },
         'These open a YouTube search rather than a fixed video, so they keep working as uploads come and go.')),
+    (() => { const x = sec('About the sound',
+      el('p', {}, 'These pieces carry no dynamic markings, and that is not an omission in the ' +
+        'edition: Bach wrote none. The Well-Tempered Clavier was written for harpsichord and ' +
+        'clavichord, where a plucked string answers the same way however hard you press, and the ' +
+        'first dynamic marks in keyboard music are still decades off. The Art of Fugue does not ' +
+        'even specify an instrument.'),
+      el('p', {}, 'So nothing is hidden here — there is nothing to show. What the synthesiser ' +
+        'does with loudness is its own doing, and you control it: <b>metrical accents</b> lean very ' +
+        'slightly on downbeats and beats, and <b>spotlight subject</b> lifts whichever voice is ' +
+        'stating the theme and ducks the rest. Turn both off for a flat, harpsichord-like reading, ' +
+        'which is the historically honest one. Low notes are also given a little extra weight so ' +
+        'the bass stays audible under three other voices; that is mixing, not interpretation.'),
+      el('p', { class: 'dnote' }, 'Ornaments — trills, mordents, turns, fermatas — are in the score ' +
+        'and are drawn, but are not yet realised in the playback.'));
+      x.id = 'secSound'; return x; })(),
     sec('The vocabulary on screen',
       el('p', { html:
         '<b>Subject</b> — the theme, stated alone at the start. <b>Answer</b> — the same theme a ' +

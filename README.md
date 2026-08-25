@@ -46,6 +46,12 @@ flagged, and the estimated key underneath.
 voice is currently stating the theme and ducks the rest; loop any entry or episode; tempo control.
 Synthesised in the browser with the Web Audio API — no samples, no network.
 
+**No dynamics, honestly.** These pieces carry no dynamic markings, because Bach wrote none — the
+Well-Tempered Clavier is harpsichord and clavichord music. Nothing is being hidden. What loudness
+the synthesiser applies (a slight metrical accent, the subject spotlight, and a little extra weight
+low down so the bass stays audible) is exposed under **Sound** and can be switched off for a flat,
+harpsichord-like reading.
+
 **Subject lab.** Every statement drawn on top of a ghost of the original, optionally transposed to a
 common pitch, so you can see at a glance which entries are literal and which Bach bent.
 

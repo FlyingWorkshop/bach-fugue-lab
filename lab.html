@@ -14,7 +14,7 @@
 <meta property="og:description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis, with every subject entry found automatically.">
 <meta property="og:url" content="https://flyingworkshop.github.io/bach-fugue-lab/lab.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="app.css?v=7">
+<link rel="stylesheet" href="app.css?v=10">
 </head>
 <body>
 
@@ -56,7 +56,6 @@
   <label class="chk"><input id="follow" type="checkbox" checked> Follow</label>
   <label class="chk"><input id="loopChk" type="checkbox"> Loop</label>
   <span id="loopLabel" class="loopLabel"></span>
-  <label class="chk"><input id="spotlight" type="checkbox" checked> Spotlight subject</label>
   <label class="slider">Volume <input id="vol" type="range" min="0" max="1" step="0.01" value="0.8"></label>
 </section>
 
@@ -73,6 +72,15 @@
     <div class="card">
       <h3>Voices</h3>
       <div id="voiceList" class="voices"></div>
+    </div>
+    <div class="card">
+      <h3>Sound</h3>
+      <div class="toggles">
+        <label class="chk"><input id="spotlight" type="checkbox" checked> Spotlight subject</label>
+        <label class="chk"><input id="accents" type="checkbox" checked> Metrical accents</label>
+      </div>
+      <p class="cardnote">Bach marked no dynamics in these pieces — there are none in the sources
+        to show. <a href="#" id="soundWhy">Why, and what the synth does instead ↗</a></p>
     </div>
     <div class="card">
       <h3>Show</h3>
@@ -137,8 +145,10 @@
     <p><b>The map</b> is the whole fugue at a glance: entries as blocks on their voice's lane, episodes greyed, strettos flagged in red, and the key underneath. Click anywhere to jump; click an entry block to loop it.</p>
     <h3>Two ways to space the page</h3>
     <p><b>Time-proportional</b> makes horizontal distance strictly proportional to duration, so a semibreve really is four times a crotchet and rhythm becomes geometry. <b>Notation</b> uses conventional engraver's spacing, which fits more bars on screen but squashes long notes. Both keep the score and the roll locked together.</p>
+    <p>A statement's label stays with you: while any part of a bracket is on screen the label slides along it rather than scrolling away, so you always know what the line above the staff is marking.</p>
     <h3>Hearing the voices apart</h3>
-    <p>Solo or mute any voice from the panel, or press its number. <b>Spotlight subject</b> lifts whichever voice is stating the theme and ducks everything else — the fastest way to learn what to listen for. Everything is synthesised in the browser; nothing is downloaded.</p>
+    <p>Solo or mute any voice from the panel, press its number, or pull its slider down. <b>Spotlight subject</b> lifts whichever voice is stating the theme and ducks everything else — the fastest way to learn what to listen for. Everything is synthesised in the browser; nothing is downloaded.</p>
+    <p><b>There are no dynamics in these pieces</b>, and that is not a gap in the edition — Bach wrote none. What loudness you hear is the synthesiser's, and it is yours to switch off under <b>Sound</b>. The full story is in <b>Notes &amp; sources</b>.</p>
     <h3>Keys</h3>
     <ul class="keys">
       <li><kbd>space</kbd> play / pause</li>
@@ -156,6 +166,6 @@
   </div>
 </div>
 
-<script src="app.js?v=8"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>
