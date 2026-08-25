@@ -11,7 +11,12 @@ const el = (t, a, ...kids) => {
     else if (k.startsWith('on')) n.addEventListener(k.slice(2), a[k]);
     else n.setAttribute(k, a[k]);
   }
-  for (const c of kids) if (c != null) n.append(c);
+  for (const c of kids) {
+    if (c == null) continue;
+    if (typeof c === 'string' && /<\/?[a-z][a-z0-9]*\b[^>]*>/i.test(c))
+      console.warn('Fugue Lab: markup passed as text — use { html: … }:', c.slice(0, 70));
+    n.append(c);
+  }
   return n;
 };
 const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
@@ -1256,12 +1261,12 @@ function buildDrawer(doc) {
         'clavichord, where a plucked string answers the same way however hard you press, and the ' +
         'first dynamic marks in keyboard music are still decades off. The Art of Fugue does not ' +
         'even specify an instrument.'),
-      el('p', {}, 'So nothing is hidden here — there is nothing to show. What the synthesiser ' +
+      el('p', { html: 'So nothing is hidden here — there is nothing to show. What the synthesiser ' +
         'does with loudness is its own doing, and you control it: <b>metrical accents</b> lean very ' +
         'slightly on downbeats and beats, and <b>spotlight subject</b> lifts whichever voice is ' +
         'stating the theme and ducks the rest. Turn both off for a flat, harpsichord-like reading, ' +
         'which is the historically honest one. Low notes are also given a little extra weight so ' +
-        'the bass stays audible under three other voices; that is mixing, not interpretation.'),
+        'the bass stays audible under three other voices; that is mixing, not interpretation.' }),
       el('p', { class: 'dnote' }, 'Ornaments — trills, mordents, turns, fermatas — are in the score ' +
         'and are drawn, but are not yet realised in the playback.'));
       x.id = 'secSound'; return x; })(),

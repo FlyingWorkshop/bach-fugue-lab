@@ -86,7 +86,12 @@ figures from `data/teasers.json`), and `lab.html` is the tool (`app.css` / `app.
 
 Nothing is hand-transcribed. Onsets are cross-checked against Verovio's own timemap, and every
 note id in the JSON is verified to exist in the engraved SVG, so the score, the roll and the audio
-can never drift apart.
+can never drift apart. The build also asserts that the number of bars matches the number of
+engraved measures — an anacrusis carries no barline marker in kern and will otherwise put every
+bar one measure out.
+
+`build/audit-dom.js` can be pasted into the browser console on either page: it walks every fugue
+and reports any text that was meant to be markup but rendered literally.
 
 A note on pitch: Verovio 6.3's `getMIDIValuesForElement` and MIDI export ignore key signatures, so
 pitches here come from the `**kern` tokens instead, which spell every accidental explicitly.

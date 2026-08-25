@@ -39,7 +39,18 @@ window.__BUNDLE__ = {
                   "\n".join(blobs) + "\n" + loader + "\n<script>\n" + js + "\n</script>", body)
     return body
 
+def lint():
+    """Cheap guard against markdown leaking into the HTML as literal text."""
+    bad = []
+    for f in ("index.html", "lab.html"):
+        for i, line in enumerate(read(f).split("\n"), 1):
+            if "`" in line: bad.append(f"{f}:{i}: stray backtick — {line.strip()[:70]}")
+    if bad:
+        print("LINT:"); [print("  " + b) for b in bad]
+        raise SystemExit(1)
+
 def main():
+    lint()
     os.makedirs(DIST, exist_ok=True)
     full = assemble()
     open(os.path.join(DIST, "fugue-lab.html"), "w", encoding="utf-8").write(full)
