@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fugue Lab — see Bach's counterpoint</title>
-<meta name="description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis, with every statement of the subject found automatically and audio you can take apart voice by voice.">
+<title>Fugue Lab — nine Bach fugues, one staff per voice</title>
+<meta name="description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis. Every statement of the subject is found by the build rather than typed in, and you can mute or solo any voice.">
 <meta name="theme-color" content="#0d1014">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Fugue Lab — see Bach's counterpoint">
-<meta property="og:description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis, with every subject entry found automatically.">
+<meta property="og:title" content="Fugue Lab — nine Bach fugues, one staff per voice">
+<meta property="og:description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis, with every statement of the subject found by the build rather than typed in.">
 <meta property="og:url" content="https://flyingworkshop.github.io/bach-fugue-lab/">
-<link rel="stylesheet" href="home.css?v=3">
+<link rel="stylesheet" href="home.css?v=4">
 </head>
 <body>
 
 <header class="nav">
   <a class="brand" href="./">
     <span class="mark">≡</span>
-    <div><h1>Fugue Lab</h1><p>Bach's counterpoint, made visible</p></div>
+    <div><h1>Fugue Lab</h1><p>Bach fugues, taken apart</p></div>
   </a>
   <nav>
     <a href="#fugues">The fugues</a>
@@ -32,17 +32,17 @@
 
 <section class="hero">
   <div class="herotext">
-    <h2>A fugue is four melodies<br>wearing the same coat.</h2>
+    <h2>One tune, every voice,<br>entering one at a time.</h2>
     <p class="lede">
-      Hard to hear, harder to see. So here is every voice on its own staff, a piano roll locked to
-      the same horizontal axis underneath, and every single statement of the subject found by the
-      site itself and drawn where it happens — while the music plays.
+      One staff per voice, a piano roll underneath on the same horizontal axis, and every statement
+      of the subject drawn where it happens — found by the build rather than marked up by hand.
+      Then it plays.
     </p>
     <div class="cta">
       <a class="btn primary" href="lab.html?piece=bwv855">Start with the two-voice fugue</a>
       <a class="btn" href="#fugues">All nine fugues</a>
     </div>
-    <p class="micro">No sign-in, nothing to install, nothing downloaded while it plays.</p>
+    <p class="micro">No sign-in, no install. The sound is synthesised in the browser, not streamed.</p>
   </div>
   <figure class="herofig">
     <div id="teaser"></div>
@@ -56,44 +56,47 @@
     <article class="feat">
       <div class="ficon" id="fi1"></div>
       <h4>Open score, one voice per staff</h4>
-      <p>Not a two-stave keyboard reduction. A fugal line never jumps between staves, and it keeps
-         the same colour in the notation, the roll, the map and the panel.</p>
+      <p>In a two-stave keyboard reduction the inner voices swap hands and you lose them. Here
+         nothing jumps, and each voice keeps its colour in the notation, the roll, the map and the
+         panel.</p>
     </article>
     <article class="feat">
       <div class="ficon" id="fi2"></div>
       <h4>The roll shares the score's axis</h4>
-      <p>Every bar in the roll sits directly beneath its own notehead. Switch to time-proportional
-         spacing and horizontal distance becomes duration exactly — rhythm turns into geometry.</p>
+      <p>Every note in the roll sits directly beneath its own notehead. Switch to
+         time-proportional spacing and a half note is exactly twice the width of a quarter.</p>
     </article>
     <article class="feat">
       <div class="ficon" id="fi3"></div>
       <h4>Entries found, not typed in</h4>
-      <p>The opening statement is slid over every note of every voice and compared in diatonic
-         space, so tonal answers and modally bent entries are still recognised — and labelled
-         <em>exact</em>, <em>tonal</em>, <em>adjusted</em> or <em>partial</em>.</p>
+      <p>The build slides the opening statement over every note of every voice and compares in
+         diatonic space — letter-name steps, not semitones. So a tonal answer, whose head Bach bent
+         to stay in key, still matches, and gets labelled <em>exact</em>, <em>tonal</em>,
+         <em>adjusted</em> or <em>partial</em>.</p>
     </article>
     <article class="feat">
       <div class="ficon" id="fi4"></div>
       <h4>Take the sound apart</h4>
-      <p>Mute or solo any voice. <em>Spotlight subject</em> lifts whichever voice is stating the
-         theme and ducks the rest — the fastest way to learn what to listen for.</p>
+      <p>Mute or solo any voice, or loop a single entry. <em>Spotlight subject</em> raises whichever
+         voice is stating the theme and ducks the rest.</p>
     </article>
   </div>
 </section>
 
 <section class="fugues" id="fugues">
   <h3 class="sect">Nine fugues, easiest first</h3>
-  <p class="sectlede">Two voices up to four; a fugue that is nothing but stretto, one that turns its
-     subject upside down, and one written deliberately in the old style of a century before Bach.</p>
+  <p class="sectlede">Ordered by voice count, two up to four, which is only roughly the order of
+     difficulty. Seven from Book I of the Well-Tempered Clavier, one from Book II, and the first
+     Contrapunctus of The Art of Fugue.</p>
   <div id="pieceGrid" class="pgrid"></div>
 </section>
 
 <section class="glossary">
   <h3 class="sect">Five words that do most of the work</h3>
   <div class="gterms">
-    <div><b>Subject</b><span>The theme, stated alone at the very start.</span></div>
-    <div><b>Answer</b><span>The same theme a fifth higher, bringing in the second voice. A <em>tonal</em> answer bends a note or two of its head to stay in key; a <em>real</em> answer transposes exactly.</span></div>
-    <div><b>Countersubject</b><span>The line the first voice plays against the answer — if it keeps coming back with later entries.</span></div>
+    <div><b>Subject</b><span>The theme, stated alone at the start.</span></div>
+    <div><b>Answer</b><span>The same theme a fifth higher — the second voice arriving. A <em>tonal</em> answer bends a note or two of its head to stay in key; a <em>real</em> answer transposes exactly.</span></div>
+    <div><b>Countersubject</b><span>The line the first voice plays against the answer. It only counts if it comes back with the later entries.</span></div>
     <div><b>Episode</b><span>The stretches between entries, usually spun out of fragments of the subject.</span></div>
     <div><b>Stretto</b><span>Entries overlapping: the next voice comes in before the last has finished.</span></div>
   </div>
@@ -105,10 +108,10 @@
     <div>
       <p>Notes come from Humdrum <code>**kern</code> digital editions of the <i>Well-Tempered
          Clavier</i> and <i>The Art of Fugue</i>, which spell every accidental explicitly rather than
-         leaving it to a key signature. The engraving is produced by
-         <a href="https://www.verovio.org/" target="_blank" rel="noopener">Verovio</a> at build time,
-         and the position of every notehead is lifted straight out of the engraved SVG — which is why
-         the score, the roll and the audio cannot drift apart.</p>
+         leaving it to a key signature.
+         <a href="https://www.verovio.org/" target="_blank" rel="noopener">Verovio</a> engraves them
+         at build time, and the position of every notehead is lifted straight out of the engraved
+         SVG. That is why the score, the roll and the audio cannot drift apart.</p>
       <p>Nothing here is hand-transcribed, and none of the analysis is typed in: the entry counts,
          the strettos, the episodes and the tonal plan are all measured from the score. The whole
          pipeline is about a thousand lines of Python and is in the repository.</p>
@@ -120,7 +123,7 @@
     <ol class="pipeline">
       <li><b>kernparse</b><span>exact <code>**kern</code> reader — pitch, onsets, ties, spine splits</span></li>
       <li><b>build</b><span>Verovio engraving + note geometry out of the SVG</span></li>
-      <li><b>autosubject</b><span>how long is the subject? what every expository entry shares</span></li>
+      <li><b>autosubject</b><span>how long the subject is — what every expository entry shares</span></li>
       <li><b>analyze</b><span>diatonic motif matching: transposition, inversion, augmentation</span></li>
       <li><b>make</b><span>episodes, strettos, pedal points, Viterbi-smoothed key path</span></li>
     </ol>
@@ -129,13 +132,15 @@
 
 <footer class="foot">
   <div>
-    <b>Sources.</b> The music is Bach's and long out of copyright; the underlying edition is the
+    <b>Sources.</b> The music is Bach's and long out of copyright; the edition underneath is the
     Bach-Gesellschaft Ausgabe (1866). The <code>**kern</code> encodings are by David Huron and Craig Stuart Sapp
     —
     <a href="https://github.com/humdrum-tools/bach-wtc-fugues" target="_blank" rel="noopener">bach-wtc-fugues</a>,
-    <a href="https://github.com/craigsapp/art-of-the-fugue" target="_blank" rel="noopener">art-of-the-fugue</a>
-    — and are fetched at build time rather than redistributed here. Scores to read alongside are on
-    <a href="https://imslp.org/wiki/Das_wohltemperierte_Klavier_I,_BWV_846-869_(Bach,_Johann_Sebastian)" target="_blank" rel="noopener">IMSLP</a>.
+    <a href="https://github.com/craigsapp/art-of-the-fugue" target="_blank" rel="noopener">art-of-the-fugue</a>.
+    Neither has a licence file, so the build fetches them from upstream rather than redistributing
+    them here. Book I is on
+    <a href="https://imslp.org/wiki/Das_wohltemperierte_Klavier_I,_BWV_846-869_(Bach,_Johann_Sebastian)" target="_blank" rel="noopener">IMSLP</a>;
+    each fugue's notes panel links to its own edition.
   </div>
   <div class="footend">
     <span>Code MIT · built with Verovio and the Web Audio API</span>
@@ -143,6 +148,6 @@
   </div>
 </footer>
 
-<script src="home.js?v=3"></script>
+<script src="home.js?v=4"></script>
 </body>
 </html>

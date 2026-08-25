@@ -7,7 +7,7 @@
   "key": "E minor",
   "meter": "3/4",
   "nv": 2,
-  "blurb": "The only two-voice fugue in either book. With just one line above and one below, every entry, every episode and every crossing is unmistakable — the best place to start.",
+  "blurb": "The only two-voice fugue in either book. One line above and one below, so you hear every entry without trying. Start here.",
   "bpm": 116,
   "bars": 42,
   "entries": 8
@@ -20,7 +20,7 @@
   "key": "C minor",
   "meter": "4/4",
   "nv": 3,
-  "blurb": "The textbook fugue: three voices, a compact subject, one regular countersubject, and episodes spun from the subject's own tail. If you learn to hear one fugue, it is this one.",
+  "blurb": "Three voices, a compact subject, a countersubject that returns nearly every time, and episodes spun from the subject's own tail. If you learn to hear one fugue, make it this one.",
   "bpm": 80,
   "bars": 31,
   "entries": 8
@@ -33,7 +33,7 @@
   "key": "D minor",
   "meter": "3/4",
   "nv": 3,
-  "blurb": "A short, fast three-voice fugue whose subject Bach turns upside down halfway through. Switch on the entry brackets and watch the shape flip.",
+  "blurb": "Short, fast, three voices, and halfway through Bach turns the subject upside down. Switch on the entry brackets and watch the shape flip.",
   "bpm": 126,
   "bars": 44,
   "entries": 14
@@ -46,7 +46,7 @@
   "key": "F major",
   "meter": "3/8",
   "nv": 3,
-  "blurb": "A dancing 3/8 fugue. The subject is long and almost entirely stepwise, so each voice reads as a clear melodic line rather than a knot of figuration.",
+  "blurb": "A 3/8 fugue that moves like a dance. The subject is long and nearly all stepwise, so each voice reads as a tune rather than a knot of figuration.",
   "bpm": 104,
   "bars": 72,
   "entries": 13
@@ -59,7 +59,7 @@
   "key": "B♭ major",
   "meter": "3/4",
   "nv": 3,
-  "blurb": "A cheerful three-voice fugue on an unusually long, leaping subject — nearly four bars of it — which leaves room for only a handful of entries.",
+  "blurb": "Cheerful, three voices, and a subject that leaps about for nearly four bars before it finishes. At that length there is room for only a handful of entries.",
   "bpm": 132,
   "bars": 48,
   "entries": 8
@@ -72,7 +72,7 @@
   "key": "C major",
   "meter": "4/4",
   "nv": 4,
-  "blurb": "Almost nothing but subject. Four voices, no regular countersubject, barely an episode — entry piles on entry in stretto until the piece is saturated with its own theme.",
+  "blurb": "Almost nothing but subject. Four voices, no regular countersubject, barely an episode anywhere; the entries pile up in stretto until there is no room left for anything else.",
   "bpm": 72,
   "bars": 27,
   "entries": 22
@@ -85,7 +85,7 @@
   "key": "G minor",
   "meter": "4/4",
   "nv": 4,
-  "blurb": "Four voices, a short and sharply characterised subject, and a countersubject that sticks to it. A good demonstration of how much four-part texture changes the sound of a fugue.",
+  "blurb": "Four voices, a short subject with a very definite rhythm, and a countersubject that sticks to it. Play it after the two-voice E minor and you can hear what the extra lines do.",
   "bpm": 80,
   "bars": 34,
   "entries": 15
@@ -98,7 +98,7 @@
   "key": "E major",
   "meter": "4/2",
   "nv": 4,
-  "blurb": "Bach writing deliberately in the old style: long white notes, alla breve, four voices moving like a Renaissance motet. Counterpoint at its most transparent.",
+  "blurb": "Bach writing in an idiom that was already old when he was born. Long white notes, alla breve, four voices moving like a Renaissance motet.",
   "bpm": 104,
   "bars": 43,
   "entries": 15
@@ -111,7 +111,7 @@
   "key": "D minor",
   "meter": "2/2",
   "nv": 4,
-  "blurb": "The plainest possible statement of the greatest fugal project ever undertaken: four voices, one subject, no tricks. Everything else in the cycle is a variation on this.",
+  "blurb": "One subject, four voices, no tricks. It opens The Art of Fugue as plainly as it can, and everything else in the cycle is a variation on it.",
   "bpm": 76,
   "bars": 78,
   "entries": 9

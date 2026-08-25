@@ -158,15 +158,15 @@ const GROUPS = [
   ['The Art',  'The Art of Fugue (c. 1745–50)'],
 ];
 const NOTE = {
-  bwv855: 'The only two-voice fugue in either book — one line above, one below, nothing to hide behind.',
-  bwv847: 'The textbook fugue: a compact subject, one regular countersubject, cleanly separated episodes.',
-  bwv851: 'Fast, tight, and halfway through Bach turns the subject upside down.',
-  bwv856: 'A dancing 3/8 fugue on a long, almost entirely stepwise subject.',
-  bwv866: 'A cheerful subject nearly four bars long, which leaves room for only a handful of entries.',
-  bwv846: 'Almost nothing but subject: entry piles on entry in stretto for twenty-seven bars.',
-  bwv861: 'Four voices and a sharply characterised subject that keeps its countersubject close.',
-  bwv878: 'Bach writing deliberately in the old style: long white notes, counterpoint in slow motion.',
-  'bwv1080-1': 'The plain opening statement of the greatest fugal project ever undertaken.',
+  bwv855: 'The only two-voice fugue in either book. One line above, one below, and nowhere to hide. Start here.',
+  bwv847: 'The textbook fugue. Compact subject, a countersubject that comes back with nearly every entry, episodes spun from the subject\'s tail.',
+  bwv851: 'Fast, and then halfway through Bach turns the subject upside down and carries on regardless.',
+  bwv856: 'A dancing 3/8, and a long subject that walks almost entirely by step, so each voice reads as a tune.',
+  bwv866: 'The subject leaps about for nearly four bars before it lets go. At that length there is no room for many entries, so most of what you hear is episode.',
+  bwv846: 'Twenty-two entries in twenty-seven bars, piled into stretto. No regular countersubject, and barely an episode.',
+  bwv861: 'Four voices, a short and sharply drawn subject, and a countersubject stuck to it. Hear how much thicker four parts sound than three.',
+  bwv878: 'The long white notes and the alla breve are deliberate: this is Bach imitating a Renaissance motet.',
+  'bwv1080-1': 'One subject, four voices, no tricks. Everything else in the cycle is a variation on this one.',
 };
 
 const [index, teasers] = await Promise.all([

@@ -1,8 +1,8 @@
 # Fugue Lab
 
-An interactive way to *see* Bach's counterpoint: real engraved notation, a piano roll on the
-same horizontal axis, a whole-piece structural map, and audio — with every statement of the
-subject found automatically and labelled.
+A viewer for Bach fugues: one staff per voice, a piano roll drawn on the same horizontal axis as
+the score, a map of the whole piece, and audio. Every statement of the subject is found by the
+build, not typed in by hand.
 
 **→ [Open the site](https://flyingworkshop.github.io/bach-fugue-lab/)**  ·  [jump straight into the lab](https://flyingworkshop.github.io/bach-fugue-lab/lab.html)
 
@@ -24,36 +24,37 @@ Fugue*, ranging from two voices to four.
 ## What it shows
 
 **Open score.** One staff per voice, so a fugal line never jumps between staves the way it does
-in a two-stave keyboard reduction. Each voice keeps one colour everywhere — notation, roll, map.
+in a two-stave keyboard reduction. Each voice keeps its colour in the notation, the roll and the
+map.
 
 **A shared x-axis.** The piano roll below the score is drawn at the exact horizontal positions of
-the engraving, so a note in the roll sits under its own notehead. Two spacings are available:
+the engraving, so a note in the roll sits under its own notehead. Two spacings:
 
-* *Time-proportional* — horizontal distance is strictly proportional to duration, so rhythm and
-  note length are literally geometric.
+* *Time-proportional* — horizontal distance is strictly proportional to duration; a half note is
+  twice the width of a quarter.
 * *Notation* — conventional engraver's spacing, which fits more bars on screen.
 
-**Subject entries, found not typed.** Every statement of the subject and countersubject is located
-by sliding the opening statement over every note of every voice and comparing in **diatonic space**
-— letter-name steps rather than semitones. That is why a *tonal answer* (whose head is mutated) or a
-modally adjusted entry is still recognised, and is labelled `exact` / `tonal` / `adjusted` /
-`partial` accordingly. Inversion and augmentation are searched for too, where a piece uses them.
+**Subject entries, found not typed.** The build slides the opening statement over every note of
+every voice and compares in **diatonic space** — letter-name steps rather than semitones. So a
+*tonal answer* (whose head is mutated) or a modally adjusted entry still matches, and gets labelled
+`exact` / `tonal` / `adjusted` / `partial`. The countersubject goes through the same pass, and so
+do inversion and augmentation where a piece uses them.
 
 **A whole-piece map.** Every entry as a block on its voice's lane, episodes greyed, strettos
 flagged, and the estimated key underneath.
 
-**Audio you can take apart.** Per-voice mute, solo and volume; *spotlight subject* raises whichever
+**Per-voice audio.** Mute, solo and volume on each voice; *spotlight subject* raises whichever
 voice is currently stating the theme and ducks the rest; loop any entry or episode; tempo control.
 Synthesised in the browser with the Web Audio API — no samples, no network.
 
-**No dynamics, honestly.** These pieces carry no dynamic markings, because Bach wrote none — the
-Well-Tempered Clavier is harpsichord and clavichord music. Nothing is being hidden. What loudness
-the synthesiser applies (a slight metrical accent, the subject spotlight, and a little extra weight
-low down so the bass stays audible) is exposed under **Sound** and can be switched off for a flat,
-harpsichord-like reading.
+**No dynamics.** Bach wrote none, so there are none here; the Well-Tempered Clavier is harpsichord
+and clavichord music. The synthesiser does add loudness of its own: a slight metrical accent and
+the subject spotlight, both under **Sound** and both switchable off for a flat, harpsichord-like
+reading. Low notes also get a little extra weight so the bass stays audible; that is mixing, not
+interpretation.
 
 **Subject lab.** Every statement drawn on top of a ghost of the original, optionally transposed to a
-common pitch, so you can see at a glance which entries are literal and which Bach bent.
+common pitch. The entries Bach bent are the interesting ones.
 
 ## Keys
 
@@ -98,17 +99,16 @@ pitches here come from the `**kern` tokens instead, which spell every accidental
 
 ## Sources & credits
 
-* **The music** is Bach's, and long out of copyright. The underlying edition is the
+* **The music** is Bach's and long out of copyright. The edition underneath is the
   Bach-Gesellschaft Ausgabe (Breitkopf & Härtel, 1866, ed. Franz Kroll).
 * **The encodings** are the Humdrum `**kern` digital editions:
   [humdrum-tools/bach-wtc-fugues](https://github.com/humdrum-tools/bach-wtc-fugues) (WTC, encoded by
   David Huron) and [craigsapp/art-of-the-fugue](https://github.com/craigsapp/art-of-the-fugue).
-  Neither carries an explicit licence file, so this repository does **not** redistribute them —
-  `build/fetch.sh` pulls them from upstream at build time. The rendered SVG and analysis JSON in
-  `data/` are derived from them; if either encoder would prefer that not be published, open an issue
-  and it comes down.
-* **The engraving** is by [Verovio](https://www.verovio.org/) (MIT), used as a build-time library.
-* Scores to read alongside: [IMSLP](https://imslp.org/wiki/Das_wohltemperierte_Klavier_I,_BWV_846-869_(Bach,_Johann_Sebastian)).
+  Neither repository has a licence file, so this one does **not** redistribute them; `build/fetch.sh`
+  pulls them from upstream at build time. The rendered SVG and analysis JSON in `data/` are derived
+  from them. If either encoder would prefer that not be published, open an issue and it comes down.
+* **The engraving** is by [Verovio](https://www.verovio.org/) (MIT), run at build time.
+* To read the printed score alongside: [IMSLP](https://imslp.org/wiki/Das_wohltemperierte_Klavier_I,_BWV_846-869_(Bach,_Johann_Sebastian)).
 
 ## Licence
 

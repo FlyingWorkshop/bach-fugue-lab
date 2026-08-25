@@ -4,17 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fugue Lab — seeing Bach's counterpoint</title>
-<meta name="description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis, with every statement of the subject found automatically and audio you can take apart voice by voice.">
+<meta name="description" content="Nine Bach fugues as open score, piano roll and map on one shared axis. Every statement of the subject is found automatically. Mute or solo any voice as it plays.">
 <meta name="theme-color" content="#0d1014">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Fugue Lab — seeing Bach's counterpoint">
-<meta property="og:description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis, with every subject entry found automatically.">
+<meta property="og:description" content="Nine Bach fugues as open score, piano roll and map on one shared axis, with every statement of the subject found automatically.">
 <meta property="og:url" content="https://flyingworkshop.github.io/bach-fugue-lab/lab.html">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="app.css?v=10">
+<link rel="stylesheet" href="app.css?v=16">
 </head>
 <body>
 
@@ -79,7 +79,7 @@
         <label class="chk"><input id="spotlight" type="checkbox" checked> Spotlight subject</label>
         <label class="chk"><input id="accents" type="checkbox" checked> Metrical accents</label>
       </div>
-      <p class="cardnote">Bach marked no dynamics in these pieces — there are none in the sources
+      <p class="cardnote">Bach marked no dynamics in these pieces, so there are none in the sources
         to show. <a href="#" id="soundWhy">Why, and what the synth does instead ↗</a></p>
     </div>
     <div class="card">
@@ -139,16 +139,16 @@
   <div class="modalbox">
     <button class="close" id="helpClose">×</button>
     <h3>How to read this</h3>
-    <p><b>The score</b> is engraved in <i>open score</i> — one staff per voice — so a single fugal line never jumps between staves the way it does in a two-stave keyboard reduction. Each voice keeps its colour everywhere: notation, roll, map, panel.</p>
-    <p><b>The roll</b> underneath is the same music by pitch and time, drawn at the score's own horizontal positions, so a bar in the roll sits directly under its notehead. The thin line through it is that voice's melodic thread.</p>
+    <p><b>The score</b> is in <i>open score</i>: one staff per voice, so a line never jumps between staves the way it does in a two-stave keyboard reduction. Each voice keeps its colour in the notation, the roll, the map and the panel.</p>
+    <p><b>The roll</b> underneath is the same music as pitch against time, drawn at the score's own horizontal positions, so each block sits directly under its notehead. The thin line through it is that voice's melodic thread.</p>
     <p><b>Brackets</b> over the staves and boxes in the roll mark every statement of the subject, labelled with the note it starts on. A dashed bracket is the countersubject.</p>
-    <p><b>The map</b> is the whole fugue at a glance: entries as blocks on their voice's lane, episodes greyed, strettos flagged in red, and the key underneath. Click anywhere to jump; click an entry block to loop it.</p>
+    <p><b>The map</b> is the whole fugue end to end: entries as blocks in their voice's lane, episodes greyed, strettos in red, and the key underneath. Click anywhere to jump there; click an entry block to loop it.</p>
     <h3>Two ways to space the page</h3>
-    <p><b>Time-proportional</b> makes horizontal distance strictly proportional to duration, so a semibreve really is four times a crotchet and rhythm becomes geometry. <b>Notation</b> uses conventional engraver's spacing, which fits more bars on screen but squashes long notes. Both keep the score and the roll locked together.</p>
-    <p>A statement's label stays with you: while any part of a bracket is on screen the label slides along it rather than scrolling away, so you always know what the line above the staff is marking.</p>
+    <p><b>Time-proportional</b> makes horizontal distance strictly proportional to duration, so a semibreve really is four times as wide as a crotchet. <b>Notation</b> uses conventional engraver's spacing, which fits more bars on screen but squashes long notes. Either way the score and the roll stay locked together.</p>
+    <p>Entry labels do not scroll away. While any part of a bracket is on screen, its label slides along the bracket to stay in view.</p>
     <h3>Hearing the voices apart</h3>
-    <p>Solo or mute any voice from the panel, press its number, or pull its slider down. <b>Spotlight subject</b> lifts whichever voice is stating the theme and ducks everything else — the fastest way to learn what to listen for. Everything is synthesised in the browser; nothing is downloaded.</p>
-    <p><b>There are no dynamics in these pieces</b>, and that is not a gap in the edition — Bach wrote none. What loudness you hear is the synthesiser's, and it is yours to switch off under <b>Sound</b>. The full story is in <b>Notes &amp; sources</b>.</p>
+    <p>Solo or mute any voice from the panel, press its number, or pull its slider down. <b>Spotlight subject</b> lifts whichever voice is stating the theme and ducks the rest. Everything is synthesised in the browser; nothing is downloaded.</p>
+    <p><b>There are no dynamics in these pieces.</b> That is not a gap in the edition — Bach wrote none. Whatever loudness you hear is the synthesiser's, and you can switch it off under <b>Sound</b>. The longer version is in <b>Notes &amp; sources</b>.</p>
     <h3>Keys</h3>
     <ul class="keys">
       <li><kbd>space</kbd> play / pause</li>
@@ -159,13 +159,14 @@
       <li><kbd>L</kbd> loop the current section</li>
       <li><kbd>S</kbd> spotlight the subject</li>
       <li><kbd>N</kbd> notes &amp; sources</li>
+      <li><kbd>esc</kbd> close this</li>
     </ul>
     <h3>Where this comes from</h3>
-    <p>Notes come from Humdrum <b>**kern</b> digital editions of the <i>Well-Tempered Clavier</i> and <i>The Art of Fugue</i>, which spell every accidental explicitly; the engraving is produced by Verovio. Nothing is hand-transcribed.</p>
-    <p>Subject entries are <b>found, not typed in</b>: the opening statement is slid over every note of every voice and compared in diatonic space — letter-name steps rather than semitones — so a tonal answer or a modally adjusted entry is still recognised, and labelled as <i>exact</i>, <i>tonal</i>, <i>adjusted</i> or <i>partial</i>. Per-fugue sources, recordings and background live behind <b>Notes &amp; sources</b>.</p>
+    <p>Notes come from Humdrum <b>**kern</b> digital editions of the <i>Well-Tempered Clavier</i> and <i>The Art of Fugue</i>, which spell every accidental explicitly. Verovio does the engraving. Nothing is hand-transcribed.</p>
+    <p>Subject entries are <b>found, not typed in</b>: the opening statement is slid over every note of every voice and compared in diatonic space, letter-name steps rather than semitones. That way a tonal answer or a modally adjusted entry is still recognised, and each one is labelled <i>exact</i>, <i>tonal</i>, <i>adjusted</i> or <i>partial</i>. Per-fugue sources, recordings and background are behind <b>Notes &amp; sources</b>.</p>
   </div>
 </div>
 
-<script src="app.js?v=15"></script>
+<script src="app.js?v=16"></script>
 </body>
 </html>

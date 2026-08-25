@@ -17,21 +17,20 @@ KERN_AOF   = ("Note data: art-of-the-fugue (Humdrum **kern)",
               "https://github.com/craigsapp/art-of-the-fugue")
 
 WTC1_CONTEXT = (
-    "Book I of *Das wohltemperirte Clavier* was assembled in Köthen and dated 1722 on "
-    "Bach's title page. Twenty-four preludes and fugues, one in every major and minor key, "
-    "written — in Bach's own words — “for the profit and use of musical youth desirous "
-    "of learning, and especially for the pastime of those already skilled in this study.” "
-    "It circulated in manuscript copies for decades; the first printed editions appeared only "
-    "in 1801.")
+    "Book I of *Das wohltemperirte Clavier* came together in Köthen, and Bach dated the title "
+    "page 1722. Twenty-four preludes and fugues, one in every major and minor key, written, in "
+    "his words, “for the profit and use of musical youth desirous of learning, and especially "
+    "for the pastime of those already skilled in this study.” Copies went round in manuscript "
+    "for decades; the first printed editions appeared in 1801.")
 WTC2_CONTEXT = (
-    "Book II was gathered in Leipzig around 1739–42, nearly twenty years after Book I, "
-    "from pieces written across a long span. The main source is the so-called London autograph "
-    "in the British Library, partly in Bach's hand and partly in Anna Magdalena's.")
+    "Book II was put together in Leipzig around 1739–42, nearly twenty years after Book I, out "
+    "of pieces Bach had been writing over a much longer span. The main source is the London "
+    "autograph in the British Library, some of it in his hand, some in Anna Magdalena's.")
 AOF_CONTEXT = (
-    "*Die Kunst der Fuge* occupied Bach in his last decade and was published posthumously in "
-    "1751. Every movement grows from one D minor subject; the collection works systematically "
-    "through simple fugues, counter-fugues, double and triple fugues, canons and mirror fugues, "
-    "and breaks off unfinished in the middle of a quadruple fugue.")
+    "Bach worked at *Die Kunst der Fuge* through his last decade; it was published in 1751, "
+    "after he died. Every movement grows out of the same D minor subject, and the collection "
+    "works in order through simple fugues, counter-fugues, double and triple fugues, canons and "
+    "mirror fugues. Then it breaks off, unfinished, in the middle of a quadruple fugue.")
 
 
 def perf(who, note, query):
@@ -42,14 +41,15 @@ PIECES = [
  dict(
   id="bwv855", file="wtc1f10.krn", bpm=116,
   title="Fugue in E minor", bwv="BWV 855", book="WTC I, No. 10", collection="wtc1",
-  blurb="The only two-voice fugue in either book. With just one line above and one below, "
-        "every entry, every episode and every crossing is unmistakable — the best place to start.",
+  blurb="The only two-voice fugue in either book. One line above and one below, so you hear "
+        "every entry without trying. Start here.",
   history=[
-    "The E minor is the outlier of Book I: two voices where every other fugue has three, four "
-    "or five. Bach gives himself almost no room to hide, and the piece is often the first fugue "
-    "a student takes apart for exactly that reason.",
-    "The second half turns into a *perpetuum mobile* — continuous running quavers under and over "
-    "the subject — which is why it is sometimes described as a two-part invention that grew up.",
+    "Every other fugue in Book I has three, four or five voices. This one has two. That leaves "
+    "Bach almost nothing to hide behind, which is exactly why students are often handed it "
+    "first.",
+    "Halfway through, the quavers start and never stop: the second half is a *perpetuum mobile* "
+    "running under and over the subject. Hence the habit of calling it a two-part invention that "
+    "grew up.",
     WTC1_CONTEXT,
   ],
   links=[WTC1_SCORE, ("Prelude and Fugue in E minor, BWV 855", "https://en.wikipedia.org/wiki/Prelude_and_Fugue_in_E_minor,_BWV_855"), WTC_WIKI, KERN_WTC],
@@ -63,20 +63,21 @@ PIECES = [
  dict(
   id="bwv847", file="wtc1f02.krn", bpm=80,
   title="Fugue in C minor", bwv="BWV 847", book="WTC I, No. 2", collection="wtc1",
-  blurb="The textbook fugue: three voices, a compact subject, one regular countersubject, and "
-        "episodes spun from the subject's own tail. If you learn to hear one fugue, it is this one.",
+  blurb="Three voices, a compact subject, a countersubject that returns nearly every time, and "
+        "episodes spun from the subject's own tail. If you learn to hear one fugue, make it this one.",
   history=[
-    "No fugue of Bach's has been analysed more often. Its proportions are unusually clean — a "
-    "two-bar subject, a tonal answer, a countersubject that returns intact with most entries, "
-    "and episodes built by sequencing fragments of the subject itself.",
-    "The last entry arrives over a tonic pedal, and the piece closes in C major: a *tierce de "
-    "Picardie*, the standard Baroque way of ending a minor-key movement.",
+    "Two-bar subject, tonal answer, a countersubject that comes back intact with most entries, "
+    "episodes built by sequencing fragments of the subject itself. Everything lines up, which is "
+    "presumably why no fugue of Bach's has been analysed more often.",
+    "The last entry arrives over a tonic pedal, and the piece ends in C major rather than C "
+    "minor — a *tierce de Picardie*, the standard Baroque way of finishing a minor-key "
+    "movement.",
     WTC1_CONTEXT,
   ],
   links=[WTC1_SCORE, ("Prelude and Fugue in C minor, BWV 847", "https://en.wikipedia.org/wiki/Prelude_and_Fugue_in_C_minor,_BWV_847"), WTC_WIKI, KERN_WTC],
   performances=[
     perf("Glenn Gould", "piano, 1963", "Glenn Gould Bach Fugue C minor BWV 847"),
-    perf("Edwin Fischer", "piano, 1933–36 — the first complete recording", "Edwin Fischer Bach Well Tempered Clavier BWV 847"),
+    perf("Edwin Fischer", "piano, 1933–36, the first complete recording", "Edwin Fischer Bach Well Tempered Clavier BWV 847"),
     perf("Wanda Landowska", "harpsichord", "Landowska Bach Well Tempered Clavier C minor fugue"),
     perf("András Schiff", "piano, ECM", "Andras Schiff Bach BWV 847 fugue"),
   ]),
@@ -84,13 +85,14 @@ PIECES = [
  dict(
   id="bwv851", file="wtc1f06.krn", bpm=126, forms=("P", "I"),
   title="Fugue in D minor", bwv="BWV 851", book="WTC I, No. 6", collection="wtc1",
-  blurb="A short, fast three-voice fugue whose subject Bach turns upside down halfway through. "
+  blurb="Short, fast, three voices, and halfway through Bach turns the subject upside down. "
         "Switch on the entry brackets and watch the shape flip.",
   history=[
-    "The subject is barely two bars of running quavers, which lets Bach stack entries closely and "
-    "then invert the subject outright — every rising step becomes a falling one.",
-    "Inversion, stretto and a tonic pedal at the close pack a remarkable amount of fugal "
-    "technique into forty-odd bars.",
+    "The subject is barely two bars of running quavers, short enough that Bach can stack the "
+    "entries close together and then invert the thing outright. Every rising step becomes a "
+    "falling one.",
+    "Inversion, stretto and a tonic pedal at the close, all inside forty-odd bars. He is showing "
+    "off.",
     WTC1_CONTEXT,
   ],
   links=[WTC1_SCORE, ("Prelude and Fugue in D minor, BWV 851", "https://en.wikipedia.org/wiki/Prelude_and_Fugue_in_D_minor,_BWV_851"), WTC_WIKI, KERN_WTC],
@@ -104,13 +106,12 @@ PIECES = [
  dict(
   id="bwv856", file="wtc1f11.krn", bpm=104,
   title="Fugue in F major", bwv="BWV 856", book="WTC I, No. 11", collection="wtc1",
-  blurb="A dancing 3/8 fugue. The subject is long and almost entirely stepwise, so each voice "
-        "reads as a clear melodic line rather than a knot of figuration.",
+  blurb="A 3/8 fugue that moves like a dance. The subject is long and nearly all stepwise, so "
+        "each voice reads as a tune rather than a knot of figuration.",
   history=[
-    "In 3/8 and full of scale figures, this fugue behaves more like a gigue than a study. The "
-    "long subject means fewer entries than usual, and correspondingly long episodes between them.",
-    "It is one of the pieces that show up early in the Book I teaching sequence precisely because "
-    "the three lines stay so easy to follow by ear.",
+    "3/8, full of scale figures, closer to a gigue than to a study. The subject is long, so there "
+    "are fewer entries than usual and the episodes between them stretch out to match.",
+    "Teachers reach for it early in Book I because the three lines stay easy to tell apart by ear.",
     WTC1_CONTEXT,
   ],
   links=[WTC1_SCORE, WTC_WIKI, KERN_WTC],
@@ -124,13 +125,13 @@ PIECES = [
  dict(
   id="bwv866", file="wtc1f21.krn", bpm=132,
   title="Fugue in B-flat major", bwv="BWV 866", book="WTC I, No. 21", collection="wtc1",
-  blurb="A cheerful three-voice fugue on an unusually long, leaping subject — nearly four bars of "
-        "it — which leaves room for only a handful of entries.",
+  blurb="Cheerful, three voices, and a subject that leaps about for nearly four bars before it "
+        "finishes. At that length there is room for only a handful of entries.",
   history=[
-    "The subject runs on for close to four bars, so the whole fugue contains far fewer statements "
-    "than a piece of its length usually would; most of the music is episode.",
-    "The prelude that precedes it is the toccata-like one with the sweeping opening flourish, and "
-    "the pair is a favourite of recitalists.",
+    "Because the subject runs close to four bars, the fugue holds far fewer statements than a "
+    "piece its length normally would. Most of what you hear is episode.",
+    "The prelude in front of it is the toccata-like one that opens with a big sweeping flourish. "
+    "Recitalists love the pair.",
     WTC1_CONTEXT,
   ],
   links=[WTC1_SCORE, ("Prelude and Fugue in B-flat major, BWV 866", "https://en.wikipedia.org/wiki/Prelude_and_Fugue_in_B-flat_major,_BWV_866"), WTC_WIKI, KERN_WTC],
@@ -144,14 +145,14 @@ PIECES = [
  dict(
   id="bwv846", file="wtc1f01.krn", bpm=72,
   title="Fugue in C major", bwv="BWV 846", book="WTC I, No. 1", collection="wtc1",
-  blurb="Almost nothing but subject. Four voices, no regular countersubject, barely an episode — "
-        "entry piles on entry in stretto until the piece is saturated with its own theme.",
+  blurb="Almost nothing but subject. Four voices, no regular countersubject, barely an episode "
+        "anywhere; the entries pile up in stretto until there is no room left for anything else.",
   history=[
-    "The opening fugue of Book I is the densest in the collection: statements of the subject "
-    "overlap almost continuously, and the music never settles into the subject/episode alternation "
-    "that most fugues rely on.",
-    "There is no countersubject that returns reliably, which is unusual for Bach and is one reason "
-    "the piece sounds so single-minded. Every voice is doing the same thing, just at different times.",
+    "Statements of the subject overlap almost continuously, and the music never settles into the "
+    "subject-then-episode alternation most fugues run on. It is the densest fugue in Book I, and "
+    "Bach put it first.",
+    "No countersubject comes back reliably, which is unusual for him and part of why the fugue "
+    "sounds so single-minded. Every voice is doing the same thing, just at different times.",
     WTC1_CONTEXT,
   ],
   links=[WTC1_SCORE, ("Prelude and Fugue in C major, BWV 846", "https://en.wikipedia.org/wiki/Prelude_and_Fugue_in_C_major,_BWV_846"), WTC_WIKI, KERN_WTC],
@@ -165,13 +166,13 @@ PIECES = [
  dict(
   id="bwv861", file="wtc1f16.krn", bpm=80,
   title="Fugue in G minor", bwv="BWV 861", book="WTC I, No. 16", collection="wtc1",
-  blurb="Four voices, a short and sharply characterised subject, and a countersubject that sticks "
-        "to it. A good demonstration of how much four-part texture changes the sound of a fugue.",
+  blurb="Four voices, a short subject with a very definite rhythm, and a countersubject that "
+        "sticks to it. Play it after the two-voice E minor and you can hear what the extra lines do.",
   history=[
-    "The subject is compact and rhythmically distinctive, which lets Bach keep four real voices "
-    "moving without the texture turning muddy.",
-    "Adding a fourth voice roughly doubles the number of simultaneous intervals you have to control; "
-    "this fugue is a standard example of how the extra line is handled.",
+    "Four real voices moving at once, and the texture still never turns to mud. The subject is "
+    "short and rhythmically sharp enough to stay audible under everything else.",
+    "Three voices give you three pairs of intervals to keep under control at any moment; four "
+    "voices give you six. This is the standard example of how Bach handles the extra line.",
     WTC1_CONTEXT,
   ],
   links=[WTC1_SCORE, ("Prelude and Fugue in G minor, BWV 861", "https://en.wikipedia.org/wiki/Prelude_and_Fugue_in_G_minor,_BWV_861"), WTC_WIKI, KERN_WTC],
@@ -185,14 +186,14 @@ PIECES = [
  dict(
   id="bwv878", file="wtc2f09.krn", bpm=104,
   title="Fugue in E major", bwv="BWV 878", book="WTC II, No. 9", collection="wtc2",
-  blurb="Bach writing deliberately in the old style: long white notes, alla breve, four voices "
-        "moving like a Renaissance motet. Counterpoint at its most transparent.",
+  blurb="Bach writing in an idiom that was already old when he was born. Long white notes, alla "
+        "breve, four voices moving like a Renaissance motet.",
   history=[
-    "This is *stile antico* — the archaic idiom of Palestrina and his successors, which Bach "
-    "studied and revived. The notation is alla breve, the subject moves in semibreves and minims, "
-    "and the harmonic rhythm is slow enough that every suspension registers.",
-    "Because the note values are long, the vertical intervals between the voices are unusually easy "
-    "to see and hear; this is the fugue to open if you want to watch counterpoint in slow motion.",
+    "*Stile antico*, the archaic idiom of Palestrina and his successors, which Bach studied and "
+    "revived. Alla breve notation, a subject that moves in semibreves and minims, and harmony "
+    "that changes slowly enough for every suspension to land.",
+    "The long note values mean you can take the intervals between the voices one at a time, by "
+    "eye and by ear. If you want to watch counterpoint in slow motion, open this one.",
     WTC2_CONTEXT,
   ],
   links=[WTC2_SCORE, WTC_WIKI, KERN_WTC],
@@ -206,14 +207,14 @@ PIECES = [
  dict(
   id="bwv1080-1", file="artfugue-001.krn", bpm=76, modernClefs=True,
   title="Contrapunctus I", bwv="BWV 1080/1", book="The Art of Fugue", collection="aof",
-  blurb="The plainest possible statement of the greatest fugal project ever undertaken: four "
-        "voices, one subject, no tricks. Everything else in the cycle is a variation on this.",
+  blurb="One subject, four voices, no tricks. It opens The Art of Fugue as plainly as it can, and "
+        "everything else in the cycle is a variation on it.",
   history=[
-    "Contrapunctus I opens *The Art of Fugue* with a *simple fugue* — one subject, treated "
-    "straightforwardly — so that the transformations to come have something to be measured against.",
+    "A *simple fugue* in the technical sense: one subject, treated straightforwardly. Bach puts it "
+    "first so that the transformations to come have something to be measured against.",
     "The collection is written in open score, one staff per voice, with no instrument specified. "
-    "That is exactly the layout used here, and it is why the counterpoint is so legible: Bach "
-    "engraved it to be read, not just played.",
+    "That is the layout on this page too. Bach engraved it to be read as much as played, which is "
+    "most of why the counterpoint stays legible.",
     AOF_CONTEXT,
   ],
   links=[AOF_SCORE, AOF_WIKI, KERN_AOF],

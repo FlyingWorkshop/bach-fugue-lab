@@ -1235,14 +1235,14 @@ function buildDrawer(doc) {
   body.replaceChildren(
     sec('At a glance', facts,
       el('p', { class: 'dnote', style: 'margin-top:10px' },
-        `Every number here is measured from the score by this site, not typed in: ` +
-        `${doc.entries.length} statements of the subject were found by matching each voice ` +
-        `against the opening entry` + (doc.counters.length ? `, plus ${doc.counters.length} statements of the countersubject` : '') + `.`)),
+        `None of these numbers are typed in. Matching every voice against the opening entry ` +
+        `turned up ${doc.entries.length} statements of the subject.` +
+        (doc.counters.length ? ` The same match run against the countersubject found ${doc.counters.length}.` : ''))),
     sec('Tonal plan', el('p', { html: keyPlan }),
       el('p', { class: 'dnote' },
-         'Estimated from the notes themselves — a key-profile reading of every bar, smoothed so ' +
-         'the ribbon only changes key when the evidence is worth it. Passing tonicisations are ' +
-         'absorbed into the region around them.')),
+         'Estimates, not markings in the score. A key-profile reading of every bar, smoothed so ' +
+         'the ribbon only changes key when the evidence is strong enough. Passing tonicisations ' +
+         'get absorbed into the region around them.')),
     sec('About this fugue', ...doc.history.map(t => el('p', { html: md(t) }))),
     sec('Scores, sources & data', el('div', { class: 'dlinks' },
       ...doc.links.map(l => el('a', { href: l.url, target: '_blank', rel: 'noopener' },
@@ -1254,26 +1254,26 @@ function buildDrawer(doc) {
       }, el('span', {}, el('span', { class: 'who' }, p.who), el('br'), el('span', { class: 'note' }, p.note)),
          el('span', { class: 'arr' }, '↗')))),
       el('p', { class: 'dnote', style: 'margin-top:9px' },
-        'These open a YouTube search rather than a fixed video, so they keep working as uploads come and go.')),
+        'These run a YouTube search rather than pointing at one video. Recordings get taken down; searches don\'t.')),
     (() => { const x = sec('About the sound',
-      el('p', {}, 'These pieces carry no dynamic markings, and that is not an omission in the ' +
-        'edition: Bach wrote none. The Well-Tempered Clavier was written for harpsichord and ' +
-        'clavichord, where a plucked string answers the same way however hard you press, and the ' +
-        'first dynamic marks in keyboard music are still decades off. The Art of Fugue does not ' +
-        'even specify an instrument.'),
-      el('p', { html: 'So nothing is hidden here — there is nothing to show. What the synthesiser ' +
+      el('p', {}, 'These pieces carry no dynamic markings. That is not the edition leaving ' +
+        'something out — Bach wrote none. The Well-Tempered Clavier was written for harpsichord ' +
+        'and clavichord, where a plucked string answers the same way however hard you press, and ' +
+        'the first dynamic marks in keyboard music are still decades off. The Art of Fugue does ' +
+        'not even specify an instrument.'),
+      el('p', { html: 'So nothing is hidden here; there is nothing to show. What the synthesiser ' +
         'does with loudness is its own doing, and you control it: <b>metrical accents</b> lean very ' +
         'slightly on downbeats and beats, and <b>spotlight subject</b> lifts whichever voice is ' +
-        'stating the theme and ducks the rest. Turn both off for a flat, harpsichord-like reading, ' +
-        'which is the historically honest one. Low notes are also given a little extra weight so ' +
-        'the bass stays audible under three other voices; that is mixing, not interpretation.' }),
+        'stating the theme and ducks the rest. Turn both off for a flat, harpsichord-like reading — ' +
+        'the historically honest one. Low notes get a little extra weight so the bass stays audible ' +
+        'under three other voices; that is mixing, not interpretation.' }),
       el('p', { class: 'dnote' }, 'Ornaments — trills, mordents, turns, fermatas — are in the score ' +
-        'and are drawn, but are not yet realised in the playback.'));
+        'and drawn on it. The playback still ignores them.'));
       x.id = 'secSound'; return x; })(),
-    sec('The vocabulary on screen',
+    sec('What the labels mean',
       el('p', { html:
         '<b>Subject</b> — the theme, stated alone at the start. <b>Answer</b> — the same theme a ' +
-        'fifth higher (or a fourth lower), the reply that brings in the second voice. A <b>tonal ' +
+        'fifth higher (or a fourth lower); it brings in the second voice. A <b>tonal ' +
         'answer</b> bends a note or two of its head so the music stays in key; a <b>real answer</b> ' +
         'transposes exactly. <b>Countersubject</b> — the line the first voice plays against the ' +
         'answer, if it comes back with later entries. <b>Episode</b> — the passages between ' +
@@ -1282,10 +1282,10 @@ function buildDrawer(doc) {
         'turned upside down, every rise becoming a fall.' })),
     sec('How the analysis works', el('p', { class: 'dnote' },
       'Notes come from a Humdrum **kern edition, which spells every pitch explicitly, so the ' +
-      'accidentals here are the edition\'s and not a guess. The engraving is produced by Verovio. ' +
-      'Subject entries are found by sliding the opening statement over every note of every voice ' +
-      'and comparing in diatonic space — letter-name steps rather than semitones — which is why a ' +
-      'tonal answer or a modally adjusted entry is still recognised, and labelled as such.')),
+      'accidentals here are the edition\'s and not a guess. Verovio does the engraving. To find ' +
+      'subject entries the site slides the opening statement over every note of every voice and ' +
+      'compares in diatonic space — letter-name steps rather than semitones — so a tonal answer ' +
+      'or a modally adjusted entry still counts, and is labelled as such.')),
   );
 }
 async function boot() {
