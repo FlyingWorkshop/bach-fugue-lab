@@ -53,10 +53,11 @@ voice is currently stating the theme and ducks the rest; loop any entry or episo
 Synthesised in the browser with the Web Audio API — no samples, no network.
 
 **No dynamics.** Bach wrote none, so there are none here; the Well-Tempered Clavier is harpsichord
-and clavichord music. The synthesiser does add loudness of its own: a slight metrical accent and
-the subject spotlight, both under **Sound** and both switchable off for a flat, harpsichord-like
-reading. Low notes also get a little extra weight so the bass stays audible; that is mixing, not
-interpretation.
+and clavichord music. Playback is flat by default — every note the same weight. Two aids under
+**Sound** will change that if you switch them on: a slight metrical accent, and a spotlight that
+lifts whichever voice is stating the subject and ducks the rest. Both are for following the
+counterpoint, not for performance. Low notes do get a little extra weight so the bass stays
+audible; that is mixing, not interpretation, and it is always on.
 
 **Subject lab.** Every statement drawn on top of a ghost of the original, optionally transposed to a
 common pitch. The entries Bach bent are the interesting ones.

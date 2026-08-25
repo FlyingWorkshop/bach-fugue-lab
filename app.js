@@ -55,7 +55,7 @@ async function loadPiece(id) {
 const S = {
   doc: null, svg: null, svgP: null, id: null, spacing: 'p',
   q: 0, playing: false, bpm: 76, zoom: 1.1,
-  follow: true, loopOn: false, loop: null, spotlight: true, accents: true,
+  follow: true, loopOn: false, loop: null, spotlight: false, accents: false,
   mute: [], solo: -1, master: 0.8, levels: [],
   show: { entries: true, cs: true, threads: true, dim: true, grid: true,
           diss: false, cross: false, score: true, keys: true },
@@ -1296,12 +1296,13 @@ function buildDrawer(doc) {
         'and clavichord, where a plucked string answers the same way however hard you press, and ' +
         'the first dynamic marks in keyboard music are still decades off. The Art of Fugue does ' +
         'not even specify an instrument.'),
-      el('p', { html: 'So nothing is hidden here; there is nothing to show. What the synthesiser ' +
-        'does with loudness is its own doing, and you control it: <b>metrical accents</b> lean very ' +
-        'slightly on downbeats and beats, and <b>spotlight subject</b> lifts whichever voice is ' +
-        'stating the theme and ducks the rest. Turn both off for a flat, harpsichord-like reading — ' +
-        'the historically honest one. Low notes get a little extra weight so the bass stays audible ' +
-        'under three other voices; that is mixing, not interpretation.' }),
+      el('p', { html: 'So nothing is hidden here; there is nothing to show, and by default the ' +
+        'playback adds nothing either — every note comes out at the same weight, which is the flat, ' +
+        'harpsichord-like reading and the historically honest one. Two switches above will change ' +
+        'that if you want them: <b>metrical accents</b> leans very slightly on downbeats and beats, ' +
+        'and <b>spotlight subject</b> lifts whichever voice is stating the theme and ducks the rest. ' +
+        'Both are analysis aids, not performance. Low notes do get a little extra weight so the bass ' +
+        'stays audible under three other voices; that is mixing, and it is always on.' }),
       el('p', { class: 'dnote' }, 'Ornaments — trills, mordents, turns, fermatas — are in the score ' +
         'and drawn on it. The playback still ignores them.'));
       x.id = 'secSound'; return x; })(),

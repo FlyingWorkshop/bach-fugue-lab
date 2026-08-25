@@ -51,7 +51,7 @@ code{font:13px ui-monospace,Menlo,monospace;background:#1a212b;padding:1px 5px;b
 .btn.primary:hover{filter:brightness(1.07);background:var(--accent)}
 
 /* --------------------------------------------------------------- teaser */
-.herofig{margin:0;padding-bottom:20px}
+.herofig{margin:0 auto;padding-bottom:20px}   /* auto, or it loses the shared centring */
 .herofig figcaption{margin-top:11px;font-size:12px;color:var(--dim2);line-height:1.55}
 #teaser{
   border:1px solid var(--line);border-radius:14px;background:var(--bg2);overflow:hidden;
