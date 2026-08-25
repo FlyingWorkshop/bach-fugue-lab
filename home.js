@@ -107,50 +107,6 @@ function mapSvg(t, { W, H }) {
   return svg;
 }
 
-/* --------------------------------------------------------- feature icons */
-function icons() {
-  const mk = (id, draw) => {
-    const svg = sel('svg', { viewBox: '0 0 200 58' });
-    draw(svg); $(id).replaceChildren(svg);
-  };
-  const C = ['#5cc8ff', '#ffc247', '#52d6a4'];
-  mk('#fi1', s => {
-    for (let k = 0; k < 3; k++) {
-      const y = 9 + k * 18;
-      for (let l = 0; l < 5; l++)
-        s.append(sel('line', { x1: 12, x2: 188, y1: y + l * 2.6, y2: y + l * 2.6, stroke: '#2b3542', 'stroke-width': .8 }));
-      for (let n = 0; n < 5; n++)
-        s.append(sel('ellipse', { cx: 34 + n * 32 + k * 7, cy: y + 2 + (n % 3) * 2.6, rx: 3.4, ry: 2.5, fill: C[k] }));
-    }
-  });
-  mk('#fi2', s => {
-    for (let l = 0; l < 5; l++)
-      s.append(sel('line', { x1: 12, x2: 188, y1: 8 + l * 2.6, y2: 8 + l * 2.6, stroke: '#2b3542', 'stroke-width': .8 }));
-    const xs = [30, 62, 94, 126, 158];
-    xs.forEach((x, i) => {
-      s.append(sel('ellipse', { cx: x, cy: 11 + (i % 3) * 2.6, rx: 3.4, ry: 2.5, fill: '#5cc8ff' }));
-      s.append(sel('line', { x1: x, x2: x, y1: 16, y2: 34, stroke: '#3d4a5c', 'stroke-width': .8, 'stroke-dasharray': '2 2' }));
-      s.append(sel('rect', { x: x - 12, y: 36 + (i % 3) * 5, width: 24, height: 5, rx: 2.5, fill: '#5cc8ff' }));
-    });
-  });
-  mk('#fi3', s => {
-    const shape = [0, 3, 1, 5, 2];
-    [[16, 6, C[0]], [70, 20, C[1]], [124, 12, C[2]]].forEach(([x0, y0, col]) => {
-      shape.forEach((d, i) => s.append(sel('rect', { x: x0 + i * 11, y: y0 + d * 4, width: 9, height: 4.5, rx: 2, fill: col })));
-      s.append(sel('path', { d: `M${x0 - 3} ${y0 - 5} L${x0 - 3} ${y0 - 9} L${x0 + 57} ${y0 - 9} L${x0 + 57} ${y0 - 5}`,
-                             fill: 'none', stroke: col, 'stroke-width': 1.1, 'stroke-opacity': .8 }));
-    });
-  });
-  mk('#fi4', s => {
-    [[0, 1], [1, .22], [2, .22]].forEach(([k, op]) => {
-      const y = 12 + k * 15;
-      for (let i = 0; i < 8; i++)
-        s.append(sel('rect', { x: 14 + i * 22, y: y + (i % 3) * 3, width: 17, height: 5, rx: 2.5,
-                               fill: C[k], opacity: op }));
-    });
-  });
-}
-
 /* -------------------------------------------------------------------- go */
 const GROUPS = [
   ['WTC I,',  'The Well-Tempered Clavier, Book I (1722)'],
@@ -174,12 +130,12 @@ const [index, teasers] = await Promise.all([
   fetch('data/teasers.json').then(r => r.json()),
 ]);
 
-icons();
-
-// hero: the exposition of the C minor fugue
-const t847 = teasers.bwv847;
-$('#teaser').replaceChildren(rollSvg(t847, { W: 620, H: 250, q0: 0, q1: 29,
-  boxes: true, labels: true, grid: true, nh: 4.6, dim: .26, pad: 14 }));
+// hero: the exposition of the C minor fugue. Narrow screens get half of it, so the
+// entry labels stay large enough to read once the SVG is scaled down.
+const narrow = window.innerWidth < 720;
+$('#teaser').replaceChildren(rollSvg(teasers.bwv847, {
+  W: narrow ? 560 : 1100, H: narrow ? 250 : 290, q0: 0, q1: narrow ? 18.5 : 33,
+  boxes: true, labels: true, grid: true, nh: narrow ? 4.6 : 5.4, dim: .26, pad: 16 }));
 
 // the nine fugues
 const grid = $('#pieceGrid');
