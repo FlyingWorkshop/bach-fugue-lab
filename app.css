@@ -306,6 +306,11 @@ input[type=range]{accent-color:var(--accent)}
 .dlinks a .who{font-weight:600}
 .dlinks a .note{color:var(--dim);font-size:11px}
 .dnote{font-size:11px;color:var(--dim2);line-height:1.55}
+.dterms{display:grid;gap:8px}
+.dterms div{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:baseline}
+.dterms b{font-size:12.5px;font-weight:620}
+.dterms span{font-size:12.5px;line-height:1.55;color:var(--dim)}
+@media (max-width:560px){.dterms div{grid-template-columns:1fr;gap:1px}}
 
 /* ------------------------------------------------------------------ modal */
 .modal{position:fixed;inset:0;background:rgba(6,8,11,.72);display:grid;place-items:center;z-index:80;padding:24px}

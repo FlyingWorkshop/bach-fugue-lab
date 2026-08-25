@@ -1249,7 +1249,6 @@ function buildDrawer(doc) {
   $('#drawerTitle').textContent = `${doc.title} · ${doc.bwv}`;
   const sec = (h, ...kids) => el('section', { class: 'dsec' }, el('h4', {}, h), ...kids);
 
-  const keyPlan = doc.keys.map(k => k.k.replace('maj', ' major').replace('min', ' minor')).join('  →  ');
   const kinds = {};
   doc.entries.forEach(e => kinds[e.kind] = (kinds[e.kind] || 0) + 1);
   const facts = el('div', { class: 'facts' });
@@ -1263,22 +1262,15 @@ function buildDrawer(doc) {
   fact('Strettos', String(doc.stretto.length));
   fact('Episodes', String(doc.episodes.length));
 
+  const term = (t, d) => el('div', {}, el('b', {}, t), el('span', { html: d }));
+
   body.replaceChildren(
-    sec('At a glance', facts,
-      el('p', { class: 'dnote', style: 'margin-top:10px' },
-        `None of these numbers are typed in. Matching every voice against the opening entry ` +
-        `turned up ${doc.entries.length} statements of the subject.` +
-        (doc.counters.length ? ` The same match run against the countersubject found ${doc.counters.length}.` : '') +
-        (doc.subjectByHand
-          ? ' Where the subject itself starts and ends was set by hand for this one: the detector' +
-            ' picked a fragment of the head instead, which then matched far too much.'
-          : ' Where the subject starts and ends was worked out by the build too.'))),
-    sec('Tonal plan', el('p', { html: keyPlan }),
-      el('p', { class: 'dnote' },
-         'Estimates, not markings in the score. A key-profile reading of every bar, smoothed so ' +
-         'the ribbon only changes key when the evidence is strong enough. Passing tonicisations ' +
-         'get absorbed into the region around them.')),
-    sec('About this fugue', ...doc.history.map(t => el('p', { html: md(t) }))),
+    sec('At a glance', facts),
+    // the last paragraph is the shared note on the collection, identical across every
+    // piece in it, so it reads as a footnote rather than as this fugue's history
+    sec('About this fugue',
+      ...doc.history.slice(0, -1).map(t => el('p', { html: md(t) })),
+      el('p', { class: 'dnote', html: md(doc.history[doc.history.length - 1]) })),
     sec('Scores, sources & data', el('div', { class: 'dlinks' },
       ...doc.links.map(l => el('a', { href: l.url, target: '_blank', rel: 'noopener' },
         el('span', { class: 'who' }, l.label), el('span', { class: 'arr' }, '↗'))))),
@@ -1289,39 +1281,34 @@ function buildDrawer(doc) {
       }, el('span', {}, el('span', { class: 'who' }, p.who), el('br'), el('span', { class: 'note' }, p.note)),
          el('span', { class: 'arr' }, '↗')))),
       el('p', { class: 'dnote', style: 'margin-top:9px' },
-        'These run a YouTube search rather than pointing at one video. Recordings get taken down; searches don\'t.')),
+        'These run a search rather than pointing at one video. Recordings get taken down; searches don\'t.')),
     (() => { const x = sec('About the sound',
-      el('p', {}, 'These pieces carry no dynamic markings. That is not the edition leaving ' +
-        'something out — Bach wrote none. The Well-Tempered Clavier was written for harpsichord ' +
-        'and clavichord, where a plucked string answers the same way however hard you press, and ' +
-        'the first dynamic marks in keyboard music are still decades off. The Art of Fugue does ' +
-        'not even specify an instrument.'),
-      el('p', { html: 'So nothing is hidden here; there is nothing to show, and by default the ' +
-        'playback adds nothing either — every note comes out at the same weight, which is the flat, ' +
-        'harpsichord-like reading and the historically honest one. Two switches above will change ' +
-        'that if you want them: <b>metrical accents</b> leans very slightly on downbeats and beats, ' +
-        'and <b>spotlight subject</b> lifts whichever voice is stating the theme and ducks the rest. ' +
-        'Both are analysis aids, not performance. Low notes do get a little extra weight so the bass ' +
-        'stays audible under three other voices; that is mixing, and it is always on.' }),
-      el('p', { class: 'dnote' }, 'Ornaments — trills, mordents, turns, fermatas — are in the score ' +
-        'and drawn on it. The playback still ignores them.'));
+      el('p', {}, 'Bach wrote no dynamics, so there are none here. A harpsichord answers the same ' +
+        'way however hard you press, and The Art of Fugue does not even name an instrument.'),
+      el('p', { html: 'Playback is flat by default. Two switches above change that: ' +
+        '<b>metrical accents</b> leans slightly on downbeats, and <b>spotlight subject</b> lifts ' +
+        'whichever voice is stating the theme and ducks the rest. Both are for following the ' +
+        'counterpoint, not for playing it.' }),
+      el('p', { class: 'dnote' }, 'Low notes get extra weight so the bass survives under three ' +
+        'other voices; that is mixing, and it is always on. Ornaments are drawn but not played.'));
       x.id = 'secSound'; return x; })(),
-    sec('What the labels mean',
-      el('p', { html:
-        '<b>Subject</b> — the theme, stated alone at the start. <b>Answer</b> — the same theme a ' +
-        'fifth higher (or a fourth lower); it brings in the second voice. A <b>tonal ' +
-        'answer</b> bends a note or two of its head so the music stays in key; a <b>real answer</b> ' +
-        'transposes exactly. <b>Countersubject</b> — the line the first voice plays against the ' +
-        'answer, if it comes back with later entries. <b>Episode</b> — the passages between ' +
-        'entries, usually spun from fragments of the subject. <b>Stretto</b> — entries overlapping, ' +
-        'the next voice coming in before the last has finished. <b>Inversion</b> — the subject ' +
-        'turned upside down, every rise becoming a fall.' })),
+    sec('What the labels mean', el('div', { class: 'dterms' },
+      term('Subject', 'The theme, alone at the start.'),
+      term('Answer', 'The same theme a fifth up, or a fourth down, bringing in the second voice. A <i>tonal</i> answer ' +
+                     'bends a note or two of its head to stay in key; a <i>real</i> answer transposes exactly.'),
+      term('Countersubject', 'What the first voice plays against the answer, if it comes back with later entries.'),
+      term('Episode', 'The stretches between entries, usually spun from fragments of the subject.'),
+      term('Stretto', 'Entries overlapping: the next voice starts before the last has finished.'),
+      term('Inversion', 'The subject upside down, every rise a fall.'))),
     sec('How the analysis works', el('p', { class: 'dnote' },
-      'Notes come from a Humdrum **kern edition, which spells every pitch explicitly, so the ' +
-      'accidentals here are the edition\'s and not a guess. Verovio does the engraving. To find ' +
-      'subject entries the site slides the opening statement over every note of every voice and ' +
-      'compares in diatonic space — letter-name steps rather than semitones — so a tonal answer ' +
-      'or a modally adjusted entry still counts, and is labelled as such.')),
+      'Pitches come from a Humdrum **kern edition, which spells every accidental out, so they are ' +
+      'the edition\'s and not a guess. Verovio engraves. Entries are found by sliding the opening ' +
+      'statement over every voice and comparing letter-name steps rather than semitones, so a tonal ' +
+      'answer still matches. ' +
+      (doc.subjectByHand
+        ? 'Where the subject itself ends was set by hand for this one — the detector picked a ' +
+          'fragment of the head, which then matched far too much.'
+        : 'Where the subject ends was worked out by the build too.'))),
   );
 }
 async function boot() {
