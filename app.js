@@ -1056,6 +1056,16 @@ function buildDrawer(doc) {
          el('span', { class: 'arr' }, '↗')))),
       el('p', { class: 'dnote', style: 'margin-top:9px' },
         'These open a YouTube search rather than a fixed video, so they keep working as uploads come and go.')),
+    sec('The vocabulary on screen',
+      el('p', { html:
+        '<b>Subject</b> — the theme, stated alone at the start. <b>Answer</b> — the same theme a ' +
+        'fifth higher (or a fourth lower), the reply that brings in the second voice. A <b>tonal ' +
+        'answer</b> bends a note or two of its head so the music stays in key; a <b>real answer</b> ' +
+        'transposes exactly. <b>Countersubject</b> — the line the first voice plays against the ' +
+        'answer, if it comes back with later entries. <b>Episode</b> — the passages between ' +
+        'entries, usually spun from fragments of the subject. <b>Stretto</b> — entries overlapping, ' +
+        'the next voice coming in before the last has finished. <b>Inversion</b> — the subject ' +
+        'turned upside down, every rise becoming a fall.' })),
     sec('How the analysis works', el('p', { class: 'dnote' },
       'Notes come from a Humdrum **kern edition, which spells every pitch explicitly, so the ' +
       'accidentals here are the edition\'s and not a guess. The engraving is produced by Verovio. ' +
