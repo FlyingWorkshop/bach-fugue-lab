@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fugue Lab — seeing Bach's counterpoint</title>
+<meta name="description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis, with every statement of the subject found automatically and audio you can take apart voice by voice.">
+<meta name="theme-color" content="#0d1014">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Fugue Lab — seeing Bach's counterpoint">
+<meta property="og:description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis, with every subject entry found automatically.">
+<meta property="og:url" content="https://flyingworkshop.github.io/bach-fugue-lab/lab.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="app.css?v=7">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="./" title="Back to the front page">
+    <span class="mark">≡</span>
+    <div>
+      <h1>Fugue Lab</h1>
+      <p>Bach's counterpoint, made visible</p>
+    </div>
+  </a>
+  <div class="pickwrap">
+    <button id="pieceBtn" class="piecebtn"><b id="pieceBtnTitle">—</b><span id="pieceBtnSub"></span><i>▾</i></button>
+    <div id="picker" class="picker" hidden></div>
+  </div>
+  <div class="topactions">
+    <button id="notesBtn" class="ghost">Notes &amp; sources</button>
+    <button id="helpBtn" class="ghost" title="Keyboard shortcuts &amp; guide">?</button>
+  </div>
+</header>
+
+<section class="titlebar">
+  <div class="titleblock">
+    <h2 id="pTitle">—</h2>
+    <div class="meta"><span id="pBwv"></span><span id="pBook"></span><span id="pKey"></span><span id="pMeter"></span><span id="pVoices"></span></div>
+  </div>
+  <p id="pBlurb" class="blurb"></p>
+</section>
+
+<section class="transport">
+  <button id="playBtn" class="play" aria-label="Play"><span class="ico-play"></span></button>
+  <button id="stopBtn" class="ghost sm" title="Back to start">⏮</button>
+  <div class="pos"><span id="posBar">1</span><span class="dim">.</span><span id="posBeat">1</span></div>
+  <label class="slider">Tempo <input id="tempo" type="range" min="30" max="160" value="76"><output id="tempoOut">76</output></label>
+  <label class="slider">Zoom <input id="zoom" type="range" min="0.6" max="2.4" step="0.05" value="1.1"></label>
+  <div class="seg" id="spacingSeg" title="How horizontal space maps to time">
+    <button data-sp="p" class="on">Time&#8209;proportional</button><button data-sp="n">Notation</button>
+  </div>
+  <label class="chk"><input id="follow" type="checkbox" checked> Follow</label>
+  <label class="chk"><input id="loopChk" type="checkbox"> Loop</label>
+  <span id="loopLabel" class="loopLabel"></span>
+  <label class="chk"><input id="spotlight" type="checkbox" checked> Spotlight subject</label>
+  <label class="slider">Volume <input id="vol" type="range" min="0" max="1" step="0.01" value="0.8"></label>
+</section>
+
+<section class="mapwrap">
+  <div class="maphead">
+    <h3>Whole piece</h3>
+    <div class="legend" id="mapLegend"></div>
+  </div>
+  <div id="map" class="map"></div>
+</section>
+
+<main class="stage">
+  <aside class="panel">
+    <div class="card">
+      <h3>Voices</h3>
+      <div id="voiceList" class="voices"></div>
+    </div>
+    <div class="card">
+      <h3>Show</h3>
+      <div class="toggles">
+        <label class="chk"><input type="checkbox" id="tEntries" checked> Subject entries</label>
+        <label class="chk"><input type="checkbox" id="tCS" checked> Countersubject</label>
+        <label class="chk"><input type="checkbox" id="tThreads" checked> Voice threads</label>
+        <label class="chk"><input type="checkbox" id="tDim" checked> Dim non-thematic</label>
+        <label class="chk"><input type="checkbox" id="tGrid" checked> Bar &amp; beat grid</label>
+        <label class="chk"><input type="checkbox" id="tDiss"> Dissonances</label>
+        <label class="chk"><input type="checkbox" id="tCross"> Voice crossings</label>
+        <label class="chk"><input type="checkbox" id="tScore" checked> Notation</label>
+        <label class="chk"><input type="checkbox" id="tKeys" checked> Keyboard</label>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Now</h3>
+      <div id="now" class="now"></div>
+    </div>
+  </aside>
+
+  <div class="viewer">
+    <div id="keys" class="keys"></div>
+    <div id="scroller" class="scroller">
+      <div id="canvasStack" class="stack">
+        <div id="score" class="score"></div>
+        <div id="rollHost" class="rollhost"></div>
+        <div id="playhead" class="playhead"></div>
+        <div id="loopBand" class="loopband"></div>
+      </div>
+    </div>
+    <div id="tip" class="tip"></div>
+  </div>
+</main>
+
+<section class="labwrap">
+  <div class="maphead">
+    <h3>Subject lab <small id="labCount"></small></h3>
+    <div class="labctl">
+      <label class="chk"><input type="checkbox" id="labAlign" checked> Transpose all to the same pitch</label>
+      <span class="hint">click an entry to hear it</span>
+    </div>
+  </div>
+  <div id="lab" class="lab"></div>
+</section>
+
+<aside id="drawer" class="drawer" hidden>
+  <div class="drawerhead">
+    <h3 id="drawerTitle">Notes &amp; sources</h3>
+    <button class="close" id="drawerClose">×</button>
+  </div>
+  <div id="drawerBody" class="drawerbody"></div>
+</aside>
+
+<div id="help" class="modal" hidden>
+  <div class="modalbox">
+    <button class="close" id="helpClose">×</button>
+    <h3>How to read this</h3>
+    <p><b>The score</b> is engraved in <i>open score</i> — one staff per voice — so a single fugal line never jumps between staves the way it does in a two-stave keyboard reduction. Each voice keeps its colour everywhere: notation, roll, map, panel.</p>
+    <p><b>The roll</b> underneath is the same music by pitch and time, drawn at the score's own horizontal positions, so a bar in the roll sits directly under its notehead. The thin line through it is that voice's melodic thread.</p>
+    <p><b>Brackets</b> over the staves and boxes in the roll mark every statement of the subject, labelled with the note it starts on. A dashed bracket is the countersubject.</p>
+    <p><b>The map</b> is the whole fugue at a glance: entries as blocks on their voice's lane, episodes greyed, strettos flagged in red, and the key underneath. Click anywhere to jump; click an entry block to loop it.</p>
+    <h3>Two ways to space the page</h3>
+    <p><b>Time-proportional</b> makes horizontal distance strictly proportional to duration, so a semibreve really is four times a crotchet and rhythm becomes geometry. <b>Notation</b> uses conventional engraver's spacing, which fits more bars on screen but squashes long notes. Both keep the score and the roll locked together.</p>
+    <h3>Hearing the voices apart</h3>
+    <p>Solo or mute any voice from the panel, or press its number. <b>Spotlight subject</b> lifts whichever voice is stating the theme and ducks everything else — the fastest way to learn what to listen for. Everything is synthesised in the browser; nothing is downloaded.</p>
+    <h3>Keys</h3>
+    <ul class="keys">
+      <li><kbd>space</kbd> play / pause</li>
+      <li><kbd>←</kbd> <kbd>→</kbd> back / forward one bar</li>
+      <li><kbd>shift</kbd>+<kbd>←</kbd><kbd>→</kbd> previous / next entry</li>
+      <li><kbd>home</kbd> back to the start</li>
+      <li><kbd>1</kbd>…<kbd>4</kbd> solo a voice, <kbd>0</kbd> all</li>
+      <li><kbd>L</kbd> loop the current section</li>
+      <li><kbd>S</kbd> spotlight the subject</li>
+      <li><kbd>N</kbd> notes &amp; sources</li>
+    </ul>
+    <h3>Where this comes from</h3>
+    <p>Notes come from Humdrum <b>**kern</b> digital editions of the <i>Well-Tempered Clavier</i> and <i>The Art of Fugue</i>, which spell every accidental explicitly; the engraving is produced by Verovio. Nothing is hand-transcribed.</p>
+    <p>Subject entries are <b>found, not typed in</b>: the opening statement is slid over every note of every voice and compared in diatonic space — letter-name steps rather than semitones — so a tonal answer or a modally adjusted entry is still recognised, and labelled as <i>exact</i>, <i>tonal</i>, <i>adjusted</i> or <i>partial</i>. Per-fugue sources, recordings and background live behind <b>Notes &amp; sources</b>.</p>
+  </div>
+</div>
+
+<script src="app.js?v=8"></script>
+</body>
+</html>

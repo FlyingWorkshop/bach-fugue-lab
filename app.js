@@ -50,7 +50,7 @@ const S = {
   follow: true, loopOn: false, loop: null, spotlight: true,
   mute: [], solo: -1, master: 0.8,
   show: { entries: true, cs: true, threads: true, dim: true, grid: true,
-          diss: false, cross: false, score: true },
+          diss: false, cross: false, score: true, keys: true },
   PXU: 1.45, scoreW: 0, scoreH: 0, rollH: 190,
 };
 const G = {};   // derived per-piece geometry / indexes
@@ -316,15 +316,43 @@ function mountScore() {
   const nv = S.doc.nv;
   let css = '';
   for (let v = 0; v < nv; v++) {
-    css += `#score g.staff[data-v="${v}"]{--vc:${vcol(nv, v)};color:var(--vc)}\n`;
+    css += `#score [data-v="${v}"]{--vc:${vcol(nv, v)};color:var(--vc)}\n`;
   }
   let st = host.querySelector('style#vcss');
   if (!st) { st = document.createElement('style'); st.id = 'vcss'; host.append(st); }
   st.textContent = css;
   G.scoreNotes = new Map();
   host.querySelectorAll('g.note').forEach(g => G.scoreNotes.set(g.id, g));
+  tagControlElements(host, svg);
   buildScoreOverlay();
   applyScoreClasses();
+}
+
+/* Ties, slurs and ornaments are emitted at measure level, outside any staff, so
+   they inherit no voice colour and would otherwise render bright white. Assign
+   each to the nearest staff and note roughly where in the piece it sits, so it
+   can be coloured and dimmed exactly like the notes it belongs to. */
+const CTRL_SEL = 'g.tie,g.slur,g.phrase,g.mordent,g.trill,g.turn,g.fermata,' +
+                 'g.dir,g.dynam,g.hairpin,g.arpeg,g.octave,g.ornam,g.breath';
+function tagControlElements(host, svg) {
+  const left = svg.getBoundingClientRect().left;
+  G.ctrlEls = [];
+  host.querySelectorAll('g.measure').forEach(m => {
+    const staves = [...m.children].filter(c => c.classList && c.classList.contains('staff'));
+    if (!staves.length) return;
+    const mids = staves.map(st => { const r = st.getBoundingClientRect(); return r.top + r.height / 2; });
+    m.querySelectorAll(CTRL_SEL).forEach(g => {
+      if (g.closest('g.staff')) return;
+      const r = g.getBoundingClientRect();
+      if (!r.width && !r.height) return;
+      const cy = r.top + r.height / 2;
+      let bi = 0, bd = Infinity;
+      mids.forEach((y, i) => { const d = Math.abs(cy - y); if (d < bd) { bd = d; bi = i; } });
+      g.dataset.v = staves[bi].dataset.v;
+      g.dataset.q = G.qOfXu((r.left + r.width / 2 - left) / S.PXU).toFixed(3);
+      G.ctrlEls.push(g);
+    });
+  });
 }
 
 /* brackets drawn over the engraving showing where each statement runs */
@@ -374,6 +402,15 @@ function applyScoreClasses() {
     if (b && b.classList && b.classList.contains('beam')) { if (on) beams.add(b); else if (!beams.has(b)) b.classList.remove('inSubj'); }
   });
   host.querySelectorAll('g.beam').forEach(b => b.classList.toggle('inSubj', beams.has(b)));
+  const doc = S.doc;
+  const inMotif = (v, q) =>
+    doc.entries.some(e => e.v === v && q >= e.q0 - 1e-6 && q < e.q1) ||
+    (S.show.cs && doc.counters.some(e => e.v === v && q >= e.q0 - 1e-6 && q < e.q1));
+  (G.ctrlEls || []).forEach(g => {
+    const v = +g.dataset.v;
+    g.classList.toggle('inSubj', inMotif(v, +g.dataset.q));
+    g.classList.toggle('muted', !voiceAudible(v));
+  });
   host.querySelectorAll('g.staff').forEach(g => {
     g.classList.toggle('muted', !voiceAudible(+g.dataset.v));
   });
@@ -483,6 +520,58 @@ function buildRoll() {
   host.append(svg);
   svg.classList.toggle('dim', S.show.dim);
   updateVoiceVisibility();
+}
+/* A keyboard down the left edge, sharing the roll's vertical axis exactly, so a
+   lit key sits on the same row as the note that lit it. */
+function buildKeyboard() {
+  const host = $('#keys');
+  host.innerHTML = '';
+  host.hidden = !S.show.keys;
+  if (!S.show.keys) return;
+  const H = S.rollH, W = 56, PAD = 8;
+  const span = (H - 2 * PAD) / Math.max(1, G.hi - G.lo);
+  const Y = p => PAD + (H - 2 * PAD) * (1 - (p - G.lo) / (G.hi - G.lo));
+  const svg = sel('svg', { class: 'kbd', width: W, height: H, viewBox: `0 0 ${W} ${H}` });
+  svg.style.width = W + 'px'; svg.style.height = H + 'px';
+  svg.style.marginTop = ((S.show.score ? S.scoreH + 6 : 0) + 1) + 'px';  // +1 for the scroller border
+  const black = p => [1, 3, 6, 8, 10].includes(((p % 12) + 12) % 12);
+  G.keyEls = {};
+  for (let p = Math.ceil(G.lo); p <= Math.floor(G.hi); p++) {
+    const h = Math.max(1.6, span - 0.7), y = Y(p) - h / 2;
+    const isB = black(p);
+    const r = sel('rect', {
+      class: 'key ' + (isB ? 'blk' : 'wht'),
+      x: isB ? 0 : 0, y, width: isB ? (W - 8) * 0.6 : W - 8, height: h, rx: 1.4,
+      'data-p': p,
+    });
+    svg.append(r); G.keyEls[p] = r;
+  }
+  for (let p = Math.ceil(G.lo / 12) * 12; p <= G.hi; p += 12) {
+    if (p < G.lo) continue;
+    const t = sel('text', { class: 'klab', x: W - 9, y: Y(p) + 3, 'text-anchor': 'end' });
+    t.textContent = 'C' + (Math.floor(p / 12) - 1);
+    svg.append(t);
+  }
+  svg.append(sel('rect', { class: 'kframe', x: 0, y: PAD - span / 2, width: W - 8,
+                           height: H - 2 * PAD + span, rx: 3 }));
+  host.append(svg);
+  G.keysLit = new Map();
+}
+function litKeys(map) {
+  if (!G.keyEls) return;
+  const prev = G.keysLit || new Map();
+  prev.forEach((v, p) => {
+    if (map.has(p)) return;
+    const el = G.keyEls[p]; if (!el) return;
+    el.style.fill = ''; el.style.color = ''; el.classList.remove('on');
+  });
+  map.forEach((v, p) => {
+    if (prev.get(p) === v) return;
+    const el = G.keyEls[p]; if (!el) return;
+    const c = vcol(S.doc.nv, v);
+    el.style.fill = c; el.style.color = c; el.classList.add('on');
+  });
+  G.keysLit = map;
 }
 function updateVoiceVisibility() {
   const svg = $('#rollHost svg'); if (!svg) return;
@@ -677,6 +766,9 @@ function paint(force) {
     });
     lastActive = act;
     paintNow(q, act);
+    const lit = new Map();
+    act.forEach(k => { const n = doc.notes[k]; if (!lit.has(n.p) && voiceAudible(n.v)) lit.set(n.p, n.v); });
+    litKeys(lit);
   }
   // spotlight whichever statements are sounding right now
   const liveSet = new Set();
@@ -721,18 +813,25 @@ function paintNow(q, act) {
   const rows = [];
   const section = ent.length ? (inStretto ? 'Stretto' : (q < doc.expoEnd ? 'Exposition' : 'Subject entry'))
     : epi ? 'Episode' : 'Free counterpoint';
-  rows.push(row('Section', el('span', { class: 'val' }, section)));
-  if (ent.length) rows.push(row('Subject', el('span', { class: 'val' },
-    ent.map(e => `${e.role} · ${doc.voiceNames[e.v]} · on ${e.on}`).join('  |  '))));
-  if (cs.length && S.show.cs) rows.push(row('Counter', el('span', { class: 'val' },
-    cs.map(e => doc.voiceNames[e.v]).join(', '))));
-  if (key) rows.push(row('Key', el('span', { class: 'val' }, key.k.replace('maj', 'major').replace('min', 'minor'))));
-  if (ivs) rows.push(row('Intervals', el('span', { class: 'val' }, ivs)));
-  const snd = el('div', { class: 'sounding' });
-  for (const n of sounding) snd.append(el('div', {},
+  const one = (txt, on) => el('div', { class: 'val one' + (on ? '' : ' muted') }, on ? txt : '—');
+  rows.push(row('Section', one(section, true)));
+
+  const lines = ent.slice(0, 2).map(e => `${e.role} · ${doc.voiceNames[e.v]} · ${e.on}`);
+  if (ent.length > 2) lines[1] += `  +${ent.length - 2}`;
+  const subj = el('div', { class: 'val stack2' + (lines.length ? '' : ' muted') });
+  (lines.length ? lines : ['—']).forEach(t => subj.append(el('div', {}, t)));
+  rows.push(row('Subject', subj));
+
+  rows.push(row('Counter', one((cs.length && S.show.cs) ? cs.map(e => doc.voiceNames[e.v]).join(', ') : '', cs.length && S.show.cs)));
+  rows.push(row('Key', one(key ? key.k.replace('maj', 'major').replace('min', 'minor') : '', !!key)));
+  rows.push(row('Intervals', one(ivs, !!ivs)));
+
+  const snd = el('div', { class: 'sounding', style: `height:${doc.nv * 17}px` });
+  for (const n of sounding.slice(0, doc.nv)) snd.append(el('div', {},
     el('i', { style: `background:${vcol(doc.nv, n.v)}` }),
-    el('span', {}, pname(n.p).padEnd(4, ' ')),
-    el('span', { class: 'k', style: 'color:var(--dim2)' }, doc.voiceNames[n.v])));
+    el('span', { class: 'pn' }, pname(n.p)),
+    el('span', { class: 'k' }, doc.voiceNames[n.v])));
+  if (!sounding.length) snd.append(el('div', { class: 'muted' }, el('span', { class: 'pn' }, '—')));
   rows.push(row('Sounding', snd));
   host.replaceChildren(...rows);
 }
@@ -776,6 +875,7 @@ function relayout() {
   $('#canvasStack').style.width = S.scoreW + 'px';
   mountScore();
   buildRoll();
+  buildKeyboard();
   setLoop(S.loop, S.loopOn);
   paint(true);
 }
@@ -907,10 +1007,11 @@ function wireControls() {
   $('#spotlight').onchange = e => S.spotlight = e.target.checked;
   $('#vol').oninput = e => { S.master = +e.target.value; if (A.master) A.master.gain.value = S.master; };
   const tg = { tEntries: 'entries', tCS: 'cs', tThreads: 'threads', tDim: 'dim',
-               tGrid: 'grid', tDiss: 'diss', tCross: 'cross', tScore: 'score' };
+               tGrid: 'grid', tDiss: 'diss', tCross: 'cross', tScore: 'score', tKeys: 'keys' };
   for (const id in tg) $('#' + id).onchange = e => {
     S.show[tg[id]] = e.target.checked;
-    if (tg[id] === 'score') { applyScoreClasses(); return; }
+    if (tg[id] === 'score') { applyScoreClasses(); buildKeyboard(); paint(true); return; }
+    if (tg[id] === 'keys') { buildKeyboard(); paint(true); return; }
     if (tg[id] === 'dim') { $('#rollHost svg').classList.toggle('dim', S.show.dim); applyScoreClasses(); return; }
     buildRoll(); buildScoreOverlay(); applyScoreClasses(); paint(true);
   };

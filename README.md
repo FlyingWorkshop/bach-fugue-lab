@@ -4,7 +4,7 @@ An interactive way to *see* Bach's counterpoint: real engraved notation, a piano
 same horizontal axis, a whole-piece structural map, and audio — with every statement of the
 subject found automatically and labelled.
 
-**→ [Open the site](https://flyingworkshop.github.io/bach-fugue-lab/)**
+**→ [Open the site](https://flyingworkshop.github.io/bach-fugue-lab/)**  ·  [jump straight into the lab](https://flyingworkshop.github.io/bach-fugue-lab/lab.html)
 
 Nine fugues: the Well-Tempered Clavier Books I and II, plus Contrapunctus I from *The Art of
 Fugue*, ranging from two voices to four.
@@ -73,7 +73,10 @@ The pipeline is:
 | `build/build.py` | Verovio engraving + geometry extraction (note positions, staff boxes, bar lines) |
 | `build/pieces.py` | the repertoire and its editorial matter |
 | `build/make.py` | puts it together into `data/<id>.json`, `<id>.svg`, `<id>.p.svg` |
-| `build/bundle.py` | packs everything into one self-contained `dist/fugue-lab.html` |
+| `build/bundle.py` | packs the lab into one self-contained `dist/fugue-lab.html` |
+
+The site itself is two pages: `index.html` is the front page (`home.css` / `home.js`, drawing its
+figures from `data/teasers.json`), and `lab.html` is the tool (`app.css` / `app.js`).
 
 Nothing is hand-transcribed. Onsets are cross-checked against Verovio's own timemap, and every
 note id in the JSON is verified to exist in the engraved SVG, so the score, the roll and the audio

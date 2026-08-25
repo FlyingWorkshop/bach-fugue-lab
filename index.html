@@ -3,154 +3,146 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fugue Lab — seeing Bach's counterpoint</title>
+<title>Fugue Lab — see Bach's counterpoint</title>
 <meta name="description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis, with every statement of the subject found automatically and audio you can take apart voice by voice.">
 <meta name="theme-color" content="#0d1014">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Fugue Lab — seeing Bach's counterpoint">
+<meta property="og:title" content="Fugue Lab — see Bach's counterpoint">
 <meta property="og:description" content="Nine Bach fugues as open score, piano roll and structural map on one shared axis, with every subject entry found automatically.">
 <meta property="og:url" content="https://flyingworkshop.github.io/bach-fugue-lab/">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="app.css?v=3">
+<link rel="stylesheet" href="home.css?v=2">
 </head>
 <body>
 
-<header class="topbar">
-  <div class="brand">
+<header class="nav">
+  <a class="brand" href="./">
     <span class="mark">≡</span>
-    <div>
-      <h1>Fugue Lab</h1>
-      <p>Bach's counterpoint, made visible</p>
-    </div>
-  </div>
-  <div class="pickwrap">
-    <button id="pieceBtn" class="piecebtn"><b id="pieceBtnTitle">—</b><span id="pieceBtnSub"></span><i>▾</i></button>
-    <div id="picker" class="picker" hidden></div>
-  </div>
-  <div class="topactions">
-    <button id="notesBtn" class="ghost">Notes &amp; sources</button>
-    <button id="helpBtn" class="ghost" title="Keyboard shortcuts &amp; guide">?</button>
-  </div>
+    <div><h1>Fugue Lab</h1><p>Bach's counterpoint, made visible</p></div>
+  </a>
+  <nav>
+    <a href="#fugues">The fugues</a>
+    <a href="#reading">How to read it</a>
+    <a href="#made">How it's made</a>
+    <a class="gh" href="https://github.com/FlyingWorkshop/bach-fugue-lab" target="_blank" rel="noopener">GitHub ↗</a>
+  </nav>
 </header>
 
-<section class="titlebar">
-  <div class="titleblock">
-    <h2 id="pTitle">—</h2>
-    <div class="meta"><span id="pBwv"></span><span id="pBook"></span><span id="pKey"></span><span id="pMeter"></span><span id="pVoices"></span></div>
+<section class="hero">
+  <div class="herotext">
+    <h2>A fugue is four melodies<br>wearing the same coat.</h2>
+    <p class="lede">
+      Hard to hear, harder to see. So here is every voice on its own staff, a piano roll locked to
+      the same horizontal axis underneath, and every single statement of the subject found by the
+      site itself and drawn where it happens — while the music plays.
+    </p>
+    <div class="cta">
+      <a class="btn primary" href="lab.html?piece=bwv855">Start with the two-voice fugue</a>
+      <a class="btn" href="#fugues">All nine fugues</a>
+    </div>
+    <p class="micro">No sign-in, nothing to install, nothing downloaded while it plays.</p>
   </div>
-  <p id="pBlurb" class="blurb"></p>
+  <figure class="herofig">
+    <div id="teaser"></div>
+    <figcaption id="teaserCap">The exposition of the C minor fugue: subject, answer, and the countersubject that arrives with it.</figcaption>
+  </figure>
 </section>
 
-<section class="transport">
-  <button id="playBtn" class="play" aria-label="Play"><span class="ico-play"></span></button>
-  <button id="stopBtn" class="ghost sm" title="Back to start">⏮</button>
-  <div class="pos"><span id="posBar">1</span><span class="dim">.</span><span id="posBeat">1</span></div>
-  <label class="slider">Tempo <input id="tempo" type="range" min="30" max="160" value="76"><output id="tempoOut">76</output></label>
-  <label class="slider">Zoom <input id="zoom" type="range" min="0.6" max="2.4" step="0.05" value="1.1"></label>
-  <div class="seg" id="spacingSeg" title="How horizontal space maps to time">
-    <button data-sp="p" class="on">Time&#8209;proportional</button><button data-sp="n">Notation</button>
+<section class="features" id="reading">
+  <h3 class="sect">What you are looking at</h3>
+  <div class="grid4">
+    <article class="feat">
+      <div class="ficon" id="fi1"></div>
+      <h4>Open score, one voice per staff</h4>
+      <p>Not a two-stave keyboard reduction. A fugal line never jumps between staves, and it keeps
+         the same colour in the notation, the roll, the map and the panel.</p>
+    </article>
+    <article class="feat">
+      <div class="ficon" id="fi2"></div>
+      <h4>The roll shares the score's axis</h4>
+      <p>Every bar in the roll sits directly beneath its own notehead. Switch to time-proportional
+         spacing and horizontal distance becomes duration exactly — rhythm turns into geometry.</p>
+    </article>
+    <article class="feat">
+      <div class="ficon" id="fi3"></div>
+      <h4>Entries found, not typed in</h4>
+      <p>The opening statement is slid over every note of every voice and compared in diatonic
+         space, so tonal answers and modally bent entries are still recognised — and labelled
+         <em>exact</em>, <em>tonal</em>, <em>adjusted</em> or <em>partial</em>.</p>
+    </article>
+    <article class="feat">
+      <div class="ficon" id="fi4"></div>
+      <h4>Take the sound apart</h4>
+      <p>Mute or solo any voice. <em>Spotlight subject</em> lifts whichever voice is stating the
+         theme and ducks the rest — the fastest way to learn what to listen for.</p>
+    </article>
   </div>
-  <label class="chk"><input id="follow" type="checkbox" checked> Follow</label>
-  <label class="chk"><input id="loopChk" type="checkbox"> Loop</label>
-  <span id="loopLabel" class="loopLabel"></span>
-  <label class="chk"><input id="spotlight" type="checkbox" checked> Spotlight subject</label>
-  <label class="slider">Volume <input id="vol" type="range" min="0" max="1" step="0.01" value="0.8"></label>
 </section>
 
-<section class="mapwrap">
-  <div class="maphead">
-    <h3>Whole piece</h3>
-    <div class="legend" id="mapLegend"></div>
-  </div>
-  <div id="map" class="map"></div>
+<section class="fugues" id="fugues">
+  <h3 class="sect">Nine fugues, easiest first</h3>
+  <p class="sectlede">Two voices up to four; a fugue that is nothing but stretto, one that turns its
+     subject upside down, and one written deliberately in the old style of a century before Bach.</p>
+  <div id="pieceGrid" class="pgrid"></div>
 </section>
 
-<main class="stage">
-  <aside class="panel">
-    <div class="card">
-      <h3>Voices</h3>
-      <div id="voiceList" class="voices"></div>
-    </div>
-    <div class="card">
-      <h3>Show</h3>
-      <div class="toggles">
-        <label class="chk"><input type="checkbox" id="tEntries" checked> Subject entries</label>
-        <label class="chk"><input type="checkbox" id="tCS" checked> Countersubject</label>
-        <label class="chk"><input type="checkbox" id="tThreads" checked> Voice threads</label>
-        <label class="chk"><input type="checkbox" id="tDim" checked> Dim non-thematic</label>
-        <label class="chk"><input type="checkbox" id="tGrid" checked> Bar &amp; beat grid</label>
-        <label class="chk"><input type="checkbox" id="tDiss"> Dissonances</label>
-        <label class="chk"><input type="checkbox" id="tCross"> Voice crossings</label>
-        <label class="chk"><input type="checkbox" id="tScore" checked> Notation</label>
-      </div>
-    </div>
-    <div class="card">
-      <h3>Now</h3>
-      <div id="now" class="now"></div>
-    </div>
-  </aside>
-
-  <div class="viewer">
-    <div id="scroller" class="scroller">
-      <div id="canvasStack" class="stack">
-        <div id="score" class="score"></div>
-        <div id="rollHost" class="rollhost"></div>
-        <div id="playhead" class="playhead"></div>
-        <div id="loopBand" class="loopband"></div>
-      </div>
-    </div>
-    <div id="tip" class="tip"></div>
+<section class="glossary">
+  <h3 class="sect">Five words that do most of the work</h3>
+  <div class="gterms">
+    <div><b>Subject</b><span>The theme, stated alone at the very start.</span></div>
+    <div><b>Answer</b><span>The same theme a fifth higher, bringing in the second voice. A <em>tonal</em> answer bends a note or two of its head to stay in key; a <em>real</em> answer transposes exactly.</span></div>
+    <div><b>Countersubject</b><span>The line the first voice plays against the answer — if it keeps coming back with later entries.</span></div>
+    <div><b>Episode</b><span>The stretches between entries, usually spun out of fragments of the subject.</span></div>
+    <div><b>Stretto</b><span>Entries overlapping: the next voice comes in before the last has finished.</span></div>
   </div>
-</main>
-
-<section class="labwrap">
-  <div class="maphead">
-    <h3>Subject lab <small id="labCount"></small></h3>
-    <div class="labctl">
-      <label class="chk"><input type="checkbox" id="labAlign" checked> Transpose all to the same pitch</label>
-      <span class="hint">click an entry to hear it</span>
-    </div>
-  </div>
-  <div id="lab" class="lab"></div>
 </section>
 
-<aside id="drawer" class="drawer" hidden>
-  <div class="drawerhead">
-    <h3 id="drawerTitle">Notes &amp; sources</h3>
-    <button class="close" id="drawerClose">×</button>
+<section class="made" id="made">
+  <h3 class="sect">How it's made</h3>
+  <div class="madegrid">
+    <div>
+      <p>Notes come from Humdrum <code>**kern</code> digital editions of the <i>Well-Tempered
+         Clavier</i> and <i>The Art of Fugue</i>, which spell every accidental explicitly rather than
+         leaving it to a key signature. The engraving is produced by
+         <a href="https://www.verovio.org/" target="_blank" rel="noopener">Verovio</a> at build time,
+         and the position of every notehead is lifted straight out of the engraved SVG — which is why
+         the score, the roll and the audio cannot drift apart.</p>
+      <p>Nothing here is hand-transcribed, and none of the analysis is typed in: the entry counts,
+         the strettos, the episodes and the tonal plan are all measured from the score. The whole
+         pipeline is about a thousand lines of Python and is in the repository.</p>
+      <p class="micro">A footnote for anyone else building on Verovio: version 6.3's
+         <code>getMIDIValuesForElement</code> and MIDI export ignore key signatures, so pitches here
+         come from the kern tokens instead.</p>
+      <a class="btn" href="https://github.com/FlyingWorkshop/bach-fugue-lab" target="_blank" rel="noopener">Read the source ↗</a>
+    </div>
+    <ol class="pipeline">
+      <li><b>kernparse</b><span>exact <code>**kern</code> reader — pitch, onsets, ties, spine splits</span></li>
+      <li><b>build</b><span>Verovio engraving + note geometry out of the SVG</span></li>
+      <li><b>autosubject</b><span>how long is the subject? what every expository entry shares</span></li>
+      <li><b>analyze</b><span>diatonic motif matching: transposition, inversion, augmentation</span></li>
+      <li><b>make</b><span>episodes, strettos, pedal points, Viterbi-smoothed key path</span></li>
+    </ol>
   </div>
-  <div id="drawerBody" class="drawerbody"></div>
-</aside>
+</section>
 
-<div id="help" class="modal" hidden>
-  <div class="modalbox">
-    <button class="close" id="helpClose">×</button>
-    <h3>How to read this</h3>
-    <p><b>The score</b> is engraved in <i>open score</i> — one staff per voice — so a single fugal line never jumps between staves the way it does in a two-stave keyboard reduction. Each voice keeps its colour everywhere: notation, roll, map, panel.</p>
-    <p><b>The roll</b> underneath is the same music by pitch and time, drawn at the score's own horizontal positions, so a bar in the roll sits directly under its notehead. The thin line through it is that voice's melodic thread.</p>
-    <p><b>Brackets</b> over the staves and boxes in the roll mark every statement of the subject, labelled with the note it starts on. A dashed bracket is the countersubject.</p>
-    <p><b>The map</b> is the whole fugue at a glance: entries as blocks on their voice's lane, episodes greyed, strettos flagged in red, and the key underneath. Click anywhere to jump; click an entry block to loop it.</p>
-    <h3>Two ways to space the page</h3>
-    <p><b>Time-proportional</b> makes horizontal distance strictly proportional to duration, so a semibreve really is four times a crotchet and rhythm becomes geometry. <b>Notation</b> uses conventional engraver's spacing, which fits more bars on screen but squashes long notes. Both keep the score and the roll locked together.</p>
-    <h3>Hearing the voices apart</h3>
-    <p>Solo or mute any voice from the panel, or press its number. <b>Spotlight subject</b> lifts whichever voice is stating the theme and ducks everything else — the fastest way to learn what to listen for. Everything is synthesised in the browser; nothing is downloaded.</p>
-    <h3>Keys</h3>
-    <ul class="keys">
-      <li><kbd>space</kbd> play / pause</li>
-      <li><kbd>←</kbd> <kbd>→</kbd> back / forward one bar</li>
-      <li><kbd>shift</kbd>+<kbd>←</kbd><kbd>→</kbd> previous / next entry</li>
-      <li><kbd>home</kbd> back to the start</li>
-      <li><kbd>1</kbd>…<kbd>4</kbd> solo a voice, <kbd>0</kbd> all</li>
-      <li><kbd>L</kbd> loop the current section</li>
-      <li><kbd>S</kbd> spotlight the subject</li>
-      <li><kbd>N</kbd> notes &amp; sources</li>
-    </ul>
-    <h3>Where this comes from</h3>
-    <p>Notes come from Humdrum <b>**kern</b> digital editions of the <i>Well-Tempered Clavier</i> and <i>The Art of Fugue</i>, which spell every accidental explicitly; the engraving is produced by Verovio. Nothing is hand-transcribed.</p>
-    <p>Subject entries are <b>found, not typed in</b>: the opening statement is slid over every note of every voice and compared in diatonic space — letter-name steps rather than semitones — so a tonal answer or a modally adjusted entry is still recognised, and labelled as <i>exact</i>, <i>tonal</i>, <i>adjusted</i> or <i>partial</i>. Per-fugue sources, recordings and background live behind <b>Notes &amp; sources</b>.</p>
+<footer class="foot">
+  <div>
+    <b>Sources.</b> The music is Bach's and long out of copyright; the underlying edition is the
+    Bach-Gesellschaft Ausgabe (1866). The `**kern` encodings are by David Huron and Craig Stuart Sapp
+    —
+    <a href="https://github.com/humdrum-tools/bach-wtc-fugues" target="_blank" rel="noopener">bach-wtc-fugues</a>,
+    <a href="https://github.com/craigsapp/art-of-the-fugue" target="_blank" rel="noopener">art-of-the-fugue</a>
+    — and are fetched at build time rather than redistributed here. Scores to read alongside are on
+    <a href="https://imslp.org/wiki/Das_wohltemperierte_Klavier_I,_BWV_846-869_(Bach,_Johann_Sebastian)" target="_blank" rel="noopener">IMSLP</a>.
   </div>
-</div>
+  <div class="footend">
+    <span>Code MIT · built with Verovio and the Web Audio API</span>
+    <a href="https://github.com/FlyingWorkshop/bach-fugue-lab" target="_blank" rel="noopener">github.com/FlyingWorkshop/bach-fugue-lab</a>
+  </div>
+</footer>
 
-<script src="app.js?v=3"></script>
+<script src="home.js?v=3"></script>
 </body>
 </html>

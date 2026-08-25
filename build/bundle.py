@@ -8,7 +8,7 @@ DIST = os.path.join(PROJ, "dist")
 def read(p): return open(os.path.join(PROJ, p), encoding="utf-8").read()
 
 def assemble():
-    html = read("index.html")
+    html = read("lab.html")
     css  = read("app.css")
     js   = read("app.js")
 

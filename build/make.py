@@ -309,8 +309,22 @@ def build(P):
           f"json {os.path.getsize(f'{DATA}/{P['id']}.json')//1024}kB")
     return doc
 
+def teaser(d):
+    """A compact shape of the whole piece for the front page."""
+    return {
+        'id': d['id'], 'nv': d['nv'], 'total': d['total'], 'qbar': d['qbar'],
+        'notes': [[round(n['q'], 2), round(n['d'], 2), n['p'], n['v'], 1 if n['e'] >= 0 else 0]
+                  for n in d['notes']],
+        'entries': [[e['v'], round(e['q0'], 2), round(e['q1'], 2), e['role'], e['on']]
+                    for e in d['entries']],
+        'counters': [[c['v'], round(c['q0'], 2), round(c['q1'], 2)] for c in d['counters']],
+        'episodes': d['episodes'],
+    }
+
 if __name__ == "__main__":
     docs = [build(P) for P in PIECES]
+    json.dump({d['id']: teaser(d) for d in docs},
+              open(f"{DATA}/teasers.json", "w"), separators=(',', ':'), ensure_ascii=False)
     idx = [{k: d[k] for k in ('id', 'title', 'bwv', 'book', 'key', 'meter', 'nv', 'blurb', 'bpm')}
            for d in docs]
     for d, i in zip(docs, idx):
