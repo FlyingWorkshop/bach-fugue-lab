@@ -8,11 +8,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from kernparse import parse, merge_ties
 from analyze import by_voice, make_template, find_statements, dedupe
 from autosubject import find_subject
+from kernprep import normalise
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 def load(name):
     path = os.path.join(HERE, "kern-open", name if name.endswith(".krn") else name + ".krn")
+    # the build normalises before parsing, so look at the same file it does
+    path, _ = normalise(path, os.path.join(HERE, "kern-open", "_n_" + os.path.basename(path)))
     ev, marks, total = parse(path)
     notes = merge_ties(ev)
     nv = max(n['spine'] for n in notes) + 1

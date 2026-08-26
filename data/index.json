@@ -64,7 +64,7 @@
   "meter": "4/4",
   "nv": 4,
   "blurb": "The subject packs thirteen notes into less than one bar, briefer than any other here.",
-  "card": "Twenty-seven entries in twenty-seven bars, more than any other fugue in Book I, and thirteen overlapping pairs.",
+  "card": "Twenty-seven entries in twenty-seven bars, an entry a bar, and thirteen overlapping pairs.",
   "bpm": 62,
   "bars": 27,
   "entries": 27
@@ -204,7 +204,7 @@
   "meter": "6/8",
   "nv": 3,
   "blurb": "Thirteen episodes, more than any other fugue in Book I.",
-  "card": "Eighteen entries in eighty-six bars, seven of them upside down: the most inversion of any fugue in Book I.",
+  "card": "Eighteen entries in eighty-six bars, and from bar 20 Bach turns the subject over and keeps it that way.",
   "bpm": 108,
   "bars": 86,
   "entries": 18
@@ -266,6 +266,20 @@
   "entries": 7
  },
  {
+  "id": "bwv865",
+  "title": "Fugue in A minor",
+  "bwv": "BWV 865",
+  "book": "WTC I, No. 20",
+  "key": "A minor",
+  "meter": "4/4",
+  "nv": 5,
+  "blurb": "The soprano does not play a note until bar 80; its eight bars are commented out in the source.",
+  "card": "Thirty entries in eighty-seven bars, thirteen of them upside down, and more notes than any other fugue in Book I.",
+  "bpm": 76,
+  "bars": 87,
+  "entries": 30
+ },
+ {
   "id": "bwv866",
   "title": "Fugue in B-flat major",
   "bwv": "BWV 866",
@@ -287,7 +301,7 @@
   "key": "B♭ minor",
   "meter": "2/2",
   "nv": 5,
-  "blurb": "One of only two five-voice fugues in the forty-eight; No. 4 is the other.",
+  "blurb": "One of three five-voice fugues in the forty-eight; this one has all five in by bar 15.",
   "card": "Five voices, a seven-note subject with a minor ninth cut into it, and three entries a bar apart at the close.",
   "bpm": 72,
   "bars": 75,

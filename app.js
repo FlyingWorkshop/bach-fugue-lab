@@ -1168,7 +1168,6 @@ async function selectPiece(id) {
   $('#pKey').textContent = doc.key;
   $('#pMeter').textContent = doc.meter;
   $('#pVoices').textContent = doc.nv + ' voices';
-  $('#pBlurb').innerHTML = md(doc.blurb);
   $('#pieceBtnTitle').textContent = doc.title;
   $('#pieceBtnSub').textContent = `${doc.bwv} · ${doc.nv} voices`;
   document.querySelectorAll('#picker .pcard').forEach(b => b.classList.toggle('on', b.dataset.id === id));

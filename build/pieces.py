@@ -143,8 +143,8 @@ PIECES = [
   id="bwv850", file="wtc1f05.krn", bpm=62,
   title="Fugue in D major", bwv="BWV 850", book="WTC I, No. 5", collection="wtc1",
   subject=dict(v=3, q0=1, q1=4.75),  # bars 1:2..2:1.75
-  card="Twenty-seven entries in twenty-seven bars, more than any other fugue in Book I, and "
-       "thirteen overlapping pairs.",
+  card="Twenty-seven entries in twenty-seven bars, an entry a bar, and thirteen overlapping "
+       "pairs.",
   blurb="The subject packs thirteen notes into less than one bar, briefer than any other here.",
   history=[
     "Dotted rhythm, the idiom of a French overture — the music that played while somebody "
@@ -410,8 +410,8 @@ PIECES = [
   subject=dict(v=0, q0=0, q1=3),  # bars 1:1..2:1
   forms=("I",),
   headOnly=True,   # the span is the subject's head; later statements re-value its tail
-  card="Eighteen entries in eighty-six bars, seven of them upside down: the most inversion of any "
-       "fugue in Book I.",
+  card="Eighteen entries in eighty-six bars, and from bar 20 Bach turns the subject over and "
+       "keeps it that way.",
   blurb="Thirteen episodes, more than any other fugue in Book I.",
   history=[
     "Ten notes, one bar of 6/8, and all three voices have had the subject by bar 12. The fugue "
@@ -538,9 +538,41 @@ PIECES = [
     perf("Sviatoslav Richter", "piano", "Richter Bach BWV 864 fugue"),
   ]),
 
- # BWV 865 (A minor, WTC I No. 20) is deliberately absent: in the kern encoding the
- # whole of its final bar is commented out ("the voicing in the final measure is
- # somewhat arbitrary"), so the fugue would end a bar early.
+ dict(
+  id="bwv865", file="wtc1f20.krn", bpm=76,
+  title="Fugue in A minor", bwv="BWV 865", book="WTC I, No. 20", collection="wtc1",
+  subject=dict(v=2, q0=0.5, q1=12.5),  # bars 1:1.5..4:1.5
+  forms=("I",),
+  card="Thirty entries in eighty-seven bars, thirteen of them upside down, and more notes than "
+       "any other fugue in Book I.",
+  blurb="The soprano does not play a note until bar 80; its eight bars are commented out in the "
+        "source.",
+  history=[
+    "Thirty-one notes and three full bars: a turn round A, a climb by step up to F, a drop of a "
+    "diminished seventh onto G sharp, then a bar of semiquavers and quavers that lands on the "
+    "tonic at bar 4 — where the answer comes in on top of the subject's last note. Alto, mezzo, "
+    "bass, tenor, at bars 1, 4, 8 and 11. At bar 14 Bach turns the subject upside down and takes "
+    "all four voices through it again, and from bar 27 the entries start overlapping: nine times "
+    "a voice enters half a bar behind one that still has two and a half bars of subject left to "
+    "run. Thirty statements in all, thirteen of them inverted, and a bass A that holds for three "
+    "and a half bars from the middle of bar 83.",
+    "The last eight bars are commented out in the kern file this site builds from. The encoder's "
+    "header says the texture goes to five voices there, and that the voicing in the final measure "
+    "is “somewhat arbitrary”. But they are the ending — the fifth voice, the pedal, the final "
+    "cadence — so the site restores them, and the bar numbers here run to eighty-seven as they do "
+    "in a printed score. It is also why the piece is listed with five voices, when for "
+    "seventy-nine of its eighty-seven bars it is a four-voice fugue: the soprano does not play a "
+    "note until bar 80.",
+    WTC1_CONTEXT,
+  ],
+  links=[WTC1_SCORE, ("Prelude and Fugue in A minor, BWV 865",
+         "https://en.wikipedia.org/wiki/Prelude_and_Fugue_in_A_minor,_BWV_865"), WTC_WIKI, KERN_WTC],
+  performances=[
+    perf("Sviatoslav Richter", "piano", "Richter Bach BWV 865 fugue A minor"),
+    perf("András Schiff", "piano, ECM", "Andras Schiff Bach BWV 865 fugue A minor"),
+    perf("Angela Hewitt", "piano, Hyperion", "Angela Hewitt Bach BWV 865 fugue A minor"),
+    perf("Gustav Leonhardt", "harpsichord", "Leonhardt Bach Well Tempered Clavier BWV 865"),
+  ]),
 
 
  dict(
@@ -570,7 +602,7 @@ PIECES = [
   subject=dict(v=0, q0=0, q1=10),  # bars 1:1..3:2
   card="Five voices, a seven-note subject with a minor ninth cut into it, and three entries a bar "
        "apart at the close.",
-  blurb="One of only two five-voice fugues in the forty-eight; No. 4 is the other.",
+  blurb="One of three five-voice fugues in the forty-eight; this one has all five in by bar 15.",
   history=[
     "Seven notes, spread over two and a half bars. The subject drops a fourth, stops dead for a "
     "crotchet, then leaps up a minor ninth and walks back down. That silence in the middle is the "

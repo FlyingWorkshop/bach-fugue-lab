@@ -6,19 +6,20 @@ build, not typed in by hand.
 
 **→ [Open the site](https://flyingworkshop.github.io/bach-fugue-lab/)**  ·  [jump straight into the lab](https://flyingworkshop.github.io/bach-fugue-lab/lab.html)
 
-Fifty-seven fugues: forty-seven of the forty-eight in the Well-Tempered Clavier, and ten from
-*The Art of Fugue*. Two to five voices, 27 to 239 bars.
+Fifty-eight fugues: all forty-eight of the Well-Tempered Clavier, and ten from *The Art of
+Fugue*. Two to five voices, 27 to 239 bars.
 
 | Collection | Fugues | Voices |
 |---|---|---|
-| Well-Tempered Clavier, Book I | 23 of 24 | 2–5 |
+| Well-Tempered Clavier, Book I | 24 of 24 | 2–5 |
 | Well-Tempered Clavier, Book II | 24 of 24 | 3–4 |
 | *The Art of Fugue* | Contrapunctus I–V, VIII–XI, XIV | 3–4 |
 
-The one absentee is **BWV 865** (A minor, Book I No. 20). In the kern encoding its entire final bar
-is commented out — the encoder's note reads "the voicing in the final measure is somewhat
-arbitrary" — so the fugue would stop a bar before it ends. The canons of *The Art of Fugue* are
-not fugues and are not here either.
+One caveat on completeness. **BWV 865** (A minor, Book I No. 20) has its last eight bars — the
+five-voice ending — commented out in the kern encoding, so the fugue would stop at bar 79,
+mid-phrase. The build restores them, and that piece's own notes say so; the encoder's header records
+that the voicing in the final measure is "somewhat arbitrary". No other file in the repertoire
+contains commented-out music. The canons of *The Art of Fugue* are not fugues and are not here.
 
 ## What it shows
 
@@ -41,9 +42,14 @@ do inversion and augmentation where a piece uses them.
 
 The one thing that is sometimes typed in is where the subject *ends*. The detector takes the
 opening voice up to the answer's entry and shortens it until the later statements agree, which
-works for 32 of the 57 and fails on the rest — usually by settling on a fragment of the head, which
-then matches far too much. Those 25 spans are set by hand in `build/pieces.py`, and each piece's
+works for 32 of the 58 and fails on the rest — usually by settling on a fragment of the head, which
+then matches far too much. Those 26 spans are set by hand in `build/pieces.py`, and each piece's
 notes panel says which kind it is. Every statement is still found by the matcher either way.
+
+For five of them the accepted span is the subject's *head* rather than the whole subject, because
+Bach re-values the tail on restatement and a full-length template then walks past entries that are
+plainly there — in BWV 860 a four-bar template found 4 entries where the one-bar head finds 18. The
+notes panel says when a bracket is head-only.
 
 **A whole-piece map.** Every entry as a block on its voice's lane, episodes greyed, strettos
 flagged, and the estimated key underneath.
@@ -118,7 +124,9 @@ Four quirks cost enough time to be worth writing down.
 * A **phantom empty column** in the spine header (wtc1f24 has one) shifts every field number by one.
 * `*+`, which adds a spine mid-piece for a voice that enters late (wtc1f20 gains a fifth voice for
   its last bars), makes the Humdrum importer return an **empty score** with no error. `kernprep.py`
-  declares the spine from the start instead and leaves it silent until it enters.
+  declares the spine from the start instead and leaves it silent until it enters — padded with
+  invisible bar rests, not null tokens, since kern time comes from durations and a spine of nulls
+  never advances its own clock.
 
 ## Sources & credits
 
