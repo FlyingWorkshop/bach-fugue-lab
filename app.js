@@ -166,17 +166,34 @@ function firstIdxAtOrAfter(q) {
   while (lo < hi) { const m = (lo + hi) >> 1; if (N[m].q < q - 1e-9) lo = m + 1; else hi = m; }
   return lo;
 }
-function play() {
+async function play() {
+  if (A.starting) return;                 // two fast clicks must not start two transports
   initAudio();
-  if (A.ctx.state === 'suspended') A.ctx.resume();
+  if (A.timer) { clearInterval(A.timer); A.timer = null; }
+  // resume() is asynchronous. A suspended context has a frozen currentTime, so
+  // scheduling against it wedges the transport: the button reads "playing" and the
+  // playhead never moves. The browser suspends on its own — a background tab is
+  // enough — so this has to be awaited every time, not just on the first play.
+  if (A.ctx.state !== 'running') {
+    A.starting = true;
+    try { await A.ctx.resume(); } catch (e) {}
+    A.starting = false;
+    if (A.ctx.state !== 'running') { showStalled(); return; }
+  }
   if (!A.voices.length) buildVoiceChain(S.doc.nv);
   if (S.q >= S.doc.total - 1e-6) S.q = 0;
   A.q0 = S.q; A.t0 = A.ctx.currentTime + 0.06;
   A.nextIdx = firstIdxAtOrAfter(S.q);
   S.playing = true;
   $('#playBtn').classList.add('playing');
+  $('#playBtn').title = '';
   A.timer = setInterval(schedule, 25);
   schedule();
+}
+function showStalled() {
+  S.playing = false;
+  $('#playBtn').classList.remove('playing');
+  $('#playBtn').title = 'The browser would not start audio. Click again.';
 }
 function pause() {
   if (!S.playing) return;
@@ -186,6 +203,7 @@ function pause() {
   $('#playBtn').classList.remove('playing');
   A.live.forEach(o => { try { o.stop(); } catch (e) {} });
   A.live = [];
+  paint(true);          // the frame loop has stopped, so sync the display here
 }
 let lastSetScroll = -1;
 function setScroll(sc, x) { sc.scrollLeft = x; lastSetScroll = sc.scrollLeft; }
@@ -205,8 +223,16 @@ function seek(q, keepPlaying, noScroll) {
   if (!noScroll) scrollToQ(q, false);
   paint(true);
 }
+let lastFrameAt = 0;
 function schedule() {
   if (!S.playing) return;
+  // requestAnimationFrame is throttled to a few frames a second in a background tab
+  // and stops entirely in some browsers, while the audio carries on. Repaint from the
+  // scheduler when the frame loop has gone quiet, or the transport looks frozen.
+  if (performance.now() - lastFrameAt > 200) paint(false);
+  // the browser can suspend the context underneath us; stop cleanly at the frozen
+  // position rather than sitting there looking as though we are playing
+  if (A.ctx && A.ctx.state !== 'running') { pause(); return; }
   const doc = S.doc, N = doc.notes;
   const nowQ = currentQ();
   const endQ = (S.loopOn && S.loop) ? S.loop[1] : doc.total;
@@ -1331,7 +1357,7 @@ async function boot() {
   wireControls(); wireStage(); wireTips();
   const want = new URLSearchParams(location.search).get('piece');
   await selectPiece(idx.some(p => p.id === want) ? want : idx[0].id);
-  const frame = () => { if (S.playing) paint(false); requestAnimationFrame(frame); };
+  const frame = () => { lastFrameAt = performance.now(); if (S.playing) paint(false); requestAnimationFrame(frame); };
   requestAnimationFrame(frame);
 }
 window.__FL = { S, G, A, seek, play, pause, paint };
