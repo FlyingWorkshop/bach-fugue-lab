@@ -172,7 +172,14 @@ def build(P):
     S = P.get("subject")
     subject_by_hand = bool(S)          # the detector got this one wrong; the span is set in pieces.py
     if not S: S = find_subject(notes)
+    # Some subjects begin with the very notes every answer bends, so a template that
+    # includes them matches nothing. `head` is where the subject really starts: match
+    # on the span, then draw each bracket from the head so it still covers the theme.
+    head_q0 = S.get('head', S['q0'])
+    head_shift = round(S['q0'] - head_q0, 6)
+    assert head_shift >= 0, f"{P['id']}: subject head must come before the matched span"
     tpl = make_template(V, S['v'], S['q0'], S['q1'])
+    full_tpl = make_template(V, S['v'], head_q0, S['q1']) if head_shift else tpl
     forms = [('P', 1, 1.0)]
     for f in P.get("forms", ()):
         if f == 'I': forms.append(('I', -1, 1.0))
@@ -180,6 +187,8 @@ def build(P):
     sts = dedupe(find_statements(V, tpl, forms=tuple(forms)))
     sts = [s for s in sts if s['form'] == 'P' or s['kind'] in ('exact', 'tonal', 'altered')]
     entries = [statement_dict(s, flats, 'subject') for s in sts]
+    if head_shift:
+        for e in entries: e['q0'] = round(e['q0'] - head_shift, 6)
 
     counters = []
     cs_span = P.get("counter")
@@ -309,6 +318,7 @@ def build(P):
         'key': key_text, 'meter': meter, 'bpm': P['bpm'], 'blurb': P['blurb'],
         'card': P.get('card') or P['blurb'],
         'subjectByHand': subject_by_hand,
+        'subjectSkipsHead': bool(head_shift),
         'subjectHeadOnly': bool(P.get('headOnly')),
         'history': P['history'], 'links': [{'label': a, 'url': b} for a, b in P['links']],
         'performances': P['performances'],
@@ -318,8 +328,8 @@ def build(P):
         'staffBox': {str(k): v for k, v in staffboxes.items()},
         'bars': bars, 'anchors': anchors('x', 'x0'), 'anchorsP': anchors('xp', 'px0'),
         'notes': out_notes,
-        'subject': {'v': S['v'], 'q0': S['q0'], 'q1': S['q1'], 'len': len(tpl),
-                    'tpl': [{'dq': t['dq'], 'p': t['p'], 'd': t['d']} for t in tpl]},
+        'subject': {'v': S['v'], 'q0': head_q0, 'q1': S['q1'], 'len': len(full_tpl),
+                    'tpl': [{'dq': t['dq'], 'p': t['p'], 'd': t['d']} for t in full_tpl]},
         'entries': entries, 'counters': counters, 'stretto': stretto,
         'episodes': episodes, 'expoEnd': round(expo_end, 4),
         'keys': fixed, 'pedals': pedals,

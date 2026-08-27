@@ -405,7 +405,10 @@ function tagControlElements(host, svg) {
       let bi = 0, bd = Infinity;
       mids.forEach((y, i) => { const d = Math.abs(cy - y); if (d < bd) { bd = d; bi = i; } });
       g.dataset.v = staves[bi].dataset.v;
-      g.dataset.q = G.qOfXu((r.left + r.width / 2 - left) / S.PXU).toFixed(3);
+      // both ends, not the midpoint: a tie that runs out of a subject and into free
+      // counterpoint belongs to neither, and lighting it up is what looks wrong
+      g.dataset.q  = G.qOfXu((r.left + 1 - left) / S.PXU).toFixed(3);
+      g.dataset.q2 = G.qOfXu((r.left + r.width - 1 - left) / S.PXU).toFixed(3);
       G.ctrlEls.push(g);
     });
   });
@@ -494,21 +497,28 @@ function applyScoreClasses() {
   const host = $('#score'), doc = S.doc;
   host.classList.toggle('dimmed', S.show.dim);
   host.style.display = S.show.score ? '' : 'none';
-  const beams = new Set();
+  // a beam is part of the subject only if every note under it is. Counting just one
+  // was lighting the whole beam wherever a subject ended part-way through a group.
+  const beamOn = new Map(), beamAll = new Map();
   G.scoreNotes.forEach((g, id) => {
     const n = G.byId.get(id);
     const on = !!n && (n.e >= 0 || (S.show.cs && n.cs >= 0));
     g.classList.toggle('inSubj', on);
     const b = g.parentElement;
-    if (on && b && b.classList && b.classList.contains('beam')) beams.add(b);
+    if (b && b.classList && b.classList.contains('beam')) {
+      beamAll.set(b, (beamAll.get(b) || 0) + 1);
+      if (on) beamOn.set(b, (beamOn.get(b) || 0) + 1);
+    }
   });
-  host.querySelectorAll('g.beam').forEach(b => b.classList.toggle('inSubj', beams.has(b)));
+  host.querySelectorAll('g.beam').forEach(b =>
+    b.classList.toggle('inSubj', beamAll.get(b) > 0 && beamOn.get(b) === beamAll.get(b)));
   const inMotif = (v, q) =>
     doc.entries.some(e => e.v === v && q >= e.q0 - 1e-6 && q < e.q1) ||
     (S.show.cs && doc.counters.some(e => e.v === v && q >= e.q0 - 1e-6 && q < e.q1));
   (G.ctrlEls || []).forEach(g => {
     const v = +g.dataset.v;
-    g.classList.toggle('inSubj', inMotif(v, +g.dataset.q));
+    const q1 = +g.dataset.q, q2 = g.dataset.q2 == null ? q1 : +g.dataset.q2;
+    g.classList.toggle('inSubj', inMotif(v, q1) && inMotif(v, q2));
     g.classList.toggle('muted', !voiceAudible(v));
   });
   host.querySelectorAll('g.staff').forEach(g => {

@@ -626,18 +626,19 @@ PIECES = [
  dict(
   id="bwv868", file="wtc1f23.krn", bpm=68,
   title="Fugue in B major", bwv="BWV 868", book="WTC I, No. 23", collection="wtc1",
-  subject=dict(v=2, q0=0.5, q1=8),  # bars 1:1.5..3:1
+  subject=dict(v=2, q0=3, q1=8, head=0.5),  # bars 1:4..3:1; matched from 1:4 for the same reason
   forms=("I",),
-  card="Four voices in thirty-four bars, nine entries, and two of them turn the subject upside "
-       "down.",
-  blurb="Three voices have the subject by bar 16; the fourth waits until bar 21 of 34.",
+  card="Four voices entering two bars apart, all in by bar 8, and twelve entries inside "
+       "thirty-four bars.",
+  blurb="Four voices entering two bars apart, all of them in by bar 8.",
   history=[
-    "Thirty-four bars is not much room for four voices, and none of it is spent idling: five "
-    "episodes, the longest four and a half bars, with nine entries packed around them. The "
-    "subject turns around B, drops a fifth, then walks a scale straight back up and over the top "
-    "— thirteen notes, nearly all of them by step. The two inverted entries come one after the "
-    "other, soprano then alto, and the alto one is still going when the bass brings the subject "
-    "back up the right way.",
+    "Tenor at bar 1, alto at 3, soprano at 5, bass at 7: each voice two bars after the last, and "
+    "the exposition is done by bar 9. The subject turns around B, drops a fifth, then walks a "
+    "scale straight back up and over the top — thirteen notes across not quite two bars, nearly "
+    "all of them by step. Twelve entries all told: six exact, three tonal answers whose opening "
+    "notes bend to fit the key, three altered further than that. Two of them go in inversion. "
+    "Four episodes, none longer than three and a half bars, a stretto at bar 20, and the "
+    "countersubject comes back three times.",
     "B major has five sharps, and in the meantone tunings common before Bach's day it was not a "
     "key anyone played in. Book I reaches it at No. 23, second from last. What comes out is "
     "short, bright and well travelled: G-sharp minor, F-sharp major and C-sharp minor all get "
@@ -655,19 +656,23 @@ PIECES = [
  dict(
   id="bwv869", file="wtc1f24.krn", bpm=56,
   title="Fugue in B minor", bwv="BWV 869", book="WTC I, No. 24", collection="wtc1",
-  subject=dict(v=1, q0=0.5, q1=12),  # bars 1:1.5..4:1
-  card="Last in Book I, marked Largo, with a twenty-note subject that uses all twelve chromatic "
-       "pitches.",
+  subject=dict(v=1, q0=2, q1=12, head=0.5),  # bars 1:3..4:1; matched from 1:3 because every answer bends the head
+  card="Last in Book I, marked Largo: a twenty-note subject using all twelve chromatic pitches, "
+       "four voices in by bar 13.",
   blurb="Three pedal points hold 21 of the 76 bars between them.",
   history=[
     "Twenty notes in the subject, and between them they cover all twelve pitches of the chromatic "
-    "scale before it lands. Bach wrote *Largo* over the fugue. Twelve entries across seventy-six "
-    "bars, three pedal points, and the last of those holds for nearly ten bars with everything "
-    "else moving above it.",
-    "It closes Book I. The twelve entries come in on six different notes — F-sharp, B, E, A, D "
-    "and C-sharp — and the music gets as far out as D major and C-sharp minor before the last "
-    "stretch home. Nine episodes, the longest of them just over nine bars, so the subject is "
-    "never away for long.",
+    "scale before it lands. Bach wrote *Largo* over the fugue. The alto states it, the tenor "
+    "answers at bar 4, the bass follows at bar 9 and the soprano arrives last at bar 13, which "
+    "completes the four-voice exposition — that last entry is altered rather than literal, and it "
+    "stays invisible to any template beginning on the notes the answer bends, so matching starts "
+    "three notes in. Thirteen entries across seventy-six bars, eight of them exact, and three "
+    "pedal points, the last holding for nearly ten bars with everything else moving above it. Ten "
+    "episodes, the longest just over six and a half bars, so the subject is never away for long.",
+    "It closes Book I, and it takes its time about it: no stretto anywhere, no two entries ever "
+    "overlapping, where the C major at the other end of the book gets through twenty-two entries "
+    "in twenty-seven bars. The keys travel further than the counterpoint does — F-sharp minor, E "
+    "minor, A major, D major, C-sharp minor — before the last stretch home to B.",
     WTC1_CONTEXT,
   ],
   links=[WTC1_SCORE, ("Prelude and Fugue in B minor, BWV 869",
@@ -1510,20 +1515,24 @@ PIECES = [
  dict(
   id="bwv1080-10", file="artfugue-010.krn", bpm=132,
   title="Contrapunctus X", bwv="BWV 1080/10", book="The Art of Fugue", collection="aof", modernClefs=True,
+  subject=dict(v=1, q0=1, q1=8),  # bars 1:2..3:1
   forms=("I",),
-  card="The soprano waits 66 bars of 120 before it gets the subject; then, three times, two "
-       "voices take it together.",
-  blurb="Thirteen entries, and only two of them turn the subject upside down.",
+  headOnly=True,   # the span is the subject's head; the answer mutates mid-entry
+  card="Alto, tenor, bass, soprano inside nine bars, and the last two bring the subject in upside "
+       "down.",
+  blurb="Eleven entries in a hundred and twenty bars, three of them upside down.",
   history=[
-    "Alto, tenor and bass pass the subject round for more than half the piece before the soprano "
-    "is allowed near it, at bar 66 of 120. That is why the map holds the exposition open until "
-    "bar 69 — the analysis is waiting for the top voice, and Bach keeps it waiting. Thirteen "
-    "statements, two of them inverted, and at bars 85, 103 and 115 they arrive two at a time.",
+    "The exposition runs alto, tenor, bass, soprano, all four in by bar 9, and the last two come "
+    "in upside down. The soprano follows the bass by a bar and a half, so those two overlap; at "
+    "bars 103 and 115 a pair starts on the same beat instead. Eleven statements in 120 bars, "
+    "three of them inverted, four bent to fit the key rather than transposed straight. Eight "
+    "episodes, and the longest keeps the subject away from bar 68 to bar 103.",
     "Counterpoint at the tenth costs something specific: invert two lines at the tenth and every "
     "third between them becomes an octave, so parallel thirds, the easiest sweetener in tonal "
     "music, are off the table for the whole movement. An earlier and shorter version of the fugue "
     "survives as well. It begins partway in, without the opening stretch of entries; that first "
-    "section was added later.",
+    "section was added later. The bracket marks the subject's head, its first six notes, not the "
+    "whole thing — the answer mutates mid-entry.",
     AOF_CONTEXT,
   ],
   links=[AOF_SCORE, AOF_WIKI, KERN_AOF],

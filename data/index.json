@@ -315,11 +315,11 @@
   "key": "B major",
   "meter": "4/4",
   "nv": 4,
-  "blurb": "Three voices have the subject by bar 16; the fourth waits until bar 21 of 34.",
-  "card": "Four voices in thirty-four bars, nine entries, and two of them turn the subject upside down.",
+  "blurb": "Four voices entering two bars apart, all of them in by bar 8.",
+  "card": "Four voices entering two bars apart, all in by bar 8, and twelve entries inside thirty-four bars.",
   "bpm": 68,
   "bars": 34,
-  "entries": 9
+  "entries": 12
  },
  {
   "id": "bwv869",
@@ -330,10 +330,10 @@
   "meter": "4/4",
   "nv": 4,
   "blurb": "Three pedal points hold 21 of the 76 bars between them.",
-  "card": "Last in Book I, marked Largo, with a twenty-note subject that uses all twelve chromatic pitches.",
+  "card": "Last in Book I, marked Largo: a twenty-note subject using all twelve chromatic pitches, four voices in by bar 13.",
   "bpm": 56,
   "bars": 76,
-  "entries": 12
+  "entries": 13
  },
  {
   "id": "bwv870",
@@ -777,11 +777,11 @@
   "key": "D minor",
   "meter": "4/4",
   "nv": 4,
-  "blurb": "Thirteen entries, and only two of them turn the subject upside down.",
-  "card": "The soprano waits 66 bars of 120 before it gets the subject; then, three times, two voices take it together.",
+  "blurb": "Eleven entries in a hundred and twenty bars, three of them upside down.",
+  "card": "Alto, tenor, bass, soprano inside nine bars, and the last two bring the subject in upside down.",
   "bpm": 132,
   "bars": 120,
-  "entries": 13
+  "entries": 11
  },
  {
   "id": "bwv1080-11",
