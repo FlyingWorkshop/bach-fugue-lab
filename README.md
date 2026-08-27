@@ -68,6 +68,15 @@ audible; that is mixing, not interpretation, and it is always on.
 **Subject lab.** Every statement drawn on top of a ghost of the original, optionally transposed to a
 common pitch. The entries Bach bent are the interesting ones.
 
+## How wrong it can be
+
+None of this is scholarship. A program decides what counts as an entry, so it misses statements
+Bach fragments or buries in the texture, and it brackets some a musicologist would label
+differently — the ones marked `partial` are where it is least sure. Two fugues here still have
+incomplete expositions for that reason (BWV 849 and BWV 864, recorded with their reasons in
+`build/validate.py`), because the only templates that complete them also match ordinary figuration.
+If you want an analysis you can rely on, go to the literature.
+
 ## Keys
 
 `space` play/pause · `←`/`→` bar · `shift`+`←`/`→` previous/next entry · `1`…`5` solo a voice ·

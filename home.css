@@ -88,6 +88,7 @@ code{font:13px ui-monospace,Menlo,monospace;background:#1a212b;padding:1px 5px;b
 .madegrid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:40px;align-items:start}
 .madegrid p{font-size:13.5px;line-height:1.7;color:#b0bbc9}
 .madegrid a{color:var(--accent)}
+.madegrid p.caveat{font-size:12.5px;color:#8e9aac;border-left:2px solid #262e39;padding-left:12px}
 .pipeline{list-style:none;counter-reset:s;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .pipeline li{
   counter-increment:s;border:1px solid var(--line);border-radius:10px;background:var(--bg2);

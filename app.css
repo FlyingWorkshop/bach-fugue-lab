@@ -189,6 +189,7 @@ input[type=range]{accent-color:var(--accent)}
 .score svg{display:block;fill:currentColor;color:var(--ink)}
 .score svg path,.score svg polygon,.score svg rect,.score svg ellipse{stroke:currentColor}
 .score svg text{fill:currentColor;stroke:none}
+.score [data-v]{color:var(--vc)}
 .score g.staff>path{stroke:var(--staffline);fill:none;stroke-width:14}
 .score g.system>path{stroke:var(--staffline);fill:none}
 .score g.barLine path{stroke:var(--staffline);fill:none}
@@ -212,11 +213,18 @@ input[type=range]{accent-color:var(--accent)}
   border-left:1px solid rgba(255,209,102,.5);border-right:1px solid rgba(255,209,102,.5);
   pointer-events:none;z-index:1;display:none}
 
-/* score note states */
+/* score note states.
+   Beams and tuplet brackets are dimmed on the shapes they draw, not on the group:
+   the group is also the parent of its notes, and colouring it would dim a lit
+   note sitting inside an otherwise unthematic beam. */
 .score.dimmed g.note:not(.inSubj),
 .score.dimmed g.rest,
 .score.dimmed g.mRest,
-.score.dimmed g.beam:not(.inSubj),
+.score.dimmed g.beam:not(.inSubj)>polygon,
+.score.dimmed g.beam:not(.inSubj)>path,
+.score.dimmed g.tupletBracket:not(.inSubj),
+.score.dimmed g.tupletNum:not(.inSubj),
+.score.dimmed g.ledgerLines>path:not(.inSubj),
 .score.dimmed [data-q]:not(.inSubj){color:color-mix(in oklab,var(--vc,#8e9aac) 46%,#0e1218)}
 .score g.note.playing,.score g.note.playing *{color:color-mix(in oklab,var(--vc,#ffffff) 38%,#ffffff)}
 .score g.note.playing g.notehead{filter:drop-shadow(0 0 6px color-mix(in oklab,var(--vc,#fff) 40%,#fff))}
@@ -305,6 +313,8 @@ input[type=range]{accent-color:var(--accent)}
 .dlinks a .who{font-weight:600}
 .dlinks a .note{color:var(--dim);font-size:11px}
 .dnote{font-size:11px;color:var(--dim2);line-height:1.55}
+.dcaveat{font-size:11.5px;color:var(--dim);line-height:1.6;
+  border-left:2px solid var(--line2);padding-left:9px}
 .dterms{display:grid;gap:8px}
 .dterms div{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:baseline}
 .dterms b{font-size:12.5px;font-weight:620}

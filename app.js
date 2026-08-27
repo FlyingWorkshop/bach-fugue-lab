@@ -372,7 +372,10 @@ function mountScore() {
   const nv = S.doc.nv;
   let css = '';
   for (let v = 0; v < nv; v++) {
-    css += `#score [data-v="${v}"]{--vc:${vcol(nv, v)};color:var(--vc)}\n`;
+    // the voice colour only, never `color` itself: an id selector here would
+    // outrank every dim rule in the stylesheet, which is what kept ties, slurs
+    // and fermatas at full brightness however they were classed
+    css += `#score [data-v="${v}"]{--vc:${vcol(nv, v)}}\n`;
   }
   let st = host.querySelector('style#vcss');
   if (!st) { st = document.createElement('style'); st.id = 'vcss'; host.append(st); }
@@ -387,9 +390,15 @@ function mountScore() {
 /* Ties, slurs and ornaments are emitted at measure level, outside any staff, so
    they inherit no voice colour and would otherwise render bright white. Assign
    each to the nearest staff and note roughly where in the piece it sits, so it
-   can be coloured and dimmed exactly like the notes it belongs to. */
-const CTRL_SEL = 'g.tie,g.slur,g.phrase,g.mordent,g.trill,g.turn,g.fermata,' +
+   can be coloured and dimmed exactly like the notes it belongs to.
+
+   Spanners run between two notes and belong to the subject only when both of
+   those notes do. Everything else in here is an editorial mark — a fermata, an
+   ornament, a direction — and is never part of the theme, so it never lights up. */
+const SPAN_SEL = 'g.tie,g.slur,g.phrase';
+const MARK_SEL = 'g.mordent,g.trill,g.turn,g.fermata,' +
                  'g.dir,g.dynam,g.hairpin,g.arpeg,g.octave,g.ornam,g.breath';
+const CTRL_SEL = SPAN_SEL + ',' + MARK_SEL;
 function tagControlElements(host, svg) {
   const left = svg.getBoundingClientRect().left;
   G.ctrlEls = [];
@@ -405,11 +414,37 @@ function tagControlElements(host, svg) {
       let bi = 0, bd = Infinity;
       mids.forEach((y, i) => { const d = Math.abs(cy - y); if (d < bd) { bd = d; bi = i; } });
       g.dataset.v = staves[bi].dataset.v;
+      if (!g.matches(SPAN_SEL)) g.dataset.mark = '1';
       // both ends, not the midpoint: a tie that runs out of a subject and into free
       // counterpoint belongs to neither, and lighting it up is what looks wrong
       g.dataset.q  = G.qOfXu((r.left + 1 - left) / S.PXU).toFixed(3);
       g.dataset.q2 = G.qOfXu((r.left + r.width - 1 - left) / S.PXU).toFixed(3);
       G.ctrlEls.push(g);
+    });
+  });
+  tagLedgerLines(host);
+}
+
+/* Ledger lines are drawn once per staff per bar, outside the notes they serve,
+   so nothing tied them to a note and they stayed at full brightness over dimmed
+   noteheads — short bright bars hanging off dark notes. Pair each line with the
+   note it sits under by x, once, and it can then be dimmed with that note. */
+function tagLedgerLines(host) {
+  G.ledgerPaths = [];
+  host.querySelectorAll('g.staff').forEach(st => {
+    const lines = st.querySelectorAll('g.ledgerLines > path');
+    if (!lines.length) return;
+    const notes = [...st.querySelectorAll('g.note')].map(n => {
+      const r = n.getBoundingClientRect();
+      return { n, cx: r.left + r.width / 2 };
+    });
+    if (!notes.length) return;
+    lines.forEach(p => {
+      const r = p.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      let best = null, bd = Infinity;
+      for (const o of notes) { const d = Math.abs(o.cx - cx); if (d < bd) { bd = d; best = o.n; } }
+      G.ledgerPaths.push({ p, n: best });
     });
   });
 }
@@ -499,26 +534,35 @@ function applyScoreClasses() {
   host.style.display = S.show.score ? '' : 'none';
   // a beam is part of the subject only if every note under it is. Counting just one
   // was lighting the whole beam wherever a subject ended part-way through a group.
-  const beamOn = new Map(), beamAll = new Map();
+  // closest(), not parentElement: in a chord the note sits a level deeper.
+  const grpOn = new Map(), grpAll = new Map();
   G.scoreNotes.forEach((g, id) => {
     const n = G.byId.get(id);
     const on = !!n && (n.e >= 0 || (S.show.cs && n.cs >= 0));
     g.classList.toggle('inSubj', on);
-    const b = g.parentElement;
-    if (b && b.classList && b.classList.contains('beam')) {
-      beamAll.set(b, (beamAll.get(b) || 0) + 1);
-      if (on) beamOn.set(b, (beamOn.get(b) || 0) + 1);
+    for (const b of [g.closest('g.beam'), g.closest('g.tuplet')]) {
+      if (!b) continue;
+      grpAll.set(b, (grpAll.get(b) || 0) + 1);
+      if (on) grpOn.set(b, (grpOn.get(b) || 0) + 1);
     }
   });
-  host.querySelectorAll('g.beam').forEach(b =>
-    b.classList.toggle('inSubj', beamAll.get(b) > 0 && beamOn.get(b) === beamAll.get(b)));
+  const whole = b => grpAll.get(b) > 0 && grpOn.get(b) === grpAll.get(b);
+  host.querySelectorAll('g.beam').forEach(b => b.classList.toggle('inSubj', whole(b)));
+  // the bracket and the little numeral, not the tuplet group itself: dimming the
+  // group would drag the colour of any lit note inside it down with it
+  host.querySelectorAll('g.tuplet').forEach(t => {
+    const on = whole(t);
+    t.querySelectorAll('g.tupletBracket,g.tupletNum').forEach(e => e.classList.toggle('inSubj', on));
+  });
+  (G.ledgerPaths || []).forEach(o =>
+    o.p.classList.toggle('inSubj', !!o.n && o.n.classList.contains('inSubj')));
   const inMotif = (v, q) =>
     doc.entries.some(e => e.v === v && q >= e.q0 - 1e-6 && q < e.q1) ||
     (S.show.cs && doc.counters.some(e => e.v === v && q >= e.q0 - 1e-6 && q < e.q1));
   (G.ctrlEls || []).forEach(g => {
     const v = +g.dataset.v;
     const q1 = +g.dataset.q, q2 = g.dataset.q2 == null ? q1 : +g.dataset.q2;
-    g.classList.toggle('inSubj', inMotif(v, q1) && inMotif(v, q2));
+    g.classList.toggle('inSubj', !g.dataset.mark && inMotif(v, q1) && inMotif(v, q2));
     g.classList.toggle('muted', !voiceAudible(v));
   });
   host.querySelectorAll('g.staff').forEach(g => {
@@ -1348,6 +1392,11 @@ function buildDrawer(doc) {
         ? 'Where the subject itself ends was set by hand for this one — the detector picked a ' +
           'fragment of the head, which then matched far too much.'
         : 'Where the subject ends was worked out by the build too.'))),
+    sec('How wrong it can be', el('p', { class: 'dcaveat' },
+      'This is a program\u2019s reading and it is wrong sometimes: it misses entries Bach ' +
+      'fragments or buries in the texture, and brackets some a musicologist would label ' +
+      'differently. The ones marked partial are where it is least sure. Where it disagrees ' +
+      'with your ear, trust your ear \u2014 and for analysis you can cite, go to the scholarship.')),
   );
 }
 async function boot() {
@@ -1370,6 +1419,6 @@ async function boot() {
   const frame = () => { lastFrameAt = performance.now(); if (S.playing) paint(false); requestAnimationFrame(frame); };
   requestAnimationFrame(frame);
 }
-window.__FL = { S, G, A, seek, play, pause, paint };
+window.__FL = { S, G, A, seek, play, pause, paint, selectPiece };
 boot();
 })();
