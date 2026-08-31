@@ -14,7 +14,6 @@ const VCOL = {
 const vcol = (nv, i) => (VCOL[nv] || VCOL[4])[i] || '#8e9aac';
 /* *asterisks* mark italics in the editorial text; that is the whole of the markup */
 const esc = t => String(t ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const md = t => esc(t).replace(/\*([^*]+)\*/g, '<em>$1</em>');
 
 /* ------------------------------------------------------------- mini rolls */
 function rollSvg(t, opts) {
@@ -131,6 +130,12 @@ $('#teaser').replaceChildren(rollSvg(hero, {
   W: narrow ? 560 : 1100, H: narrow ? 250 : 290, q0: 0, q1: narrow ? 18.5 : 33,
   boxes: true, labels: true, grid: true, nh: narrow ? 4.6 : 5.4, dim: .26, pad: 16 }));
 
+const rnd = document.getElementById('randomBtn');
+if (rnd) rnd.addEventListener('click', () => {
+  const p = index[Math.floor(Math.random() * index.length)];
+  rnd.href = `lab.html?piece=${p.id}`;
+});
+
 // every fugue on the site
 const grid = $('#pieceGrid');
 for (const [key, label] of GROUPS) {
@@ -144,7 +149,6 @@ for (const [key, label] of GROUPS) {
     a.innerHTML =
       `<div class="ph"><b>${esc(p.title)}</b><span class="bwv">${esc(p.bwv)}</span></div>` +
       `<div class="sub">${esc(p.book)} · ${esc(p.key)} · ${esc(p.meter)}</div>` +
-      `<div class="note">${md(p.card || p.blurb || '')}</div>` +
       `<div class="tags"><span class="tag v">${p.nv} voices</span>` +
       `<span class="tag">${p.bars} bars</span><span class="tag">${p.entries} entries</span></div>`;
     const mini = document.createElement('div');

@@ -36,10 +36,8 @@ code{font:13px ui-monospace,Menlo,monospace;background:#1a212b;padding:1px 5px;b
 .nav .gh:hover{color:var(--ink)}
 
 /* ------------------------------------------------------------------ hero */
-.hero{padding-top:64px;padding-bottom:26px}
-.hero h2{font-size:clamp(32px,5vw,54px);line-height:1.08;letter-spacing:-0.032em}
-.lede{margin-top:16px;font-size:16.5px;color:#b6c0cd}
-.cta{margin-top:22px}
+.hero{padding-top:40px;padding-bottom:26px}
+.cta{margin-top:0}
 .btn{
   display:inline-block;padding:11px 18px;border-radius:10px;border:1px solid var(--line2);
   background:var(--bg3);color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:560;
@@ -75,7 +73,6 @@ code{font:13px ui-monospace,Menlo,monospace;background:#1a212b;padding:1px 5px;b
 .pc b{font-size:15px;font-weight:620}
 .pc .bwv{font:11.5px ui-monospace,Menlo,monospace;color:var(--dim2)}
 .pc .sub{font-size:11.5px;color:var(--dim);margin-top:2px}
-.pc .note{font-size:12.5px;color:#a4b0be;line-height:1.55;margin-top:9px}
 .pc .tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:11px}
 .pc .tag{font-size:10px;padding:2px 7px;border-radius:20px;background:#1e2733;color:#93a0b1}
 .pc .tag.v{background:#152836;color:#7fc4e8}

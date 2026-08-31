@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fugue Lab — 58 Bach fugues, one staff per voice</title>
-<meta name="description" content="All forty-eight fugues of the Well-Tempered Clavier, plus ten from The Art of Fugue, as open score, piano roll and structural map on one shared axis. Every statement of the subject is found by the build rather than typed in.">
+<meta name="description" content="All forty-eight fugues of the Well-Tempered Clavier, plus ten from The Art of Fugue, as open score, piano roll and structural map on one shared axis.">
 <meta name="theme-color" content="#0d1014">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="favicon-32.png" sizes="32x32" type="image/png">
@@ -13,14 +13,14 @@
 <meta property="og:title" content="Fugue Lab — 58 Bach fugues, one staff per voice">
 <meta property="og:description" content="All forty-eight fugues of the Well-Tempered Clavier, plus ten from The Art of Fugue, as open score, piano roll and structural map on one shared axis.">
 <meta property="og:url" content="https://flyingworkshop.github.io/bach-fugue-lab/">
-<link rel="stylesheet" href="home.css?v=9">
+<link rel="stylesheet" href="home.css?v=10">
 </head>
 <body>
 
 <header class="nav">
   <a class="brand" href="./">
     <span class="mark">≡</span>
-    <div><h1>Fugue Lab</h1><p>Bach fugues, taken apart</p></div>
+    <div><h1>Fugue Lab</h1></div>
   </a>
   <nav>
     <a class="gh" href="https://github.com/FlyingWorkshop/bach-fugue-lab" target="_blank" rel="noopener">GitHub ↗</a>
@@ -28,10 +28,8 @@
 </header>
 
 <section class="hero">
-  <h2>The complete Well-Tempered Clavier,<br>one staff per voice.</h2>
-  <p class="lede">Every entry of the subject is found by the build, not typed in.</p>
   <div class="cta">
-    <a class="btn primary" href="lab.html?piece=bwv855">Start with the two-voice fugue</a>
+    <a class="btn primary" id="randomBtn" href="lab.html?piece=bwv855">Open a random fugue</a>
   </div>
 </section>
 
@@ -87,6 +85,6 @@
   </div>
 </footer>
 
-<script src="home.js?v=7"></script>
+<script src="home.js?v=8"></script>
 </body>
 </html>
